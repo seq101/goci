@@ -152,40 +152,78 @@ public class EnsemblRestService {
 
         RestResponseResult restResponseResult = new RestResponseResult();
 
-        HttpResponse<JsonNode> response = Unirest.get(url)
-                .header("Content-Type", "application/json")
-                .asJson();
-        String retryHeader = response.getHeaders().getFirst("Retry-After");
+        int maxTries = 5;
+        int tries = 0;
+        int wait = 1;
+        boolean success = false;
+        while (!success && tries < maxTries) {
+            tries++;
+            try {
+                HttpResponse<JsonNode> response = Unirest.get(url)
+                        .header("Content-Type", "application/json")
+                        .asJson();
+                String retryHeader = response.getHeaders().getFirst("Retry-After");
 
-        if (response.getStatus() == 200) { // Success
-            restResponseResult.setRestResult(response.getBody());
-        }
-        else if (response.getStatus() == 429 && retryHeader != null) { // Too Many Requests
-            Long waitSeconds = Long.valueOf(retryHeader);
-            Thread.sleep(waitSeconds * 1000);
-            fetchJson(url);
-        }
-        else if (response.getStatus() == 503) { // Service unavailable
-            restResponseResult.setError(
-                    "No server is available to handle this request (Error 503: service unavailable) at url: " + url);
-            getLog().error(
-                    "No server is available to handle this request (Error 503: service unavailable) at url: " + url);
-            throw new EnsemblRestIOException(
-                    "No server is available to handle this request (Error 503: service unavailable) at url: " + url);
-        }
-        else if (response.getStatus() == 400) { // Bad request (no result found)
-            JSONObject json_obj = response.getBody().getObject();
-            if (json_obj.has("error")) {
-                restResponseResult.setError(json_obj.getString("error"));
+//                if (response.getStatus() == 200) { // Success
+//                    success = true;
+//                    restResponseResult.setRestResult(response.getBody());
+//                }
+//                else if { // fails but need retrying
+//
+//                }
+//                else { // fail
+//                    if () { // response code we recognise
+//
+//                    }
+//                    else { // some other unexpected response code
+//
+//                    }
+//                }
+
+
+                if (response.getStatus() == 200) { // Success
+                    success = true;
+                    restResponseResult.setRestResult(response.getBody());
+                }
+                else if (response.getStatus() == 429 && retryHeader != null) { // Too Many Requests
+                    Long waitSeconds = Long.valueOf(retryHeader);
+                    Thread.sleep(waitSeconds * 1000);
+                }
+                else if (response.getStatus() == 503) { // Service unavailable
+                    restResponseResult.setError(
+                            "No server is available to handle this request (Error 503: service unavailable) at url: " + url);
+                    getLog().error(
+                            "No server is available to handle this request (Error 503: service unavailable) at url: " + url);
+                    throw new EnsemblRestIOException(
+                            "No server is available to handle this request (Error 503: service unavailable) at url: " + url);
+                }
+                else if (response.getStatus() == 400) { // Bad request (no result found)
+                    success = true;
+                    JSONObject json_obj = response.getBody().getObject();
+                    if (json_obj.has("error")) {
+                        restResponseResult.setError(json_obj.getString("error"));
+                    }
+                    getLog().error(url + " is generating an invalid request. (Error 400: bad request)");
+                }
+                else { // Other issue
+                    restResponseResult.setError("No data available at url " + url);
+                    getLog().error("No data at " + url);
+                    throw new EnsemblRestIOException("No data at " + url + ": (Error " + response.getStatus()+ ")");
+                }
             }
-            getLog().error(url + " is generating an invalid request. (Error 400: bad request)");
-        }
-        else { // Other issue
-            restResponseResult.setError("No data available at url " + url);
-            getLog().error("No data at " + url);
+            catch (UnirestException e) {
+                getLog().error("Caught exception from Ensembl Rest call, this call will be retried after " + wait + "s.", e);
+                Thread.sleep(wait * 1000);
+            }
         }
 
-        return restResponseResult;
+        if (success) {
+            return restResponseResult;
+        }
+        else {
+            getLog().error("Failed to obtain a result from from '" + url + "' after after " + maxTries + " attempts");
+            throw new EnsemblRestIOException("Failed to obtain a result from '" + url + "' after " + maxTries + " attempts");
+        }
     }
 
 
