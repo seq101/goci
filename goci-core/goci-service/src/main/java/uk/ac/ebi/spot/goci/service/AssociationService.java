@@ -14,8 +14,8 @@ import uk.ac.ebi.spot.goci.model.EntrezGene;
 import uk.ac.ebi.spot.goci.model.Gene;
 import uk.ac.ebi.spot.goci.model.Location;
 import uk.ac.ebi.spot.goci.model.Region;
-import uk.ac.ebi.spot.goci.model.RiskAllele;
-import uk.ac.ebi.spot.goci.model.SingleNucleotidePolymorphism;
+import uk.ac.ebi.spot.goci.model.EffectAllele;
+import uk.ac.ebi.spot.goci.model.Variant;
 import uk.ac.ebi.spot.goci.model.Study;
 import uk.ac.ebi.spot.goci.repository.AssociationRepository;
 
@@ -39,17 +39,17 @@ public class AssociationService {
     private AssociationRepository associationRepository;
 
     private StudyService studyService;
-    private SingleNucleotidePolymorphismService snpService;
+    private VariantService variantService;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     public AssociationService(AssociationRepository associationRepository,
                               StudyService studyService,
-                              SingleNucleotidePolymorphismService snpService) {
+                              VariantService variantService) {
         this.associationRepository = associationRepository;
         this.studyService = studyService;
-        this.snpService = snpService;
+        this.variantService = variantService;
     }
 
     protected Logger getLog() {
@@ -76,7 +76,7 @@ public class AssociationService {
 
     /**
      * Get in one transaction the list of all Association with : the attached study and its publish date the attached
-     * efo traits the attached loci, for each loci : their strongestRiskAlleles, for each alleles : the regions the
+     * efo traits the attached loci, for each loci : their strongestEffectAlleles, for each alleles : the regions the
      * genomic contexts
      *
      * @return a List of Associations.
@@ -136,10 +136,10 @@ public class AssociationService {
     }
 
     @Transactional(readOnly = true)
-    public Collection<Association> findPublishedAssociationsBySnpId(Long snpId) {
+    public Collection<Association> findPublishedAssociationsByVariantId(Long variantId) {
         Collection<Association> associations = associationRepository
-                .findByLociStrongestRiskAllelesSnpIdAndStudyHousekeepingCatalogPublishDateIsNotNullAndStudyHousekeepingCatalogUnpublishDateIsNull(
-                        snpId);
+                .findByLociStrongestEffectAllelesVariantIdAndStudyHousekeepingCatalogPublishDateIsNotNullAndStudyHousekeepingCatalogUnpublishDateIsNull(
+                        variantId);
         associations.forEach(this::loadAssociatedData);
         return associations;
     }
@@ -171,21 +171,21 @@ public class AssociationService {
         int traitCount = association.getEfoTraits().size();
         Study study = studyService.fetchOne(association.getStudy());
         AtomicInteger reportedGeneCount = new AtomicInteger();
-        Collection<SingleNucleotidePolymorphism> snps = new HashSet<>();
+        Collection<Variant> variants = new HashSet<>();
         Collection<Region> regions = new HashSet<>();
         Collection<Gene> mappedGenes = new HashSet<>();
         Map<String, Set<String>> mappedGeneEntrezIds = new HashMap<>();
         Map<String, Set<String>> mappedGeneEnsemblIds = new HashMap<>();
         association.getLoci().forEach(
                 locus -> {
-                    locus.getStrongestRiskAlleles().stream().map(RiskAllele::getSnp).forEach(
-                            snp -> {
-                                Collection<Location> snpLocations = snp.getLocations();
-                                for (Location location : snpLocations) {
+                    locus.getStrongestEffectAlleles().stream().map(EffectAllele::getVariant).forEach(
+                            variant -> {
+                                Collection<Location> variantLocations = variant.getLocations();
+                                for (Location location : variantLocations) {
                                     regions.add(location.getRegion());
                                 }
 
-                                snp.getGenomicContexts().forEach(context -> {
+                                variant.getGenomicContexts().forEach(context -> {
                                                                      mappedGenes.add(context.getGene());
 
                                                                      String geneName = context.getGene().getGeneName();
@@ -229,13 +229,13 @@ public class AssociationService {
                                                                      }
                                                                  }
                                 );
-                                snps.add(snp);
+                                variants.add(variant);
                             }
                     );
 
-                    snps.addAll(locus.getStrongestRiskAlleles()
+                    variants.addAll(locus.getStrongestEffectAlleles()
                                         .stream()
-                                        .map(RiskAllele::getSnp)
+                                        .map(EffectAllele::getVariant)
                                         .collect(Collectors.toList()));
                     reportedGeneCount.addAndGet(locus.getAuthorReportedGenes().size());
                     locus.getAuthorReportedGenes().forEach(
@@ -248,7 +248,7 @@ public class AssociationService {
         getLog().trace("Association '" + association.getId() + "' is mapped to " +
                                "" + traitCount + " EFO traits where study id = " + study.getId() + " " +
                                "(author reported " + reportedGeneCount + " gene(s)); " +
-                               "this reports on " + snps.size() + " SNPs in " + regions.size() + " regions, " +
+                               "this reports on " + variants.size() + " Variants in " + regions.size() + " regions, " +
                                "mapped to " + mappedGenes.size() + " genes.");
     }
 }

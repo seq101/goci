@@ -41,7 +41,7 @@ public class DiseaseTraitDocument extends OntologyEnabledDocument<DiseaseTrait> 
     //    @Field("association_orPerCopyUnitDescr") private Collection<String> orPerCopyUnitDescrs;
     //    @Field("association_orPerCopyRange") private Collection<String> orPerCopyRanges;
     //    @Field("association_orType") private Collection<String> orTypes;
-    @Field("association_rsId") private Collection<String> rsIds;
+    @Field("association_externalId") private Collection<String> externalIds;
     @Field("association_strongestAllele") private Collection<String> strongestAlleles;
     @Field("association_context") private Collection<String> contexts;
     @Field("association_regions") private Collection<String> regions;
@@ -89,7 +89,7 @@ public class DiseaseTraitDocument extends OntologyEnabledDocument<DiseaseTrait> 
         //        this.orPerCopyUnitDescrs = new LinkedHashSet<>();
         //        this.orPerCopyRanges = new LinkedHashSet<>();
         //        this.orTypes = new LinkedHashSet<>();
-        this.rsIds = new LinkedHashSet<>();
+        this.externalIds = new LinkedHashSet<>();
         this.strongestAlleles = new LinkedHashSet<>();
         this.contexts = new LinkedHashSet<>();
         this.regions = new LinkedHashSet<>();
@@ -213,8 +213,8 @@ public class DiseaseTraitDocument extends OntologyEnabledDocument<DiseaseTrait> 
     //        this.orTypes.add(orType);
     //    }
 
-    public void addRsId(String rsId) {
-        this.rsIds.add(rsId);
+    public void addExternalId(String externalId) {
+        this.externalIds.add(externalId);
     }
 
     public void addStrongestAllele(String strongestAllele) {

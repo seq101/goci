@@ -132,9 +132,9 @@ public class EnsemblRestService {
 
         catch (InterruptedException | MalformedURLException | UnirestException e) {
             getLog().error("Encountered a " + e.getClass().getSimpleName() +
-                                   " whilst trying to run mapping of SNP", e);
+                                   " whilst trying to run mapping of Variant", e);
             throw new EnsemblRestIOException("Encountered a " + e.getClass().getSimpleName() +
-                                                     " whilst trying to run mapping of SNP", e);
+                                                     " whilst trying to run mapping of Variant", e);
         }
 
 

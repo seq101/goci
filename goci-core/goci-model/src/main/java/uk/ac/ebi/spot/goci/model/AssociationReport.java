@@ -20,9 +20,9 @@ public class AssociationReport {
 
     private Date lastUpdateDate;
 
-    private String snpError;
+    private String variantError;
 
-    private String snpGeneOnDiffChr;
+    private String variantGeneOnDiffChr;
 
     private String noGeneForSymbol;
 
@@ -42,8 +42,8 @@ public class AssociationReport {
     }
 
     public AssociationReport(Date lastUpdateDate,
-                             String snpError,
-                             String snpGeneOnDiffChr,
+                             String variantError,
+                             String variantGeneOnDiffChr,
                              String noGeneForSymbol,
                              String restServiceError,
                              String suspectVariationError,
@@ -51,8 +51,8 @@ public class AssociationReport {
                              Boolean errorCheckedByCurator,
                              Association association) {
         this.lastUpdateDate = lastUpdateDate;
-        this.snpError = snpError;
-        this.snpGeneOnDiffChr = snpGeneOnDiffChr;
+        this.variantError = variantError;
+        this.variantGeneOnDiffChr = variantGeneOnDiffChr;
         this.noGeneForSymbol = noGeneForSymbol;
         this.restServiceError = restServiceError;
         this.suspectVariationError = suspectVariationError;
@@ -77,20 +77,20 @@ public class AssociationReport {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    public String getSnpError() {
-        return snpError;
+    public String getVariantError() {
+        return variantError;
     }
 
-    public void setSnpError(String snpError) {
-        this.snpError = snpError;
+    public void setVariantError(String variantError) {
+        this.variantError = variantError;
     }
 
-    public String getSnpGeneOnDiffChr() {
-        return snpGeneOnDiffChr;
+    public String getVariantGeneOnDiffChr() {
+        return variantGeneOnDiffChr;
     }
 
-    public void setSnpGeneOnDiffChr(String snpGeneOnDiffChr) {
-        this.snpGeneOnDiffChr = snpGeneOnDiffChr;
+    public void setVariantGeneOnDiffChr(String variantGeneOnDiffChr) {
+        this.variantGeneOnDiffChr = variantGeneOnDiffChr;
     }
 
     public String getNoGeneForSymbol() {

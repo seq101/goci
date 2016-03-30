@@ -22,9 +22,9 @@ public class Housekeeping {
     @GeneratedValue
     private Long id;
 
-    private Boolean studySnpCheckedLevelOne = false;
+    private Boolean studyVariantCheckedLvlOne = false;
 
-    private Boolean studySnpCheckedLevelTwo = false;
+    private Boolean studyVariantCheckedLvlTwo = false;
 
     private Boolean ethnicityCheckedLevelOne = false;
 
@@ -34,7 +34,7 @@ public class Housekeeping {
 
     private Boolean checkedMappingError = false;
 
-    private Boolean snpsRechecked = false;
+    private Boolean variantsRechecked = false;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date catalogPublishDate;
@@ -68,13 +68,13 @@ public class Housekeeping {
     public Housekeeping() {
     }
 
-    public Housekeeping(Boolean studySnpCheckedLevelOne,
-                        Boolean studySnpCheckedLevelTwo,
+    public Housekeeping(Boolean studyVariantCheckedLvlOne,
+                        Boolean studyVariantCheckedLvlTwo,
                         Boolean ethnicityCheckedLevelOne,
                         Boolean ethnicityCheckedLevelTwo,
                         Boolean ethnicityBackFilled,
                         Boolean checkedMappingError,
-                        Boolean snpsRechecked,
+                        Boolean variantsRechecked,
                         Date catalogPublishDate,
                         Date sendToNCBIDate,
                         Date studyAddedDate,
@@ -85,13 +85,13 @@ public class Housekeeping {
                         Curator curator,
                         CurationStatus curationStatus,
                         UnpublishReason unpublishReason) {
-        this.studySnpCheckedLevelOne = studySnpCheckedLevelOne;
-        this.studySnpCheckedLevelTwo = studySnpCheckedLevelTwo;
+        this.studyVariantCheckedLvlOne = studyVariantCheckedLvlOne;
+        this.studyVariantCheckedLvlTwo = studyVariantCheckedLvlTwo;
         this.ethnicityCheckedLevelOne = ethnicityCheckedLevelOne;
         this.ethnicityCheckedLevelTwo = ethnicityCheckedLevelTwo;
         this.ethnicityBackFilled = ethnicityBackFilled;
         this.checkedMappingError = checkedMappingError;
-        this.snpsRechecked = snpsRechecked;
+        this.variantsRechecked = variantsRechecked;
         this.catalogPublishDate = catalogPublishDate;
         this.sendToNCBIDate = sendToNCBIDate;
         this.studyAddedDate = studyAddedDate;
@@ -112,20 +112,20 @@ public class Housekeeping {
         this.id = id;
     }
 
-    public Boolean getStudySnpCheckedLevelOne() {
-        return studySnpCheckedLevelOne;
+    public Boolean getStudyVariantCheckedLvlOne() {
+        return studyVariantCheckedLvlOne;
     }
 
-    public void setStudySnpCheckedLevelOne(Boolean studySnpCheckedLevelOne) {
-        this.studySnpCheckedLevelOne = studySnpCheckedLevelOne;
+    public void setStudyVariantCheckedLvlOne(Boolean studyVariantCheckedLvlOne) {
+        this.studyVariantCheckedLvlOne = studyVariantCheckedLvlOne;
     }
 
-    public Boolean getStudySnpCheckedLevelTwo() {
-        return studySnpCheckedLevelTwo;
+    public Boolean getStudyVariantCheckedLvlTwo() {
+        return studyVariantCheckedLvlTwo;
     }
 
-    public void setStudySnpCheckedLevelTwo(Boolean studySnpCheckedLevelTwo) {
-        this.studySnpCheckedLevelTwo = studySnpCheckedLevelTwo;
+    public void setStudyVariantCheckedLvlTwo(Boolean studyVariantCheckedLvlTwo) {
+        this.studyVariantCheckedLvlTwo = studyVariantCheckedLvlTwo;
     }
 
     public Boolean getEthnicityCheckedLevelOne() {
@@ -160,12 +160,12 @@ public class Housekeeping {
         this.checkedMappingError = checkedMappingError;
     }
 
-    public Boolean getSnpsRechecked() {
-        return snpsRechecked;
+    public Boolean getVariantsRechecked() {
+        return variantsRechecked;
     }
 
-    public void setSnpsRechecked(Boolean snpsRechecked) {
-        this.snpsRechecked = snpsRechecked;
+    public void setVariantsRechecked(Boolean variantsRechecked) {
+        this.variantsRechecked = variantsRechecked;
     }
 
     public Date getCatalogPublishDate() {

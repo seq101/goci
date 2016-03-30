@@ -34,11 +34,11 @@ public class JsonProcessingService {
         
         if(type.equals("study")){
             header =
-                    "DATE ADDED TO CATALOG\tPUBMEDID\tFIRST AUTHOR\tDATE\tJOURNAL\tLINK\tSTUDY\tDISEASE/TRAIT\tINITIAL SAMPLE SIZE\tREPLICATION SAMPLE SIZE\tPLATFORM [SNPS PASSING QC]\tASSOCIATION COUNT";
+                    "DATE ADDED TO CATALOG\tPUBMEDID\tFIRST AUTHOR\tDATE\tJOURNAL\tLINK\tSTUDY\tDISEASE/TRAIT\tINITIAL SAMPLE SIZE\tREPLICATION SAMPLE SIZE\tPLATFORM [VARIANTS PASSING QC]\tASSOCIATION COUNT";
         }
         else{
             header =
-                    "DATE ADDED TO CATALOG\tPUBMEDID\tFIRST AUTHOR\tDATE\tJOURNAL\tLINK\tSTUDY\tDISEASE/TRAIT\tINITIAL SAMPLE SIZE\tREPLICATION SAMPLE SIZE\tREGION\tCHR_ID\tCHR_POS\tREPORTED GENE(S)\tMAPPED_GENE\tUPSTREAM_GENE_ID\tDOWNSTREAM_GENE_ID\tSNP_GENE_IDS\tUPSTREAM_GENE_DISTANCE\tDOWNSTREAM_GENE_DISTANCE\tSTRONGEST SNP-RISK ALLELE\tSNPS\tMERGED\tSNP_ID_CURRENT\tCONTEXT\tINTERGENIC\tRISK ALLELE FREQUENCY\tP-VALUE\tPVALUE_MLOG\tP-VALUE (TEXT)\tOR or BETA\t95% CI (TEXT)\tPLATFORM [SNPS PASSING QC]\tCNV";
+                    "DATE ADDED TO CATALOG\tPUBMEDID\tFIRST AUTHOR\tDATE\tJOURNAL\tLINK\tSTUDY\tDISEASE/TRAIT\tINITIAL SAMPLE SIZE\tREPLICATION SAMPLE SIZE\tREGION\tCHR_ID\tCHR_POS\tREPORTED GENE(S)\tMAPPED_GENE\tUPSTREAM_GENE_ID\tDOWNSTREAM_GENE_ID\tVARIANT_GENE_IDS\tUPSTREAM_GENE_DISTANCE\tDOWNSTREAM_GENE_DISTANCE\tSTRONGEST VARIANT-EFFECT ALLELE\tVARIANTS\tMERGED\tVARIANT_ID_CURRENT\tCONTEXT\tINTERGENIC\tEFFECT ALLELE FREQUENCY\tP-VALUE\tPVALUE_MLOG\tP-VALUE (TEXT)\tOR or BETA\t95% CI (TEXT)\tPLATFORM [VARIANTS PASSING QC]\tCNV";
         }
 
         if(includeAnnotations){
@@ -228,16 +228,16 @@ public class JsonProcessingService {
         line.append(getStrongestAllele(doc));
         line.append("\t");
 
-        String rsId = getRsId(doc);
-        line.append(rsId);
+        String externalId = getExternalId(doc);
+        line.append(externalId);
         line.append("\t");
 
         //            line.append(doc.get("merged").asText().trim());
         line.append(""); // todo - remove this when above solr field is available
         line.append("\t");
 
-        if (rsId.indexOf("rs") == 0 && rsId.indexOf("rs", 2) == -1) {
-            line.append(rsId.substring(2));
+        if (externalId.indexOf("rs") == 0 && externalId.indexOf("rs", 2) == -1) {
+            line.append(externalId.substring(2));
         }
         else {
             line.append("");
@@ -382,14 +382,14 @@ public class JsonProcessingService {
     }
 
     private String getRiskFreq(JsonNode doc) {
-        String riskFreq;
-        if (doc.get("riskFrequency") != null) {
-            riskFreq = doc.get("riskFrequency").asText().trim();
+        String effectFreq;
+        if (doc.get("effectFrequency") != null) {
+            effectFreq = doc.get("effectFrequency").asText().trim();
         }
         else {
-            riskFreq = "";
+            effectFreq = "";
         }
-        return riskFreq;
+        return effectFreq;
     }
 
     private String getContext(JsonNode doc) {
@@ -404,15 +404,15 @@ public class JsonProcessingService {
         return context;
     }
 
-    private String getRsId(JsonNode doc) {
-        String rsId;
-        if (doc.get("rsId") != null) {
-            rsId = doc.get("rsId").get(0).asText().trim();
+    private String getExternalId(JsonNode doc) {
+        String externalId;
+        if (doc.get("externalId") != null) {
+            externalId = doc.get("externalId").get(0).asText().trim();
         }
         else {
-            rsId = "";
+            externalId = "";
         }
-        return rsId;
+        return externalId;
     }
 
     private String getStrongestAllele(JsonNode doc) {

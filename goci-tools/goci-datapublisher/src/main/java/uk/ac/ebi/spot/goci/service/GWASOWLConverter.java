@@ -3,7 +3,7 @@ package uk.ac.ebi.spot.goci.service;
 import org.semanticweb.owlapi.model.OWLOntology;
 import uk.ac.ebi.spot.goci.exception.OWLConversionException;
 import uk.ac.ebi.spot.goci.model.Association;
-import uk.ac.ebi.spot.goci.model.SingleNucleotidePolymorphism;
+import uk.ac.ebi.spot.goci.model.Variant;
 import uk.ac.ebi.spot.goci.model.Study;
 
 import java.util.Collection;
@@ -37,12 +37,12 @@ public interface GWASOWLConverter {
     /**
      * Converts the provided SNPs into ontology entities and adds them to the supplied ontology ontology
      *
-     * @param snps     the SNPs retrieved from the GWAS catalog
+     * @param variants     the SNPs retrieved from the GWAS catalog
      * @param ontology the ontology to write the studies to
      * @throws uk.ac.ebi.spot.goci.exception.OWLConversionException if something went wrong whilst adding data to the
      *                                                              ontology
      */
-    void addSNPsToOntology(Collection<SingleNucleotidePolymorphism> snps, OWLOntology ontology)
+    void addVariantsToOntology(Collection<Variant> variants, OWLOntology ontology)
             throws OWLConversionException;
 
     /**

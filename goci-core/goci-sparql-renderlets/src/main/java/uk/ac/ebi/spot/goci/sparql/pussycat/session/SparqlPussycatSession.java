@@ -59,8 +59,8 @@ public class SparqlPussycatSession extends AbstractPussycatSession {
     private static final String associationQueryMain = "SELECT DISTINCT ?association ?band " +
             "WHERE { " +
             "  ?association a gt:TraitAssociation ; " +
-            "               oban:has_subject ?snp . " +
-            "  ?snp ro:located_in ?bandUri . " +
+            "               oban:has_subject ?variant . " +
+            "  ?variant ro:located_in ?bandUri . " +
             "  ?bandUri rdfs:label ?band .";
 
     private static final String associationQueryBandFilter = "  FILTER (STR(?band) != 'NR') }";

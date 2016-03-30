@@ -1,6 +1,5 @@
 package uk.ac.ebi.spot.goci.repository;
 
-import org.flywaydb.core.internal.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,7 +175,17 @@ public class CatalogExportRepository {
 
                     if (val != null) {
                         if (!val.isEmpty()) {
-                            if (!StringUtils.isNumeric(val)) {
+
+                            boolean isDigit = true;
+                            for(int pos =0; pos<val.length();pos++){
+                                char c = val.charAt(pos);
+                                if(!Character.isDigit(c)){
+                                    isDigit = false;
+                                }
+                            }
+
+
+                            if (!isDigit) {
                                 identifiers.add((long) val.hashCode());
                             }
                             else {
@@ -418,26 +427,26 @@ public class CatalogExportRepository {
                                   "ENTREZ_DOWNSTREAM_GENE_ID",
                                   "ENSEMBL_UPSTREAM_GENE_ID",
                                   "ENSEMBL_DOWNSTREAM_GENE_ID",
-                                  "SNP_GENE_IDS_ENTREZ",
-                                  "SNP_GENE_IDS_ENSEMBL",
+                                  "VARIANT_GENE_IDS_ENTREZ",
+                                  "VARIANT_GENE_IDS_ENSEMBL",
                                   "ENTREZ_UPSTREAM_GENE_DISTANCE",
                                   "ENTREZ_DOWNSTREAM_GENE_DISTANCE",
                                   "ENSEMBL_UPSTREAM_GENE_DISTANCE",
                                   "ENSEMBL_DOWNSTREAM_GENE_DISTANCE",
-                                  "STRONGEST SNP-RISK ALLELE",
-                                  "SNPS",
+                                  "STRONGEST VARUABT-EFFECT ALLELE",
+                                  "VARIANTS",
                                   "MERGED",
-                                  "SNP_ID_CURRENT",
+                                  "VARIANT_ID_CURRENT",
                                   "CONTEXT",
                                   "INTERGENIC_ENTREZ",
                                   "INTERGENIC_ENSEMBL",
-                                  "RISK ALLELE FREQUENCY",
+                                  "EFFECT ALLELE FREQUENCY",
                                   "P-VALUE",
                                   "PVALUE_MLOG",
                                   "P-VALUE (TEXT)",
                                   "OR or BETA",
                                   "95% CI (TEXT)",
-                                  "PLATFORM [SNPS PASSING QC]",
+                                  "PLATFORM [VARIANTS PASSING QC]",
                                   "CNV");
         }
         else {
@@ -461,26 +470,26 @@ public class CatalogExportRepository {
                                   "ENTREZ_DOWNSTREAM_GENE_ID",
                                   "ENSEMBL_UPSTREAM_GENE_ID",
                                   "ENSEMBL_DOWNSTREAM_GENE_ID",
-                                  "SNP_GENE_IDS_ENTREZ",
-                                  "SNP_GENE_IDS_ENSEMBL",
+                                  "VARIANT_GENE_IDS_ENTREZ",
+                                  "VARIANT_GENE_IDS_ENSEMBL",
                                   "ENTREZ_UPSTREAM_GENE_DISTANCE",
                                   "ENTREZ_DOWNSTREAM_GENE_DISTANCE",
                                   "ENSEMBL_UPSTREAM_GENE_DISTANCE",
                                   "ENSEMBL_DOWNSTREAM_GENE_DISTANCE",
-                                  "STRONGEST SNP-RISK ALLELE",
-                                  "SNPS",
+                                  "STRONGEST VARIANT-EFFECT ALLELE",
+                                  "VARIANTS",
                                   "MERGED",
-                                  "SNP_ID_CURRENT",
+                                  "VARIANT_ID_CURRENT",
                                   "CONTEXT",
                                   "INTERGENIC_ENTREZ",
                                   "INTERGENIC_ENSEMBL",
-                                  "RISK ALLELE FREQUENCY",
+                                  "EFFECT ALLELE FREQUENCY",
                                   "P-VALUE",
                                   "PVALUE_MLOG",
                                   "P-VALUE (TEXT)",
                                   "OR or BETA",
                                   "95% CI (TEXT)",
-                                  "PLATFORM [SNPS PASSING QC]",
+                                  "PLATFORM [VARIANTS PASSING QC]",
                                   "CNV",
                                   "MAPPED_TRAIT",
                                   "MAPPED_TRAIT_URI");

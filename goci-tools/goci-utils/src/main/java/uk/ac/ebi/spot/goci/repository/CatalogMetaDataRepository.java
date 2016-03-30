@@ -30,11 +30,11 @@ public class CatalogMetaDataRepository {
                     "JOIN HOUSEKEEPING H ON H.ID = S.HOUSEKEEPING_ID " +
                     "WHERE H.CATALOG_PUBLISH_DATE IS NOT NULL AND H.CATALOG_UNPUBLISH_DATE IS NULL)";
 
-    private static final String SNP_COUNT = "" +
+    private static final String VARIANT_COUNT = "" +
             "SELECT COUNT(*) FROM(" +
-            "SELECT DISTINCT SNP.RS_ID " +
-            "FROM SINGLE_NUCLEOTIDE_POLYMORPHISM SNP " +
-            "JOIN STUDY_SNP SN ON SN.SNP_ID = SNP.ID " +
+            "SELECT DISTINCT VARIANT.RS_ID " +
+            "FROM VARIANT VARIANT " +
+            "JOIN STUDY_VARIANT SN ON SN.VARIANT_ID = VARIANT.ID " +
             "JOIN STUDY S ON S.ID = SN.STUDY_ID " +
             "JOIN HOUSEKEEPING H ON H.ID = S.HOUSEKEEPING_ID " +
             "WHERE H.CATALOG_PUBLISH_DATE IS NOT NULL AND H.CATALOG_UNPUBLISH_DATE IS NULL)";
@@ -42,9 +42,9 @@ public class CatalogMetaDataRepository {
 
     private static final String ASSOCIATION_COUNT =
             "SELECT COUNT(*) FROM(" +
-                    "SELECT DISTINCT SNP.RS_ID, D.TRAIT " +
-                    "FROM SINGLE_NUCLEOTIDE_POLYMORPHISM SNP " +
-                    "JOIN STUDY_SNP SN ON SN.SNP_ID = SNP.ID " +
+                    "SELECT DISTINCT VARIANT.RS_ID, D.TRAIT " +
+                    "FROM VARIANT VARIANT " +
+                    "JOIN STUDY_VARIANT SN ON SN.VARIANT_ID = VARIANT.ID " +
                     "JOIN STUDY S ON S.ID = SN.STUDY_ID " +
                     "JOIN HOUSEKEEPING H ON H.ID = S.HOUSEKEEPING_ID " +
                     "JOIN STUDY_DISEASE_TRAIT SD ON SD.STUDY_ID = S.ID " +
@@ -83,8 +83,8 @@ public class CatalogMetaDataRepository {
 
         Integer studycount = getStudyCount();
         System.out.println(studycount);
-        Integer snpcount = getSNPCount();
-        System.out.println(snpcount);
+        Integer variantCount = getVariantCount();
+        System.out.println(variantCount);
         Integer associationCount = getAssociationCount();
         System.out.println(associationCount);
         Integer ensemblBuild = getEnsemblBuild();
@@ -106,7 +106,7 @@ public class CatalogMetaDataRepository {
         FileOutputStream out = new FileOutputStream(statsFile);
         props.setProperty("releasedate", today);
         props.setProperty("studycount", studycount.toString());
-        props.setProperty("snpcount", snpcount.toString());
+        props.setProperty("variantCount", variantCount.toString());
         props.setProperty("associationcount", associationCount.toString());
         props.setProperty("dbsnpbuild", dbSnpVersion.toString());
         props.setProperty("genomebuild", genomeBuild);
@@ -121,8 +121,8 @@ public class CatalogMetaDataRepository {
         return jdbcTemplate.queryForObject(ASSOCIATION_COUNT, Integer.class);
     }
 
-    private Integer getSNPCount() {
-        return jdbcTemplate.queryForObject(SNP_COUNT, Integer.class);
+    private Integer getVariantCount() {
+        return jdbcTemplate.queryForObject(VARIANT_COUNT, Integer.class);
     }
 
     private Integer getStudyCount() {

@@ -30,35 +30,35 @@ WHERE {
   ?c a gwas:Chromosome .
   ?c ro:has_part ?bandIndiv .
   ?bandIndiv a gwas:CytogeneticRegion .
-  ?bandIndiv ro:location_of ?snp .
+  ?bandIndiv ro:location_of ?variant .
   ?bandIndiv rdfs:label ?band .
-  ?snp a gwas:SingleNucleotidePolymorphism .
+  ?variant a gwas:Variant .
 }
 
 
-^[BAND_SNP.read]
+^[BAND_VARIANT.read]
 
-SELECT DISTINCT ?band ?snp
+SELECT DISTINCT ?band ?variant
 WHERE {
   ?bandIndiv a gwas:CytogeneticRegion .
-  ?bandIndiv ro:location_of ?snp .
+  ?bandIndiv ro:location_of ?variant .
   ?bandIndiv rdfs:label ?band .
-  ?snp a gwas:SingleNucleotidePolymorphism .
+  ?variant a gwas:Variant .
 }
 
 
 
-^[SNP_TRAIT.read]
+^[VARIANT_TRAIT.read]
 
-SELECT DISTINCT ?snp ?trait ?traitClass
+SELECT DISTINCT ?variant ?trait ?traitClass
 WHERE {
-  ?snpIndiv a gwas:SingleNucleotidePolymorphism .
-  ?snpIndiv gwas:has_about ?ta . 
-  ?snpIndiv rdfs:label ?snp .
+  ?variantIndiv a gwas:Variant .
+  ?variantIndiv gwas:has_about ?ta .
+  ?variantIndiv rdfs:label ?variant .
   ?ta a gwas:TraitAssociation .
   ?ta obo:IAO_0000136 ?traitIndiv .
   ?traitIndiv a ?traitClass .
   ?traitClass rdfs:label ?trait
-  FILTER (?traitClass != gwas:SingleNucleotidePolymorphism) .
+  FILTER (?traitClass != gwas:Variant) .
   FILTER (?traitClass != owl:NamedIndividual) .
 }

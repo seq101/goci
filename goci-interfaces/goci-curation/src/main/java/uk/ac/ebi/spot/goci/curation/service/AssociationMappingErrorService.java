@@ -26,13 +26,13 @@ public class AssociationMappingErrorService {
 
         //Create map of errors
         if (associationReport != null) {
-            if (associationReport.getSnpError() != null && !associationReport.getSnpError().isEmpty()) {
-                associationErrorMap.put("SNP Error", associationReport.getSnpError());
+            if (associationReport.getVariantError() != null && !associationReport.getVariantError().isEmpty()) {
+                associationErrorMap.put("Variant Error", associationReport.getVariantError());
             }
 
-            if (associationReport.getSnpGeneOnDiffChr() != null &&
-                    !associationReport.getSnpGeneOnDiffChr().isEmpty()) {
-                associationErrorMap.put("Snp Gene On Diff Chr", associationReport.getSnpGeneOnDiffChr());
+            if (associationReport.getVariantGeneOnDiffChr() != null &&
+                    !associationReport.getVariantGeneOnDiffChr().isEmpty()) {
+                associationErrorMap.put("Variant Gene On Diff Chr", associationReport.getVariantGeneOnDiffChr());
             }
 
             if (associationReport.getNoGeneForSymbol() != null &&

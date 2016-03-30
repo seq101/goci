@@ -22,8 +22,8 @@ getCytogeneticBandForAssociation()
 SELECT ?band
 WHERE {
   ?association a gt:TraitAssociation ;
-               oban:has_subject ?snp .
-  ?snp ro:located_in ?band .
+               oban:has_subject ?variant .
+  ?variant ro:located_in ?band .
   FILTER (?association = <??>)
 }
 
@@ -32,8 +32,8 @@ getAssociationsLocatedInCytogeneticBand(SparqlTemplate reasoner, URI bandIndivid
 SELECT ?association
 WHERE {
   ?association a gt:TraitAssociation ;
-               oban:has_subject ?snp .
-  ?snp ro:located_in ?band .
+               oban:has_subject ?variant .
+  ?variant ro:located_in ?band .
   FILTER (?band = <??>)
 }
 
@@ -42,8 +42,8 @@ getAssociationsLocatedInCytogeneticBand(SparqlTemplate reasoner, String bandName
 SELECT ?association
 WHERE {
   ?association a gt:TraitAssociation ;
-               oban:has_subject ?snp .
-  ?snp ro:located_in ?bandUri .
+               oban:has_subject ?variant .
+  ?variant ro:located_in ?bandUri .
   ?bandUri rdfs:label ?band .
   FILTER ( ?band = "??"^^xsd:string )
 }
@@ -53,9 +53,9 @@ getTraitsLocatedInCytogeneticBand()
 SELECT ?trait ?band
 WHERE {
   ?association a gt:TraitAssociation ;
-               oban:has_subject ?snp ;
+               oban:has_subject ?variant ;
                oban:has_object ?trait .
-  ?snp ro:located_in ?band ;
+  ?variant ro:located_in ?band ;
   FILTER (?band = <??>)
 }
 
@@ -73,11 +73,11 @@ getDatesOfAssociationsByBandAndTrait()
 SELECT ?association ?date
 WHERE {
   ?association a gt:TraitAssociation ;
-               oban:has_subject ?snp ;
+               oban:has_subject ?variant ;
                oban:has_object ?trait ;
                ro:part_of ?study .
   ?study gt:has_publication_date ?date .
-  ?snp ro:located_in ?band .
+  ?variant ro:located_in ?band .
   FILTER ( ?band = ?? )
   FILTER ( ?trait = ?? )
 }
@@ -111,10 +111,10 @@ getAssociationsForPvalue()
 SELECT ?association ?pvalue
 WHERE {
   ?association a gt:TraitAssociation ;
-               oban:has_subject ?snp ;
+               oban:has_subject ?variant ;
                oban:has_object ?trait ;
                ro:part_of ?study .
   ?association gt:has_p_value ?pvalue .
-  ?snp ro:located_in ?band .
+  ?variant ro:located_in ?band .
   FILTER ( ?pvalue < 5e-8)
 }

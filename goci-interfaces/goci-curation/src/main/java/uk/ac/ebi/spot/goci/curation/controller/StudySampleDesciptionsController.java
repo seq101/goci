@@ -74,12 +74,12 @@ public class StudySampleDesciptionsController {
                 String replicateSampleSize = study.getReplicateSampleSize();
 
                 // Housekeeping attributes
-                Boolean ethnicityCheckedLevelOne = false;
-                Boolean ethnicityCheckedLevelTwo = false;
+                Boolean ethnicityCheckedLvlOne = false;
+                Boolean ethnicityCheckedLvlTwo = false;
 
                 if (study.getHousekeeping() != null) {
-                    ethnicityCheckedLevelOne = study.getHousekeeping().getEthnicityCheckedLevelOne();
-                    ethnicityCheckedLevelTwo = study.getHousekeeping().getEthnicityCheckedLevelTwo();
+                    ethnicityCheckedLvlOne = study.getHousekeeping().getEthnicityCheckedLevelOne();
+                    ethnicityCheckedLvlTwo = study.getHousekeeping().getEthnicityCheckedLevelTwo();
 
                 }
 
@@ -98,8 +98,8 @@ public class StudySampleDesciptionsController {
                                                                                            pubmedId,
                                                                                            initialSampleSize,
                                                                                            replicateSampleSize,
-                                                                                           ethnicityCheckedLevelOne,
-                                                                                           ethnicityCheckedLevelTwo,
+                                                                                           ethnicityCheckedLvlOne,
+                                                                                           ethnicityCheckedLvlTwo,
                                                                                            type,
                                                                                            numberOfIndividuals,
                                                                                            ethnicGroup,

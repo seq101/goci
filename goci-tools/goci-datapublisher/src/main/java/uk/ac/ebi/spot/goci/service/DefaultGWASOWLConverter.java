@@ -31,8 +31,8 @@ import uk.ac.ebi.spot.goci.model.EfoTrait;
 import uk.ac.ebi.spot.goci.model.Location;
 import uk.ac.ebi.spot.goci.model.Locus;
 import uk.ac.ebi.spot.goci.model.Region;
-import uk.ac.ebi.spot.goci.model.RiskAllele;
-import uk.ac.ebi.spot.goci.model.SingleNucleotidePolymorphism;
+import uk.ac.ebi.spot.goci.model.EffectAllele;
+import uk.ac.ebi.spot.goci.model.Variant;
 import uk.ac.ebi.spot.goci.model.Study;
 import uk.ac.ebi.spot.goci.ontology.OntologyConstants;
 import uk.ac.ebi.spot.goci.ontology.ReflexiveIRIMinter;
@@ -113,9 +113,9 @@ public class DefaultGWASOWLConverter implements GWASOWLConverter {
         }
     }
 
-    public void addSNPsToOntology(Collection<SingleNucleotidePolymorphism> snps, OWLOntology ontology) {
-        for (SingleNucleotidePolymorphism snp : snps) {
-            convertSNP(snp, ontology);
+    public void addVariantsToOntology(Collection<Variant> variants, OWLOntology ontology) {
+        for (Variant variant : variants) {
+            convertVariant(variant, ontology);
         }
     }
 
@@ -222,23 +222,23 @@ public class DefaultGWASOWLConverter implements GWASOWLConverter {
         }
     }
 
-    protected void convertSNP(SingleNucleotidePolymorphism snp, OWLOntology ontology) {
-        // get the snp class
-        OWLClass snpClass = getDataFactory().getOWLClass(IRI.create(OntologyConstants.SNP_CLASS_IRI));
+    protected void convertVariant(Variant variant, OWLOntology ontology) {
+        // get the variant class
+        OWLClass variantClass = getDataFactory().getOWLClass(IRI.create(OntologyConstants.VARIANT_CLASS_IRI));
 
-        // create a new snp instance
-        OWLNamedIndividual snpIndiv = getDataFactory().getOWLNamedIndividual(
-                getMinter().mint(OntologyConstants.GWAS_ONTOLOGY_BASE_IRI, snp));
+        // create a new variant instance
+        OWLNamedIndividual variantIndiv = getDataFactory().getOWLNamedIndividual(
+                getMinter().mint(OntologyConstants.GWAS_ONTOLOGY_BASE_IRI, variant));
 
         // assert class membership
-        OWLClassAssertionAxiom classAssertion = getDataFactory().getOWLClassAssertionAxiom(snpClass, snpIndiv);
+        OWLClassAssertionAxiom classAssertion = getDataFactory().getOWLClassAssertionAxiom(variantClass, variantIndiv);
         getManager().addAxiom(ontology, classAssertion);
 
         // add datatype properties...
 
         // get datatype relations
-        OWLDataProperty has_snp_rsid = getDataFactory().getOWLDataProperty(
-                IRI.create(OntologyConstants.HAS_SNP_REFERENCE_ID_PROPERTY_IRI));
+        OWLDataProperty hasVariantExternalId = getDataFactory().getOWLDataProperty(
+                IRI.create(OntologyConstants.HAS_VARIANT_REFERENCE_ID_PROPERTY_IRI));
         OWLDataProperty has_bp_pos = getDataFactory().getOWLDataProperty(
                 IRI.create(OntologyConstants.HAS_BP_POSITION_PROPERTY_IRI));
 
@@ -246,36 +246,36 @@ public class DefaultGWASOWLConverter implements GWASOWLConverter {
         OWLAnnotationProperty rdfsLabel =
                 getDataFactory().getOWLAnnotationProperty(OWLRDFVocabulary.RDFS_LABEL.getIRI());
 
-        // assert rsid relation
+        // assert variantId relation
 
-        OWLLiteral rsid = getDataFactory().getOWLLiteral(snp.getRsId());
-        OWLDataPropertyAssertionAxiom rsid_relation =
-                getDataFactory().getOWLDataPropertyAssertionAxiom(has_snp_rsid, snpIndiv, rsid);
-        AddAxiom add_rsid = new AddAxiom(ontology, rsid_relation);
-        getManager().applyChange(add_rsid);
+        OWLLiteral externalId = getDataFactory().getOWLLiteral(variant.getExternalId());
+        OWLDataPropertyAssertionAxiom externalId_relation =
+                getDataFactory().getOWLDataPropertyAssertionAxiom(hasVariantExternalId, variantIndiv, externalId);
+        AddAxiom add_externalId = new AddAxiom(ontology, externalId_relation);
+        getManager().applyChange(add_externalId);
 
         // assert bp_pos relation
-        if (snp.getLocations() != null) {
-            for (Location snpLocation : snp.getLocations()) {
-                if (snpLocation.getChromosomePosition() != null) {
+        if (variant.getLocations() != null) {
+            for (Location variantLocation : variant.getLocations()) {
+                if (variantLocation.getChromosomePosition() != null) {
                     OWLLiteral bp_pos =
-                            getDataFactory().getOWLLiteral(snpLocation.getChromosomePosition(), OWL2Datatype.XSD_INT);
+                            getDataFactory().getOWLLiteral(variantLocation.getChromosomePosition(), OWL2Datatype.XSD_INT);
                     OWLDataPropertyAssertionAxiom bp_pos_relation =
-                            getDataFactory().getOWLDataPropertyAssertionAxiom(has_bp_pos, snpIndiv, bp_pos);
+                            getDataFactory().getOWLDataPropertyAssertionAxiom(has_bp_pos, variantIndiv, bp_pos);
                     AddAxiom add_bp_pos = new AddAxiom(ontology, bp_pos_relation);
                     getManager().applyChange(add_bp_pos);
                 }
             }
         }
         else {
-            getLog().debug("No SNP location available for SNP " + rsid);
+            getLog().debug("No Variant location available for Variant " + externalId);
         }
 
         // assert label
-        OWLAnnotationAssertionAxiom snp_label_annotation =
-                getDataFactory().getOWLAnnotationAssertionAxiom(rdfsLabel, snpIndiv.getIRI(), rsid);
-        AddAxiom add_snp_label = new AddAxiom(ontology, snp_label_annotation);
-        getManager().applyChange(add_snp_label);
+        OWLAnnotationAssertionAxiom variantlabelAnnotation =
+                getDataFactory().getOWLAnnotationAssertionAxiom(rdfsLabel, variantIndiv.getIRI(), externalId);
+        AddAxiom addVariantLabel = new AddAxiom(ontology, variantlabelAnnotation);
+        getManager().applyChange(addVariantLabel);
 
         // get the band class
         OWLClass bandClass = getDataFactory().getOWLClass(IRI.create(OntologyConstants.CYTOGENIC_REGION_CLASS_IRI));
@@ -300,7 +300,7 @@ public class DefaultGWASOWLConverter implements GWASOWLConverter {
         OWLObjectProperty part_of = getDataFactory().getOWLObjectProperty(
                 IRI.create(OntologyConstants.PART_OF_PROPERTY_IRI));
 
-        for (Location location : snp.getLocations()) {
+        for (Location location : variant.getLocations()) {
             Region region = location.getRegion();
 
             if (region.getName() != null){
@@ -332,13 +332,13 @@ public class DefaultGWASOWLConverter implements GWASOWLConverter {
 
                 // assert located_in relation
                 OWLObjectPropertyAssertionAxiom located_in_relation =
-                        getDataFactory().getOWLObjectPropertyAssertionAxiom(located_in, snpIndiv, bandIndiv);
+                        getDataFactory().getOWLObjectPropertyAssertionAxiom(located_in, variantIndiv, bandIndiv);
                 AddAxiom add_located_in = new AddAxiom(ontology, located_in_relation);
                 getManager().applyChange(add_located_in);
 
                 // assert location_of relation
                 OWLObjectPropertyAssertionAxiom location_of_relation =
-                        getDataFactory().getOWLObjectPropertyAssertionAxiom(location_of, bandIndiv, snpIndiv);
+                        getDataFactory().getOWLObjectPropertyAssertionAxiom(location_of, bandIndiv, variantIndiv);
                 AddAxiom add_location_of = new AddAxiom(ontology, location_of_relation);
                 getManager().applyChange(add_location_of);
 
@@ -346,7 +346,7 @@ public class DefaultGWASOWLConverter implements GWASOWLConverter {
                 OWLClass chrClass = getDataFactory().getOWLClass(IRI.create(OntologyConstants.CHROMOSOME_CLASS_IRI));
 
                 // create a new chromosome individual
-                //If a snp has a chromosome name, create the chromosome individual if it doesn't have one (ex : the snp is
+                //If a variant has a chromosome name, create the chromosome individual if it doesn't have one (ex : the variant is
                 // no mapped any more) then just don't create it.
 
                 String chromName = location.getChromosomeName();
@@ -432,50 +432,50 @@ public class DefaultGWASOWLConverter implements GWASOWLConverter {
             getManager().applyChange(add_p_value);
         }
         // get the snp instance for this association
-        OWLNamedIndividual snpIndiv;
-        String rsId = null;
+        OWLNamedIndividual variantIndiv;
+        String externalId = null;
         for (Locus locus : association.getLoci()) {
-            for (RiskAllele riskAllele : locus.getStrongestRiskAlleles()) {
-                SingleNucleotidePolymorphism snp = riskAllele.getSnp();
-                rsId = snp.getRsId();
+            for (EffectAllele effectAllele : locus.getStrongestEffectAlleles()) {
+                Variant variant = effectAllele.getVariant();
+                externalId = variant.getExternalId();
 
-                snpIndiv = getDataFactory().getOWLNamedIndividual(
-                        getMinter().mint(OntologyConstants.GWAS_ONTOLOGY_BASE_IRI, snp));
+                variantIndiv = getDataFactory().getOWLNamedIndividual(
+                        getMinter().mint(OntologyConstants.GWAS_ONTOLOGY_BASE_IRI, variant));
 
-                if (snpIndiv == null) {
-                    String warning = "A new SNP with the given RSID only will be created";
+                if (variantIndiv == null) {
+                    String warning = "A new Variant with the given variantId only will be created";
 
                     if (!issuedWarnings.contains(warning)) {
                         getLog().warn(warning);
                         issuedWarnings.add(warning);
                     }
 
-                    snpIndiv = getDataFactory().getOWLNamedIndividual(
+                    variantIndiv = getDataFactory().getOWLNamedIndividual(
                             getMinter().mint(OntologyConstants.GWAS_ONTOLOGY_BASE_IRI,
-                                             "SingleNucleotidePolymorphism",
-                                             snp.getRsId(),
+                                             "Variant",
+                                             variant.getExternalId(),
                                              true));
 
                     // assert class membership
-                    OWLClass snpClass = getDataFactory().getOWLClass(IRI.create(OntologyConstants.SNP_CLASS_IRI));
-                    OWLClassAssertionAxiom snpClassAssertion =
-                            getDataFactory().getOWLClassAssertionAxiom(snpClass, snpIndiv);
-                    getManager().addAxiom(ontology, snpClassAssertion);
+                    OWLClass variantClass = getDataFactory().getOWLClass(IRI.create(OntologyConstants.VARIANT_CLASS_IRI));
+                    OWLClassAssertionAxiom variantClassAssertion =
+                            getDataFactory().getOWLClassAssertionAxiom(variantClass, variantIndiv);
+                    getManager().addAxiom(ontology, variantClassAssertion);
 
-                    // assert rsid relation
-                    OWLDataProperty has_snp_rsid = getDataFactory().getOWLDataProperty(
-                            IRI.create(OntologyConstants.HAS_SNP_REFERENCE_ID_PROPERTY_IRI));
-                    OWLLiteral rsid = getDataFactory().getOWLLiteral(snp.getRsId());
-                    OWLDataPropertyAssertionAxiom rsid_relation =
-                            getDataFactory().getOWLDataPropertyAssertionAxiom(has_snp_rsid, snpIndiv, rsid);
-                    AddAxiom add_rsid = new AddAxiom(ontology, rsid_relation);
-                    getManager().applyChange(add_rsid);
+                    // assert variantId relation
+                    OWLDataProperty hasVariantExternalId = getDataFactory().getOWLDataProperty(
+                            IRI.create(OntologyConstants.HAS_VARIANT_REFERENCE_ID_PROPERTY_IRI));
+                    OWLLiteral variantExternalId = getDataFactory().getOWLLiteral(variant.getExternalId());
+                    OWLDataPropertyAssertionAxiom externalId_relation =
+                            getDataFactory().getOWLDataPropertyAssertionAxiom(hasVariantExternalId, variantIndiv, variantExternalId);
+                    AddAxiom add_externalId = new AddAxiom(ontology, externalId_relation);
+                    getManager().applyChange(add_externalId);
 
                     // assert label
-                    OWLAnnotationAssertionAxiom snp_label_annotation =
-                            getDataFactory().getOWLAnnotationAssertionAxiom(rdfsLabel, snpIndiv.getIRI(), rsid);
-                    AddAxiom add_snp_label = new AddAxiom(ontology, snp_label_annotation);
-                    getManager().applyChange(add_snp_label);
+                    OWLAnnotationAssertionAxiom variantLabelAnnotation =
+                            getDataFactory().getOWLAnnotationAssertionAxiom(rdfsLabel, variantIndiv.getIRI(), variantExternalId);
+                    AddAxiom addVariantLabel = new AddAxiom(ontology, variantLabelAnnotation);
+                    getManager().applyChange(addVariantLabel);
 
                 }
 
@@ -486,15 +486,15 @@ public class DefaultGWASOWLConverter implements GWASOWLConverter {
                         getDataFactory().getOWLObjectProperty(IRI.create(OntologyConstants.IS_SUBJECT_OF_IRI));
 
                 // assert relations
-                OWLObjectPropertyAssertionAxiom has_subject_snp_relation =
-                        getDataFactory().getOWLObjectPropertyAssertionAxiom(has_subject, taIndiv, snpIndiv);
-                AddAxiom add_has_subject_snp = new AddAxiom(ontology, has_subject_snp_relation);
-                getManager().applyChange(add_has_subject_snp);
+                OWLObjectPropertyAssertionAxiom hasSuubjectVariantRelation =
+                        getDataFactory().getOWLObjectPropertyAssertionAxiom(has_subject, taIndiv, variantIndiv);
+                AddAxiom addHasSubjectVariant = new AddAxiom(ontology, hasSuubjectVariantRelation);
+                getManager().applyChange(addHasSubjectVariant);
 
-                OWLObjectPropertyAssertionAxiom is_subject_of_snp_relation =
-                        getDataFactory().getOWLObjectPropertyAssertionAxiom(is_subject_of, snpIndiv, taIndiv);
-                AddAxiom add_is_subject_of_snp = new AddAxiom(ontology, is_subject_of_snp_relation);
-                getManager().applyChange(add_is_subject_of_snp);
+                OWLObjectPropertyAssertionAxiom isSubjectOfVariantRelation =
+                        getDataFactory().getOWLObjectPropertyAssertionAxiom(is_subject_of, variantIndiv, taIndiv);
+                AddAxiom addIsSubjectOfVariant = new AddAxiom(ontology, isSubjectOfVariantRelation);
+                getManager().applyChange(addIsSubjectOfVariant);
             }
 
             // get the EFO class for the trait
@@ -564,7 +564,7 @@ public class DefaultGWASOWLConverter implements GWASOWLConverter {
             }
             // finally, assert label for this association
             OWLLiteral label = getDataFactory().getOWLLiteral(
-                    "Association between " + rsId + " and " +
+                    "Association between " + externalId + " and " +
                             association.getStudy().getDiseaseTrait().getTrait());
 
             OWLAnnotationAssertionAxiom label_annotation =

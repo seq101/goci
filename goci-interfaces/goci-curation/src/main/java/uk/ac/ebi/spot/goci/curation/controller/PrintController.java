@@ -7,9 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import uk.ac.ebi.spot.goci.curation.model.SnpAssociationTableView;
+import uk.ac.ebi.spot.goci.curation.model.VariantAssociationTableView;
 import uk.ac.ebi.spot.goci.curation.service.AssociationViewService;
-import uk.ac.ebi.spot.goci.curation.service.SingleSnpMultiSnpAssociationService;
+import uk.ac.ebi.spot.goci.curation.service.SingleVariantMultiVariantAssociationService;
 import uk.ac.ebi.spot.goci.model.Association;
 import uk.ac.ebi.spot.goci.model.Ethnicity;
 import uk.ac.ebi.spot.goci.model.Housekeeping;
@@ -42,7 +42,7 @@ public class PrintController {
                            HousekeepingRepository housekeepingRepository,
                            EthnicityRepository ethnicityRepository,
                            AssociationRepository associationRepository,
-                           SingleSnpMultiSnpAssociationService singleSnpMultiSnpAssociationService,
+                           SingleVariantMultiVariantAssociationService singleVariantMultiVariantAssociationService,
                            AssociationViewService associationViewService) {
         this.studyRepository = studyRepository;
         this.ethnicityRepository = ethnicityRepository;
@@ -86,13 +86,13 @@ public class PrintController {
         associations.addAll(associationRepository.findByStudyId(studyId));
 
         // For our associations create a table view object and return
-        Collection<SnpAssociationTableView> snpAssociationTableViews = new ArrayList<SnpAssociationTableView>();
+        Collection<VariantAssociationTableView> variantAssociationTableViews = new ArrayList<VariantAssociationTableView>();
         for (Association association : associations) {
-            SnpAssociationTableView snpAssociationTableView =
-                    associationViewService.createSnpAssociationTableView(association);
-            snpAssociationTableViews.add(snpAssociationTableView);
+            VariantAssociationTableView variantAssociationTableView =
+                    associationViewService.createVariantAssociationTableView(association);
+            variantAssociationTableViews.add(variantAssociationTableView);
         }
-        model.addAttribute("snpAssociationTableViews", snpAssociationTableViews);
+        model.addAttribute("variantAssociationTableViews", variantAssociationTableViews);
 
         return "printview";
     }

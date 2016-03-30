@@ -13,8 +13,8 @@ import uk.ac.ebi.spot.goci.model.Gene;
 import uk.ac.ebi.spot.goci.model.GenomicContext;
 import uk.ac.ebi.spot.goci.model.Location;
 import uk.ac.ebi.spot.goci.model.Locus;
-import uk.ac.ebi.spot.goci.model.SingleNucleotidePolymorphism;
-import uk.ac.ebi.spot.goci.repository.SingleNucleotidePolymorphismRepository;
+import uk.ac.ebi.spot.goci.model.Variant;
+import uk.ac.ebi.spot.goci.repository.VariantRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,14 +34,14 @@ import java.util.Set;
 @Service
 public class MappingService {
 
-    private SingleNucleotidePolymorphismRepository singleNucleotidePolymorphismRepository;
+    private VariantRepository variantRepository;
 
     // Services
-    private SnpLocationMappingService snpLocationMappingService;
-    private SnpGenomicContextMappingService snpGenomicContextMappingService;
+    private VariantLocationMappingService variantLocationMappingService;
+    private VariantGenomicContextMappingService variantGenomicContextMappingService;
     private AssociationReportService associationReportService;
     private MappingRecordService mappingRecordService;
-    private SingleNucleotidePolymorphismQueryService singleNucleotidePolymorphismQueryService;
+    private VariantQueryService variantQueryService;
     private EnsemblMappingPipeline ensemblMappingPipeline;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
@@ -51,19 +51,19 @@ public class MappingService {
     }
 
     @Autowired
-    public MappingService(SingleNucleotidePolymorphismRepository singleNucleotidePolymorphismRepository,
-                          SnpLocationMappingService snpLocationMappingService,
-                          SnpGenomicContextMappingService snpGenomicContextMappingService,
+    public MappingService(VariantRepository variantRepository,
+                          VariantLocationMappingService variantLocationMappingService,
+                          VariantGenomicContextMappingService variantGenomicContextMappingService,
                           AssociationReportService associationReportService,
                           MappingRecordService mappingRecordService,
-                          SingleNucleotidePolymorphismQueryService singleNucleotidePolymorphismQueryService,
+                          VariantQueryService variantQueryService,
                           EnsemblMappingPipeline ensemblMappingPipeline) {
-        this.singleNucleotidePolymorphismRepository = singleNucleotidePolymorphismRepository;
-        this.snpLocationMappingService = snpLocationMappingService;
-        this.snpGenomicContextMappingService = snpGenomicContextMappingService;
+        this.variantRepository = variantRepository;
+        this.variantLocationMappingService = variantLocationMappingService;
+        this.variantGenomicContextMappingService = variantGenomicContextMappingService;
         this.associationReportService = associationReportService;
         this.mappingRecordService = mappingRecordService;
-        this.singleNucleotidePolymorphismQueryService = singleNucleotidePolymorphismQueryService;
+        this.variantQueryService = variantQueryService;
         this.ensemblMappingPipeline = ensemblMappingPipeline;
     }
 
@@ -120,9 +120,9 @@ public class MappingService {
         getLog().info("Mapping association: " + association.getId());
 
         // Map to store returned location data, this is used in
-        // snpLocationMappingService to process all locations linked
+        // variantLocationMappingService to process all locations linked
         // to a single snp in one go
-        Map<String, Set<Location>> snpToLocationsMap = new HashMap<>();
+        Map<String, Set<Location>> variantToLocationsMap = new HashMap<>();
 
         // Collection to store all genomic contexts
         Collection<GenomicContext> allGenomicContexts = new ArrayList<>();
@@ -135,48 +135,48 @@ public class MappingService {
         for (Locus associationLocus : studyAssociationLoci) {
             Long locusId = associationLocus.getId();
 
-            Collection<SingleNucleotidePolymorphism> snpsLinkedToLocus =
-                    singleNucleotidePolymorphismQueryService.findByRiskAllelesLociId(locusId);
+            Collection<Variant> variantsLinkedToLocus =
+                    variantQueryService.findByEffectAllelesLociId(locusId);
 
-            Collection<Gene> authorReportedGenesLinkedToSnp = associationLocus.getAuthorReportedGenes();
+            Collection<Gene> authorReportedGenesLinkedToVariant = associationLocus.getAuthorReportedGenes();
 
             // Get gene names
-            Collection<String> authorReportedGeneNamesLinkedToSnp = new ArrayList<>();
-            for (Gene authorReportedGeneLinkedToSnp : authorReportedGenesLinkedToSnp) {
-                authorReportedGeneNamesLinkedToSnp.add(authorReportedGeneLinkedToSnp.getGeneName().trim());
+            Collection<String> authorReportedGeneNamesLinkedToVariant = new ArrayList<>();
+            for (Gene authorReportedGeneLinkedToVariant : authorReportedGenesLinkedToVariant) {
+                authorReportedGeneNamesLinkedToVariant.add(authorReportedGeneLinkedToVariant.getGeneName().trim());
             }
 
             // Pass rs_id and author reported genes to mapping component
-            for (SingleNucleotidePolymorphism snpLinkedToLocus : snpsLinkedToLocus) {
+            for (Variant variantLinkedToLocus : variantsLinkedToLocus) {
 
-                String snpRsId = snpLinkedToLocus.getRsId();
+                String variantExternalId = variantLinkedToLocus.getExternalId();
                 EnsemblMappingResult ensemblMappingResult = new EnsemblMappingResult();
 
                 // Try to map supplied data
                 try {
                     getLog().debug("Running mapping....");
                     ensemblMappingResult =
-                            ensemblMappingPipeline.run_pipeline(snpRsId, authorReportedGeneNamesLinkedToSnp);
+                            ensemblMappingPipeline.run_pipeline(variantExternalId, authorReportedGeneNamesLinkedToVariant);
                 }
                 catch (Exception e) {
                     getLog().error("Encountered a " + e.getClass().getSimpleName() +
-                                           " whilst trying to run mapping of SNP " + snpRsId, e);
+                                           " whilst trying to run mapping of Variant " + variantExternalId, e);
                     throw new EnsemblMappingException();
                 }
 
                 getLog().debug("Mapping complete");
                 // First remove old locations and genomic contexts
-                snpLocationMappingService.removeExistingSnpLocations(snpLinkedToLocus);
-                snpGenomicContextMappingService.removeExistingGenomicContexts(snpLinkedToLocus);
+                variantLocationMappingService.removeExistingVariantLocations(variantLinkedToLocus);
+                variantGenomicContextMappingService.removeExistingGenomicContexts(variantLinkedToLocus);
 
                 Collection<Location> locations = ensemblMappingResult.getLocations();
-                Collection<GenomicContext> snpGenomicContexts = ensemblMappingResult.getGenomicContexts();
+                Collection<GenomicContext> variantGenomicContexts = ensemblMappingResult.getGenomicContexts();
                 ArrayList<String> pipelineErrors = ensemblMappingResult.getPipelineErrors();
 
                 // Update functional class
-                snpLinkedToLocus.setFunctionalClass(ensemblMappingResult.getFunctionalClass());
-                snpLinkedToLocus.setLastUpdateDate(new Date());
-                singleNucleotidePolymorphismRepository.save(snpLinkedToLocus);
+                variantLinkedToLocus.setFunctionalClass(ensemblMappingResult.getFunctionalClass());
+                variantLinkedToLocus.setLastUpdateDate(new Date());
+                variantRepository.save(variantLinkedToLocus);
 
                 // Store location information for SNP
                 if (!locations.isEmpty()) {
@@ -184,30 +184,30 @@ public class MappingService {
 
                         // Next time we see SNP, add location to set
                         // This would only occur is SNP has multiple locations
-                        if (snpToLocationsMap.containsKey(snpRsId)) {
-                            snpToLocationsMap.get(snpRsId).add(location);
+                        if (variantToLocationsMap.containsKey(variantExternalId)) {
+                            variantToLocationsMap.get(variantExternalId).add(location);
                         }
 
                         // First time we see a SNP store the location
                         else {
-                            Set<Location> snpLocation = new HashSet<>();
-                            snpLocation.add(location);
-                            snpToLocationsMap.put(snpRsId, snpLocation);
+                            Set<Location> variantLocation = new HashSet<>();
+                            variantLocation.add(location);
+                            variantToLocationsMap.put(variantExternalId, variantLocation);
                         }
                     }
                 }
                 else {
-                    getLog().warn("Attempt to map SNP: " + snpRsId + " returned no location details");
-                    pipelineErrors.add("Attempt to map SNP: " + snpRsId + " returned no location details");
+                    getLog().warn("Attempt to map Variant: " + variantExternalId + " returned no location details");
+                    pipelineErrors.add("Attempt to map Variant: " + variantExternalId + " returned no location details");
                 }
 
                 // Store genomic context data for snp
-                if (!snpGenomicContexts.isEmpty()) {
-                    allGenomicContexts.addAll(snpGenomicContexts);
+                if (!variantGenomicContexts.isEmpty()) {
+                    allGenomicContexts.addAll(variantGenomicContexts);
                 }
                 else {
-                    getLog().warn("Attempt to map SNP: " + snpRsId + " returned no mapped genes");
-                    pipelineErrors.add("Attempt to map SNP: " + snpRsId + " returned no mapped genes");
+                    getLog().warn("Attempt to map Variant: " + variantExternalId + " returned no mapped genes");
+                    pipelineErrors.add("Attempt to map Variant: " + variantExternalId + " returned no mapped genes");
                 }
 
                 if (!pipelineErrors.isEmpty()) {
@@ -225,14 +225,14 @@ public class MappingService {
         }
 
         // Save data
-        if (!snpToLocationsMap.isEmpty()) {
+        if (!variantToLocationsMap.isEmpty()) {
             getLog().debug("Updating location details ...");
-            snpLocationMappingService.storeSnpLocation(snpToLocationsMap);
+            variantLocationMappingService.storeVariantLocation(variantToLocationsMap);
             getLog().debug("Updating location details complete");
         }
         if (!allGenomicContexts.isEmpty()) {
             getLog().debug("Updating genomic context details ...");
-            snpGenomicContextMappingService.processGenomicContext(allGenomicContexts);
+            variantGenomicContextMappingService.processGenomicContext(allGenomicContexts);
             getLog().debug("Updating genomic context details complete");
         }
     }

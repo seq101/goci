@@ -16,13 +16,13 @@ public class MappingErrorComparisonReport {
 
     private Long associationId;
 
-    private String oldSnpError;
+    private String oldVariantError;
 
-    private String newSnpError;
+    private String newVariantError;
 
-    private String oldSnpGeneOnDiffChr;
+    private String oldVariantGeneOnDiffChr;
 
-    private String newSnpGeneOnDiffChr;
+    private String newVariantGeneOnDiffChr;
 
     private String oldNoGeneForSymbol;
 
@@ -47,28 +47,28 @@ public class MappingErrorComparisonReport {
     public MappingErrorComparisonReport(Long studyId,
                                         String pubmedId,
                                         Long associationId,
-                                        String oldSnpError,
-                                        String oldSnpGeneOnDiffChr,
+                                        String oldVariantError,
+                                        String oldVariantGeneOnDiffChr,
                                         String oldNoGeneForSymbol,
                                         String oldRestServiceError,
                                         String oldSuspectVariationError,
                                         String oldGeneError,
-                                        String newSnpError,
-                                        String newSnpGeneOnDiffChr,
+                                        String newVariantError,
+                                        String newVariantGeneOnDiffChr,
                                         String newNoGeneForSymbol,
                                         String newRestServiceError,
                                         String newSuspectVariationError, String newGeneError) {
         this.studyId = studyId;
         this.pubmedId = pubmedId;
         this.associationId = associationId;
-        this.oldSnpError = oldSnpError;
-        this.oldSnpGeneOnDiffChr = oldSnpGeneOnDiffChr;
+        this.oldVariantError = oldVariantError;
+        this.oldVariantGeneOnDiffChr = oldVariantGeneOnDiffChr;
         this.oldNoGeneForSymbol = oldNoGeneForSymbol;
         this.oldRestServiceError = oldRestServiceError;
         this.oldSuspectVariationError = oldSuspectVariationError;
         this.oldGeneError = oldGeneError;
-        this.newSnpError = newSnpError;
-        this.newSnpGeneOnDiffChr = newSnpGeneOnDiffChr;
+        this.newVariantError = newVariantError;
+        this.newVariantGeneOnDiffChr = newVariantGeneOnDiffChr;
         this.newNoGeneForSymbol = newNoGeneForSymbol;
         this.newRestServiceError = newRestServiceError;
         this.newSuspectVariationError = newSuspectVariationError;
@@ -99,20 +99,20 @@ public class MappingErrorComparisonReport {
         this.associationId = associationId;
     }
 
-    public String getOldSnpError() {
-        return oldSnpError;
+    public String getOldVariantError() {
+        return oldVariantError;
     }
 
-    public void setOldSnpError(String oldSnpError) {
-        this.oldSnpError = oldSnpError;
+    public void setOldVariantError(String oldVariantError) {
+        this.oldVariantError = oldVariantError;
     }
 
-    public String getOldSnpGeneOnDiffChr() {
-        return oldSnpGeneOnDiffChr;
+    public String getOldVariantGeneOnDiffChr() {
+        return oldVariantGeneOnDiffChr;
     }
 
-    public void setOldSnpGeneOnDiffChr(String oldSnpGeneOnDiffChr) {
-        this.oldSnpGeneOnDiffChr = oldSnpGeneOnDiffChr;
+    public void setOldVariantGeneOnDiffChr(String oldVariantGeneOnDiffChr) {
+        this.oldVariantGeneOnDiffChr = oldVariantGeneOnDiffChr;
     }
 
     public String getOldNoGeneForSymbol() {
@@ -147,20 +147,20 @@ public class MappingErrorComparisonReport {
         this.oldGeneError = oldGeneError;
     }
 
-    public String getNewSnpError() {
-        return newSnpError;
+    public String getNewVariantError() {
+        return newVariantError;
     }
 
-    public void setNewSnpError(String newSnpError) {
-        this.newSnpError = newSnpError;
+    public void setNewVariantError(String newVariantError) {
+        this.newVariantError = newVariantError;
     }
 
-    public String getNewSnpGeneOnDiffChr() {
-        return newSnpGeneOnDiffChr;
+    public String getNewVariantGeneOnDiffChr() {
+        return newVariantGeneOnDiffChr;
     }
 
-    public void setNewSnpGeneOnDiffChr(String newSnpGeneOnDiffChr) {
-        this.newSnpGeneOnDiffChr = newSnpGeneOnDiffChr;
+    public void setNewVariantGeneOnDiffChr(String newVariantGeneOnDiffChr) {
+        this.newVariantGeneOnDiffChr = newVariantGeneOnDiffChr;
     }
 
     public String getNewNoGeneForSymbol() {

@@ -209,13 +209,13 @@ public class StudyController {
                                                                                                   1,
                                                                                           sort));
             }
-            if (studyType.equals("Multi-SNP haplotype studies")) {
-                studies = studyRepository.findStudyDistinctByAssociationsMultiSnpHaplotypeTrue(sort);
+            if (studyType.equals("Multi-Variant haplotype studies")) {
+                studies = studyRepository.findStudyDistinctByAssociationsMultiVariantHaplotypeTrue(sort);
                 pagination = false;
             }
 
-            if (studyType.equals("SNP Interaction studies")) {
-                studies = studyRepository.findStudyDistinctByAssociationsSnpInteractionTrue(sort);
+            if (studyType.equals("Variant Interaction studies")) {
+                studies = studyRepository.findStudyDistinctByAssociationsVariantInteractionTrue(sort);
                 pagination = false;
             }
 
@@ -690,11 +690,11 @@ public class StudyController {
             CurationStatus currentStudyStatus = study.getHousekeeping().getCurationStatus();
 
             // Handles status change
-            String studySnpsNotApproved = studyService.updateStatus(status, study, currentStudyStatus);
+            String studyVariantsNotApproved = studyService.updateStatus(status, study, currentStudyStatus);
             study.getHousekeeping().setLastUpdateDate(new Date());
             studyRepository.save(study);
 
-            redirectAttributes.addFlashAttribute("studySnpsNotApproved", studySnpsNotApproved);
+            redirectAttributes.addFlashAttribute("studyVariantsNotApproved", studyVariantsNotApproved);
         }
         return "redirect:" + statusAssignment.getUri();
     }
@@ -1032,8 +1032,8 @@ public class StudyController {
         studyTypesOptions.add("GXG");
         studyTypesOptions.add("CNV");
         studyTypesOptions.add("Studies in curation queue");
-        studyTypesOptions.add("Multi-SNP haplotype studies");
-        studyTypesOptions.add("SNP Interaction studies");
+        studyTypesOptions.add("Multi-Variant haplotype studies");
+        studyTypesOptions.add("Variant Interaction studies");
         return studyTypesOptions;
     }
 

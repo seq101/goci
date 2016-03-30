@@ -71,8 +71,8 @@ public class AssociationReportService {
 
         // Populate arrays that will hold various errors
 
-        Collection<String> snpErrors = new ArrayList<>();
-        Collection<String> snpGeneOnDiffChrErrors = new ArrayList<>();
+        Collection<String> variantErrors = new ArrayList<>();
+        Collection<String> variantGeneOnDiffChrErrors = new ArrayList<>();
         Collection<String> noGeneForSymbolErrors = new ArrayList<>();
         Collection<String> restServiceErrors = new ArrayList<>();
         Collection<String> suspectVariationErrors = new ArrayList<>();
@@ -89,11 +89,11 @@ public class AssociationReportService {
                 case "suspectVariationError":
                     suspectVariationErrors.add(errorMessage);
                     break;
-                case "snpError":
-                    snpErrors.add(errorMessage);
+                case "variantError":
+                    variantErrors.add(errorMessage);
                     break;
-                case "snpGeneOnDiffChrError":
-                    snpGeneOnDiffChrErrors.add(errorMessage);
+                case "variantGeneOnDiffChrError":
+                    variantGeneOnDiffChrErrors.add(errorMessage);
                     break;
                 case "noGeneForSymbolError":
                     noGeneForSymbolErrors.add(errorMessage);
@@ -109,19 +109,19 @@ public class AssociationReportService {
         }
 
         // Format errors into string so they can be stored in database
-        String allSnpErrors = null;
-        String allSnpGeneOnDiffChrErrors = null;
+        String allVariantErrors = null;
+        String allVariantGeneOnDiffChrErrors = null;
         String allNoGeneForSymbolErrors = null;
         String allRestServiceErrors = null;
         String allSuspectVariationErrors = null;
         String allGeneErrors = null;
 
-        if (!snpErrors.isEmpty()) {
-            allSnpErrors = String.join(", ", snpErrors);
+        if (!variantErrors.isEmpty()) {
+            allVariantErrors = String.join(", ", variantErrors);
         }
 
-        if (!snpGeneOnDiffChrErrors.isEmpty()) {
-            allSnpGeneOnDiffChrErrors = String.join(", ", snpGeneOnDiffChrErrors);
+        if (!variantGeneOnDiffChrErrors.isEmpty()) {
+            allVariantGeneOnDiffChrErrors = String.join(", ", variantGeneOnDiffChrErrors);
         }
 
         if (!noGeneForSymbolErrors.isEmpty()) {
@@ -143,8 +143,8 @@ public class AssociationReportService {
         // Create association report object
         AssociationReport associationReport = new AssociationReport();
         associationReport.setLastUpdateDate(new Date());
-        associationReport.setSnpError(allSnpErrors);
-        associationReport.setSnpGeneOnDiffChr(allSnpGeneOnDiffChrErrors);
+        associationReport.setVariantError(allVariantErrors);
+        associationReport.setVariantGeneOnDiffChr(allVariantGeneOnDiffChrErrors);
         associationReport.setNoGeneForSymbol(allNoGeneForSymbolErrors);
         associationReport.setRestServiceError(allRestServiceErrors);
         associationReport.setSuspectVariationError(allSuspectVariationErrors);
@@ -175,7 +175,7 @@ public class AssociationReportService {
 
         // SNP Error
         standardErrorList.add("not found for homo_sapiens");
-        standardErrorList.add("Attempt to map SNP");
+        standardErrorList.add("Attempt to map Variant");
 
         // Suspect variation errors
         standardErrorList.add("Variation does not map to the genome");
@@ -223,9 +223,9 @@ public class AssociationReportService {
         errorMap.putIfAbsent("no mapping available for the variant", "geneError");
 
         errorMap.putIfAbsent("not found for homo_sapiens", "snpError");
-        errorMap.putIfAbsent("Attempt to map SNP", "snpError");
+        errorMap.putIfAbsent("Attempt to map Variant", "variantError");
 
-        errorMap.putIfAbsent("is on a different chromosome", "snpGeneOnDiffChrError");
+        errorMap.putIfAbsent("is on a different chromosome", "variantGeneOnDiffChrError");
 
         errorMap.putIfAbsent("No valid lookup found for symbol", "noGeneForSymbolError");
 

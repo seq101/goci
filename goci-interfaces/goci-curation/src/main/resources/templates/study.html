@@ -33,7 +33,7 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#">Study Details</a></li>
             <li><a th:href="@{/studies/{studyId}/sampledescription(studyId=*{id})}">Sample Information</a></li>
-            <li><a th:href="@{/studies/{studyId}/associations(studyId=*{id})}">SNP Associations</a></li>
+            <li><a th:href="@{/studies/{studyId}/associations(studyId=*{id})}">VARIANT Associations</a></li>
             <li><a th:href="@{/studies/{studyId}/housekeeping(studyId=*{id})}">Curator Information</a></li>
             <li><a th:href="@{/studies/{studyId}/printview(studyId=*{id})}" target="_blank">Print View</a></li>
         </ul>
@@ -201,7 +201,7 @@
                     <div class="col-md-offset-10 col-md-2">
                         <a th:href="@{/studies/{studyId}/associations/applyefotraits(studyId=${study.Id})}"
                            class="btn btn-default pull-right"
-                           role="button">Apply EFO trait(s) to all SNPs</a>
+                           role="button">Apply EFO trait(s) to all VARIANTs</a>
                     </div>
                 </div>
 

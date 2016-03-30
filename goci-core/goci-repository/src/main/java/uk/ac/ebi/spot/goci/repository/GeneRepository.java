@@ -19,19 +19,19 @@ public interface GeneRepository extends JpaRepository<Gene, Long> {
 
     Collection<Gene> findByAuthorReportedFromLociAssociationStudyId(Long studyId);
 
-    Collection<Gene> findByGenomicContextsSnpRiskAllelesLociAssociationStudyId(Long studyId);
+    Collection<Gene> findByGenomicContextsVariantEffectAllelesLociAssociationStudyId(Long studyId);
 
-    Collection<Gene> findByAuthorReportedFromLociStrongestRiskAllelesSnpId(Long snpId);
+    Collection<Gene> findByAuthorReportedFromLociStrongestEffectAllelesVariantId(Long variantId);
 
-    Collection<Gene> findByGenomicContextsSnpId(Long snpId);
+    Collection<Gene> findByGenomicContextsVariantId(Long variantId);
 
     Collection<Gene> findByAuthorReportedFromLociAssociationId(Long associationId);
 
-    Collection<Gene> findByGenomicContextsSnpRiskAllelesLociAssociationId(Long associationId);
+    Collection<Gene> findByGenomicContextsVariantEffectAllelesLociAssociationId(Long associationId);
 
-    Collection<Gene> findByGenomicContextsSnpRiskAllelesLociAssociationStudyDiseaseTraitId(Long traitId);
+    Collection<Gene> findByGenomicContextsVariantEffectAllelesLociAssociationStudyDiseaseTraitId(Long traitId);
 
-    Collection<Gene> findByGenomicContextsSnpRiskAllelesLociAssociationEfoTraitsId(Long traitId);
+    Collection<Gene> findByGenomicContextsVariantEffectAllelesLociAssociationEfoTraitsId(Long traitId);
 
     Gene findByEnsemblGeneIdsId(Long id);
 

@@ -79,13 +79,13 @@ public class CatalogSummaryView {
 
     private Integer ensemblDownstreamGeneDist;
 
-    private String strongestSnpRiskAllele;
+    private String strongestVariantEffectAllele;
 
-    private String snpRsid;
+    private String variantExternalId;
 
     private Boolean merged;
 
-    private Long snpId;
+    private Long variantId;
 
     private String context;
 
@@ -93,7 +93,7 @@ public class CatalogSummaryView {
 
     private Boolean isIntergenicEnsembl;
 
-    private String riskAlleleFrequency;
+    private String effectAlleleFrequency;
 
     private Integer pValueMantissa;
 
@@ -159,14 +159,14 @@ public class CatalogSummaryView {
                               String ensemblDownstreamMappedGene,
                               String ensemblDownstreamGeneId,
                               Integer ensemblDownstreamGeneDist,
-                              String strongestSnpRiskAllele,
-                              String snpRsid,
+                              String strongestVariantEffectAllele,
+                              String variantExternalId,
                               Boolean merged,
-                              Long snpId,
+                              Long variantId,
                               String context,
                               Boolean isIntergenicEntrez,
                               Boolean isIntergenicEnsembl,
-                              String riskAlleleFrequency,
+                              String effectAlleleFrequency,
                               Integer pValueMantissa,
                               Integer pValueExponent,
                               String pValueQualifier,
@@ -211,14 +211,14 @@ public class CatalogSummaryView {
         this.ensemblDownstreamMappedGene = ensemblDownstreamMappedGene;
         this.ensemblDownstreamGeneId = ensemblDownstreamGeneId;
         this.ensemblDownstreamGeneDist = ensemblDownstreamGeneDist;
-        this.strongestSnpRiskAllele = strongestSnpRiskAllele;
-        this.snpRsid = snpRsid;
+        this.strongestVariantEffectAllele = strongestVariantEffectAllele;
+        this.variantExternalId = variantExternalId;
         this.merged = merged;
-        this.snpId = snpId;
+        this.variantId = variantId;
         this.context = context;
         this.isIntergenicEntrez = isIntergenicEntrez;
         this.isIntergenicEnsembl = isIntergenicEnsembl;
-        this.riskAlleleFrequency = riskAlleleFrequency;
+        this.effectAlleleFrequency = effectAlleleFrequency;
         this.pValueMantissa = pValueMantissa;
         this.pValueExponent = pValueExponent;
         this.pValueQualifier = pValueQualifier;
@@ -498,20 +498,20 @@ public class CatalogSummaryView {
         this.ensemblDownstreamGeneDist = ensemblDownstreamGeneDist;
     }
 
-    public String getStrongestSnpRiskAllele() {
-        return strongestSnpRiskAllele;
+    public String getStrongestVariantEffectAllele() {
+        return strongestVariantEffectAllele;
     }
 
-    public void setStrongestSnpRiskAllele(String strongestSnpRiskAllele) {
-        this.strongestSnpRiskAllele = strongestSnpRiskAllele;
+    public void setStrongestVariantEffectAllele(String strongestVariantEffectAllele) {
+        this.strongestVariantEffectAllele = strongestVariantEffectAllele;
     }
 
-    public String getSnpRsid() {
-        return snpRsid;
+    public String getVariantExternalId() {
+        return variantExternalId;
     }
 
-    public void setSnpRsid(String snpRsid) {
-        this.snpRsid = snpRsid;
+    public void setVariantExternalId(String variantExternalId) {
+        this.variantExternalId = variantExternalId;
     }
 
     public Boolean isMerged() {
@@ -522,12 +522,12 @@ public class CatalogSummaryView {
         this.merged = merged;
     }
 
-    public Long getSnpId() {
-        return snpId;
+    public Long getVariantId() {
+        return variantId;
     }
 
-    public void setSnpId(Long snpId) {
-        this.snpId = snpId;
+    public void setVariantId(Long variantId) {
+        this.variantId = variantId;
     }
 
     public String getContext() {
@@ -554,12 +554,12 @@ public class CatalogSummaryView {
         this.isIntergenicEnsembl = isIntergenicEnsembl;
     }
 
-    public String getRiskAlleleFrequency() {
-        return riskAlleleFrequency;
+    public String getEffectAlleleFrequency() {
+        return effectAlleleFrequency;
     }
 
-    public void setRiskAlleleFrequency(String riskAlleleFrequency) {
-        this.riskAlleleFrequency = riskAlleleFrequency;
+    public void setEffectAlleleFrequency(String effectAlleleFrequency) {
+        this.effectAlleleFrequency = effectAlleleFrequency;
     }
 
     public Integer getpValueMantissa() {

@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class EnsemblMappingResult {
 
-    private String rsId;
+    private String externalId;
 
     private Integer merged;
 
@@ -120,12 +120,12 @@ public class EnsemblMappingResult {
         this.functionalClass = functionalClass;
     }
 
-    public String getRsId() {
-        return rsId;
+    public String getExternalId() {
+        return externalId;
     }
 
-    public void setRsId(String rsId) {
-        this.rsId = rsId;
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
     }
 
     public Set<String> getNcbiOverlappingGene() {

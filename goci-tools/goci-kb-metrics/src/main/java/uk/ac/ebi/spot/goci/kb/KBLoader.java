@@ -89,7 +89,7 @@ public class KBLoader {
 
                 for (IRI traitClass : traitClasses) {
                     // skip SNPs
-                    if (traitClass.toString().equals(OntologyConstants.SNP_CLASS_IRI)) {
+                    if (traitClass.toString().equals(OntologyConstants.VARIANT_CLASS_IRI)) {
                         continue;
                     }
 

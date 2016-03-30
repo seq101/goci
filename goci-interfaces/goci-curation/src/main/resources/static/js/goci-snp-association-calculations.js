@@ -3,7 +3,7 @@
 // Calculate OR per copy num
 $(document).ready(function() {
     $("#calculate-or").click(function() {
-        var orPerCopyRecip = document.forms["snp-association-form"]["orPerCopyRecip"].value;
+        var orPerCopyRecip = document.forms["variant-association-form"]["orPerCopyRecip"].value;
         calculateOrPerCopyNum(orPerCopyRecip);
     });
 });
@@ -18,8 +18,8 @@ function calculateOrPerCopyNum(orPerCopyRecip) {
 // Build orPerCopyRange
 $(document).ready(function() {
     $("#calculate-or-range").click(function() {
-        var orPerCopyStdError = document.forms["snp-association-form"]["orPerCopyStdError"].value;
-        var orPerCopyNum = document.forms["snp-association-form"]["orPerCopyNum"].value;
+        var orPerCopyStdError = document.forms["variant-association-form"]["orPerCopyStdError"].value;
+        var orPerCopyNum = document.forms["variant-association-form"]["orPerCopyNum"].value;
         setRange(orPerCopyStdError, orPerCopyNum);
     });
 });
@@ -57,7 +57,7 @@ function setRange(orPerCopyStdError, orPerCopyNum) {
 
 $(document).ready(function() {
     $("#calculate-recip-range").click(function() {
-        var orPerCopyRecipRange = document.forms["snp-association-form"]["orPerCopyRecipRange"].value;
+        var orPerCopyRecipRange = document.forms["variant-association-form"]["orPerCopyRecipRange"].value;
 
         calculateOrPerCopyRange(orPerCopyRecipRange);
     });

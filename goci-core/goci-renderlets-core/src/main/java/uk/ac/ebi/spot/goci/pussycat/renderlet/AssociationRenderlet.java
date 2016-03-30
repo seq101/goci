@@ -35,7 +35,7 @@ public abstract class AssociationRenderlet<C, E> implements Renderlet<C, E> {
 
     @Override
     public String getDescription() {
-        return ("Renderlet capable of creating GWAS trait-SNP association visualisations");
+        return ("Renderlet capable of creating GWAS trait-Variant association visualisations");
     }
 
     @Override

@@ -26,7 +26,7 @@ public class GenomicContext {
     private Long distance;
 
     @ManyToOne
-    private SingleNucleotidePolymorphism snp;
+    private Variant variant;
 
     @ManyToOne
     private Gene gene;
@@ -48,7 +48,7 @@ public class GenomicContext {
                           Boolean isUpstream,
                           Boolean isDownstream,
                           Long distance,
-                          SingleNucleotidePolymorphism snp,
+                          Variant variant,
                           Gene gene,
                           Location location,
                           String source,
@@ -57,7 +57,7 @@ public class GenomicContext {
         this.isUpstream = isUpstream;
         this.isDownstream = isDownstream;
         this.distance = distance;
-        this.snp = snp;
+        this.variant = variant;
         this.gene = gene;
         this.location = location;
         this.source = source;
@@ -105,12 +105,12 @@ public class GenomicContext {
         this.distance = distance;
     }
 
-    public SingleNucleotidePolymorphism getSnp() {
-        return snp;
+    public Variant getVariant() {
+        return variant;
     }
 
-    public void setSnp(SingleNucleotidePolymorphism snp) {
-        this.snp = snp;
+    public void setVariant(Variant variant) {
+        this.variant = variant;
     }
 
     public Gene getGene() {

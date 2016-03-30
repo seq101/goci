@@ -28,12 +28,12 @@
         <div class="col-md-12">
 
             <!--Alerts-->
-            <div class="container-fluid" th:if="${!#strings.isEmpty(studySnpsNotApproved)}">
+            <div class="container-fluid" th:if="${!#strings.isEmpty(studyVariantsNotApproved)}">
                 <div class="row">
                     <div class="col-md-8">
                         <div class="alert alert-danger">
                             <a href="#" class="close" data-dismiss="alert">&times;</a>
-                            <strong th:text="${studySnpsNotApproved}">Note:</strong>
+                            <strong th:text="${studyVariantsNotApproved}">Note:</strong>
                         </div>
                     </div>
                 </div>

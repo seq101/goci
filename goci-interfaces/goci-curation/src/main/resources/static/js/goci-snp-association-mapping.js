@@ -1,7 +1,7 @@
 /**
  * Created by Laurent on 23/06/15.
  *
- * Function to switch between the SNP association and the SNP mapping tabs
+ * Function to switch between the VARIANT association and the VARIANT mapping tabs
  *
  */
 

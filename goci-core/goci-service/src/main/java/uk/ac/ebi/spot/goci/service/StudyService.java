@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.ac.ebi.spot.goci.model.Association;
 import uk.ac.ebi.spot.goci.model.Locus;
-import uk.ac.ebi.spot.goci.model.RiskAllele;
-import uk.ac.ebi.spot.goci.model.SingleNucleotidePolymorphism;
+import uk.ac.ebi.spot.goci.model.EffectAllele;
+import uk.ac.ebi.spot.goci.model.Variant;
 import uk.ac.ebi.spot.goci.model.Study;
 import uk.ac.ebi.spot.goci.repository.StudyRepository;
 
@@ -157,10 +157,10 @@ public class StudyService {
     }
 
     @Transactional(readOnly = true)
-    public Collection<Study> findBySnpId(Long snpId) {
+    public Collection<Study> findByVariantId(Long variantId) {
         Collection<Study> studies =
-                studyRepository.findByAssociationsLociStrongestRiskAllelesSnpIdAndHousekeepingCatalogPublishDateIsNotNullAndHousekeepingCatalogUnpublishDateIsNull(
-                        snpId);
+                studyRepository.findByAssociationsLociStrongestEffectAllelesVariantIdAndHousekeepingCatalogPublishDateIsNotNullAndHousekeepingCatalogUnpublishDateIsNull(
+                        variantId);
         studies.forEach(this::loadAssociatedData);
         return studies;
     }
@@ -205,13 +205,13 @@ public class StudyService {
     public void deepLoadAssociatedData(Study study) {
         int efoTraitCount = study.getEfoTraits().size();
         int associationCount = study.getAssociations().size();
-        int snpCount = study.getSingleNucleotidePolymorphisms().size();
+        int variantCount = study.getVariants().size();
         //        System.out.println("BONJOUR");
         //        getLog().error("BONJOUR");
-        for (SingleNucleotidePolymorphism snp : study.getSingleNucleotidePolymorphisms()) {
-            int locationCount = snp.getLocations().size();
-            getLog().trace("Snp '" + snp.getId() + "' is linked to " + locationCount + " regions.");
-            //            for(Region region : snp.getRegions()){
+        for (Variant variant : study.getVariants()) {
+            int locationCount = variant.getLocations().size();
+            getLog().trace("Variant '" + variant.getId() + "' is linked to " + locationCount + " regions.");
+            //            for(Region region : variant.getRegions()){
             //                region.getId();
             //            }
             int ethnicityCount = study.getEthnicities().size();
@@ -222,12 +222,12 @@ public class StudyService {
                 getLog().trace("Association '" + association.getId() + "' is linked to " + lociCount + " loci and " +
                                        associationEfoTraitCount + "efo traits.");
                 for (Locus locus : association.getLoci()) {
-                    int riskAlleleCount = locus.getStrongestRiskAlleles().size();
-                    getLog().trace("Locus '" + locus.getId() + "' is linked to " + riskAlleleCount + " risk alleles.");
-                    for (RiskAllele riskAllele : locus.getStrongestRiskAlleles()) {
-                        SingleNucleotidePolymorphism riskAlleleSnp = riskAllele.getSnp();
-                        int riskAlleleSnpRegionCount = riskAlleleSnp.getLocations().size();
-                        getLog().trace("Snp '" + riskAlleleSnp.getId() + "' is linked to " + riskAlleleSnpRegionCount +
+                    int effectAlleleCount = locus.getStrongestEffectAlleles().size();
+                    getLog().trace("Locus '" + locus.getId() + "' is linked to " + effectAlleleCount + " effect alleles.");
+                    for (EffectAllele effectAllele : locus.getStrongestEffectAlleles()) {
+                        Variant effectAlleleVariant = effectAllele.getVariant();
+                        int effectAlleleVariantRegionCount = effectAlleleVariant.getLocations().size();
+                        getLog().trace("Variant '" + effectAlleleVariant.getId() + "' is linked to " + effectAlleleVariantRegionCount +
                                                " regions.");
                     }
                 }
@@ -238,14 +238,14 @@ public class StudyService {
             if (publishDate != null) {
                 getLog().trace(
                         "Study '" + study.getId() + "' is mapped to " + efoTraitCount + " traits, " +
-                                "has " + associationCount + " associations, " + snpCount + " snps, " + ethnicityCount +
+                                "has " + associationCount + " associations, " + variantCount + " Variants, " + ethnicityCount +
                                 " ancestry entries and was published on " +
                                 publishDate.toString());
             }
             else {
                 getLog().trace(
                         "Study '" + study.getId() + "' is mapped to " + efoTraitCount + " traits, " +
-                                "has " + associationCount + " associations, " + snpCount + " snps, , " +
+                                "has " + associationCount + " associations, " + variantCount + " Variants, , " +
                                 ethnicityCount + " ancestry entries and is not yet published");
             }
         }

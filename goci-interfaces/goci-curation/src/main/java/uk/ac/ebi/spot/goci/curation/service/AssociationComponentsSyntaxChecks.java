@@ -18,18 +18,18 @@ public class AssociationComponentsSyntaxChecks {
     /**
      * Check value for common syntax errors
      *
-     * @param snpValue SNP RS_ID
+     * @param variantValue SNP RS_ID
      */
-    public String checkSnp(String snpValue) {
+    public String checkVariant(String variantValue) {
 
         String error = "";
-        error = runCommonChecks(snpValue, "SNP");
+        error = runCommonChecks(variantValue, "VARIANT");
 
-        if (snpValue.contains("-")) {
-            error = error + "SNP " + snpValue + " contains a '-' character. ";
+        if (variantValue.contains("-")) {
+            error = error + "VARIANT " + variantValue + " contains a '-' character. ";
         }
-        if (!snpValue.startsWith("rs")) {
-            error = error + "SNP " + snpValue + " does not start with rs. ";
+        if (!variantValue.startsWith("rs")) {
+            error = error + "VARIANT " + variantValue + " does not start with rs. ";
         }
 
         return error;
@@ -38,19 +38,19 @@ public class AssociationComponentsSyntaxChecks {
     /**
      * Check value for common syntax errors
      *
-     * @param snpValue Proxy SNP RS_ID
+     * @param variantValue Proxy SNP RS_ID
      */
-    public String checkProxy(String snpValue) {
+    public String checkProxy(String variantValue) {
 
         String error = "";
-        error = runCommonChecks(snpValue, "Proxy SNP");
+        error = runCommonChecks(variantValue, "Proxy Variant");
 
-        if (snpValue.contains("-")) {
-            error = error + "SNP " + snpValue + " contains a '-' character. ";
+        if (variantValue.contains("-")) {
+            error = error + "Variant " + variantValue + " contains a '-' character. ";
         }
-        if (!snpValue.equals("NR")) {
-            if (!snpValue.startsWith("rs")) {
-                error = error + "SNP " + snpValue + " does not start with rs. ";
+        if (!variantValue.equals("NR")) {
+            if (!variantValue.startsWith("rs")) {
+                error = error + "Variant " + variantValue + " does not start with rs. ";
             }
         }
 
@@ -60,15 +60,15 @@ public class AssociationComponentsSyntaxChecks {
     /**
      * Check value for common syntax errors
      *
-     * @param riskAllele Risk allele name
+     * @param effectAllele Risk allele name
      */
-    public String checkRiskAllele(String riskAllele) {
+    public String checkEffectAllele(String effectAllele) {
 
         String error = "";
-        error = runCommonChecks(riskAllele, "Risk Allele");
+        error = runCommonChecks(effectAllele, "Risk Allele");
 
-        if (!riskAllele.startsWith("rs")) {
-            error = error + "Risk Allele " + riskAllele + " does not start with rs. ";
+        if (!effectAllele.startsWith("rs")) {
+            error = error + "Risk Allele " + effectAllele + " does not start with rs. ";
         }
 
         return error;

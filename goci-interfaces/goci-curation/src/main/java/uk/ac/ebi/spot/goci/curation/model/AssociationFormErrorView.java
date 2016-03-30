@@ -12,9 +12,9 @@ import java.util.Map;
  */
 public class AssociationFormErrorView {
 
-    private String snpErrors;
+    private String variantErrors;
 
-    private String riskAlleleErrors;
+    private String effectAlleleErrors;
 
     private String proxyErrors;
 
@@ -25,20 +25,20 @@ public class AssociationFormErrorView {
 
     }
 
-    public String getSnpErrors() {
-        return snpErrors;
+    public String getVariantErrors() {
+        return variantErrors;
     }
 
-    public void setSnpErrors(String snpErrors) {
-        this.snpErrors = snpErrors;
+    public void setVariantErrors(String variantErrors) {
+        this.variantErrors = variantErrors;
     }
 
-    public String getRiskAlleleErrors() {
-        return riskAlleleErrors;
+    public String getEffectAlleleErrors() {
+        return effectAlleleErrors;
     }
 
-    public void setRiskAlleleErrors(String riskAlleleErrors) {
-        this.riskAlleleErrors = riskAlleleErrors;
+    public void setEffectAlleleErrors(String effectAlleleErrors) {
+        this.effectAlleleErrors = effectAlleleErrors;
     }
 
     public String getProxyErrors() {

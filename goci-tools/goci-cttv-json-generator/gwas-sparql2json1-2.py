@@ -96,20 +96,20 @@ with open(sparqlresults[0]) as results:
         totalCount += 1
         if not line[0].startswith("#"):
             # grab snp, can we map?
-            snpid = line[0]
-            snpid = snpid[63:]
+            variantId = line[0]
+            variantId = variantId[63:]
             pid = line[1]
             print ""
             print "pid=  ", pid
-            print "snpid = ", snpid
+            print "variantId = ", variantId
 
-        if not snpid in snpGeneMappings:
+        if not variantId in snpGeneMappings:
             noMappingCount += 1
-            print "NO MAPPING snpid = " + snpid
+            print "NO MAPPING snpid = " + variantId
         else:
-            for gene2so in snpGeneMappings[snpid]:
+            for gene2so in snpGeneMappings[variantId]:
                 geneid, so = gene2so.split(":")
-                print "Generating JSON for gene '" + geneid + " -> SNP '" + snpid + "'"
+                print "Generating JSON for gene '" + geneid + " -> Variant '" + variantId + "'"
                 soId = soName2soId[so]
                 geneToVariantProbability=soName2probability[so]
                 print "soId" + soId
@@ -144,7 +144,7 @@ with open(sparqlresults[0]) as results:
                 json["access_level"]="public"
 
                 json["unique_association_fields"] = {
-                "variant": "http://identifiers.org/dbsnp/" + snpid,
+                "variant": "http://identifiers.org/dbsnp/" + variantId,
                 "object": efo_disease,
                 "study_name": "cttv009_gwas_catalog",
                 "pubmed_refs": "http://europepmc.org/abstract/MED/" + pmid,
@@ -158,8 +158,8 @@ with open(sparqlresults[0]) as results:
                 json["target"] = target
 
                 variant = {}
-                variant["id"] = ["http://identifiers.org/dbsnp/" + snpid]
-                variant["type"] = "snp single";
+                variant["id"] = ["http://identifiers.org/dbsnp/" + variantId]
+                variant["type"] = "variant single";
                 json["variant"] = variant
 
                 disease = {}
@@ -175,7 +175,7 @@ with open(sparqlresults[0]) as results:
                 probability={}
                 probability["value"]=evidence_probability
                 method = {}
-                method["description"]="This is just the product of the probability that the given snp is associated to the given gene (gene2variant association_score) by the P value of the variant to disease association (variant2disease association score)"
+                method["description"]="This is just the product of the probability that the given variant is associated to the given gene (gene2variant association_score) by the P value of the variant to disease association (variant2disease association score)"
                 probability["method"] = method
                 evidence_association_score["probability"]=probability
                 evidence["association_score"] = evidence_association_score
@@ -294,7 +294,7 @@ with open(sparqlresults[0]) as results:
                 variant2disease_pvalue = {}
                 variant2disease_pvalue["value"] = float(pval)
                 variant2disease_method = {}
-                variant2disease_method["description"] = "The P value we get from the curated paper for the given variant to disease association. A P value is a value representing the significance of the odds ratio (odds of disease for individuals having a specific allele and the odds of disease for individuals who do not have that same allele) is typically calculated using a simple chi-squared test. Finding odds ratios that are significantly different from 1 is the objective of the GWA study because this shows that a SNP is associated with disease."
+                variant2disease_method["description"] = "The P value we get from the curated paper for the given variant to disease association. A P value is a value representing the significance of the odds ratio (odds of disease for individuals having a specific allele and the odds of disease for individuals who do not have that same allele) is typically calculated using a simple chi-squared test. Finding odds ratios that are significantly different from 1 is the objective of the GWA study because this shows that a Variant is associated with disease."
                 variant2disease_method["url"] = "http://en.wikipedia.org/wiki/Genome-wide_association_study"
                 variant2disease_pvalue["method"] = variant2disease_method
                 variant2disease_association_score["pvalue"] = variant2disease_pvalue

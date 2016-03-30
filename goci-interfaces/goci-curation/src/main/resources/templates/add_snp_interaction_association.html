@@ -28,12 +28,12 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.js"></script>
 
     <!--Handles calculations in form -->
-    <script src="../static/js/goci-snp-association-calculations.js"
-            th:src="@{../../../js/goci-snp-association-calculations.js}"></script>
+    <script src="../static/js/goci-variant-association-calculations.js"
+            th:src="@{../../../js/goci-variant-association-calculations.js}"></script>
 
     <!--Check variants, check reported genes, load variants mappings, load genomic contexts -->
-    <script src="../static/js/goci-snp-association-mapping.js"
-            th:src="@{../../../js/goci-snp-association-mapping.js}"></script>
+    <script src="../static/js/goci-variant-association-mapping.js"
+            th:src="@{../../../js/goci-variant-association-mapping.js}"></script>
 
 </head>
 <body>
@@ -42,11 +42,11 @@
 <div th:include="header :: navbar"></div>
 
 <div class="container-fluid">
-    <!-- Link to the different SNP tabs -->
+    <!-- Link to the different VARIANT tabs -->
     <div class="row">
         <ul class="nav nav-tabs">
-            <li class="active"><a id="association_tab" href="#">SNP Interactions</a></li>
-            <li><a id="mapping_tab" href="#">SNP Mappings</a></li>
+            <li class="active"><a id="association_tab" href="#">VARIANT Interactions</a></li>
+            <li><a id="mapping_tab" href="#">VARIANT Mappings</a></li>
         </ul>
     </div>
     <!--Link back to study page -->
@@ -60,13 +60,13 @@
     <div class="row">
         <div class="col-md-10">
             <div class="form-group">
-                <div id="addSNPForm">
+                <div id="addVariantForm">
 
 
                     <form class="form-horizontal"
                           method="post"
-                          name="snp-association-form"
-                          th:object="${snpAssociationInteractionForm}">
+                          name="variant-association-form"
+                          th:object="${variantAssociationInteractionForm}">
 
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10">
@@ -108,7 +108,7 @@
 
                                         <tr>
                                             <td></td>
-                                            <td th:each="col,colStat : *{snpFormColumns}">
+                                            <td th:each="col,colStat : *{variantFormColumns}">
                                                  <button class="btn btn-default btn-sm" type="submit" name="removeCol"
                                                          th:value="${colStat.index}"><span class="glyphicon glyphicon-remove"
                                                                                            aria-hidden="true"></span>
@@ -117,22 +117,22 @@
                                         </tr>
 
                                         <tr>
-                                            <td>SNP</td>
-                                            <td th:each="col,colStat : *{snpFormColumns}">
+                                            <td>VARIANT</td>
+                                            <td th:each="col,colStat : *{variantFormColumns}">
                                                 <span th:text="${colStat.count}"
-                                                      class="snp_row"
+                                                      class="variant_row"
                                                       style="display:none">1</span>
-                                                <input th:id="snp_id_+${colStat.count}"
+                                                <input th:id="variant_id_+${colStat.count}"
                                                        type="text"
-                                                       th:field="*{snpFormColumns[__${colStat.index}__].snp}"/>
+                                                       th:field="*{variantFormColumns[__${colStat.index}__].variant}"/>
 
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Strongest SNP-Risk Allele</td>
-                                            <td th:each="col,colStat : *{snpFormColumns}">
+                                            <td>Strongest VARIANT-Risk Allele</td>
+                                            <td th:each="col,colStat : *{variantFormColumns}">
                                                 <input type="text"
-                                                       th:field="*{snpFormColumns[__${colStat.index}__].strongestRiskAllele}"/>
+                                                       th:field="*{variantFormColumns[__${colStat.index}__].strongestEffectAllele}"/>
                                             </td>
                                         </tr>
 
@@ -140,42 +140,42 @@
                                             <td>
                                                 <div>Gene(s)</div>
                                             </td>
-                                            <td th:each="col,colStat : *{snpFormColumns}">
+                                            <td th:each="col,colStat : *{variantFormColumns}">
                                                 <input type="text"
                                                        data-role="tagsinput"
                                                        th:id="'authorgenes'+${colStat.index}"
-                                                       th:field="*{snpFormColumns[__${colStat.index}__].authorReportedGenes}"/>
+                                                       th:field="*{variantFormColumns[__${colStat.index}__].authorReportedGenes}"/>
 
                                             </td>
                                         </tr>
 
                                         <tr>
                                             <td>Proxy</td>
-                                            <td th:each="col,colStat : *{snpFormColumns}">
-                                                <input type="text" data-role="tagsinput" label="proxySnps"
-                                                       th:field="*{snpFormColumns[__${colStat.index}__].proxySnps}"/>
+                                            <td th:each="col,colStat : *{variantFormColumns}">
+                                                <input type="text" data-role="tagsinput" label="proxyVariants"
+                                                       th:field="*{variantFormColumns[__${colStat.index}__].proxyVariants}"/>
                                             </td>
                                         </tr>
 
                                         <tr>
-                                            <td>Independent SNP risk allele frequency in controls</td>
-                                            <td th:each="col,colStat : *{snpFormColumns}">
+                                            <td>Independent VARIANT effect allele frequency in controls</td>
+                                            <td th:each="col,colStat : *{variantFormColumns}">
                                                 <input type="text"
-                                                       th:field="*{snpFormColumns[__${colStat.index}__].riskFrequency}"/>
+                                                       th:field="*{variantFormColumns[__${colStat.index}__].effectAlleleFrequency}"/>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>Genome-wide</td>
-                                            <td th:each="col,colStat : *{snpFormColumns}">
+                                            <td th:each="col,colStat : *{variantFormColumns}">
                                                 <input type="checkbox"
-                                                       th:field="*{snpFormColumns[__${colStat.index}__].genomeWide}"/>
+                                                       th:field="*{variantFormColumns[__${colStat.index}__].genomeWide}"/>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>Limited list</td>
-                                            <td th:each="col,colStat : *{snpFormColumns}">
+                                            <td th:each="col,colStat : *{variantFormColumns}">
                                                 <input type="checkbox"
-                                                       th:field="*{snpFormColumns[__${colStat.index}__].limitedList}"/>
+                                                       th:field="*{variantFormColumns[__${colStat.index}__].limitedList}"/>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -185,13 +185,13 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="riskFrequency" class="control-label col-md-2">Combined interacting risk
+                                <label for="effectAlleleFrequency" class="control-label col-md-2">Combined interacting effect
                                                                                           allele frequency in
                                                                                           controls</label>
 
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" id="riskFrequency"
-                                           th:field="*{riskFrequency}" name="riskFrequency"/>
+                                    <input type="text" class="form-control" id="effectAlleleFrequency"
+                                           th:field="*{effectAlleleFrequency}" name="effectAlleleFrequency"/>
                                 </div>
                             </div>
 
@@ -318,16 +318,16 @@
 
 
                             <div class="form-group">
-                                <label for="snpType" class="control-label col-md-2">SNP type</label>
+                                <label for="variantType" class="control-label col-md-2">VARIANT type</label>
 
-                                <div class="col-md-10" id="snpType">
+                                <div class="col-md-10" id="variantType">
                                     <label class="radio-inline">
-                                        <input type="radio" name="snpType" th:value="'novel'"
-                                               th:field="*{snpType}">novel</input>
+                                        <input type="radio" name="variantType" th:value="'novel'"
+                                               th:field="*{variantType}">novel</input>
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="snpType" th:value="'known'"
-                                               th:field="*{snpType}">known</input>
+                                        <input type="radio" name="variantType" th:value="'known'"
+                                               th:field="*{variantType}">known</input>
                                     </label>
                                 </div>
                             </div>
@@ -339,7 +339,7 @@
                             </div>
 
                             <div class="form-group">
-                                <input id="snpApproved" type="hidden" th:field="*{snpApproved}"/>
+                                <input id="variantApproved" type="hidden" th:field="*{variantApproved}"/>
                             </div>
 
                             <div class="form-group">
@@ -355,8 +355,8 @@
                                 <div>
                                     <label class="control-label">Mapping data:</label>
                                 </div>
-                                <div th:include="snp_mapping :: mapping_table"></div>
-                                <div th:include="snp_genomic_context :: genomic_context_table"></div>
+                                <div th:include="variant_mapping :: mapping_table"></div>
+                                <div th:include="variant_genomic_context :: genomic_context_table"></div>
                             </div>
                         </div>
 
@@ -376,7 +376,7 @@
 
 <!--Formats tags input -->
 <script>
-    $('#proxySnps').tagsinput({
+    $('#proxyVariants').tagsinput({
                                   trimValue: true
                               });
 </script>

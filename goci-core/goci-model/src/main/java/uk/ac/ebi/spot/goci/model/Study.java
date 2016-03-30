@@ -62,6 +62,25 @@ public class Study {
 
     private Boolean gxg = false;
 
+    // The number of variant passing QC (quality control)
+    private long variantCount;
+
+    //referencedColumnName
+
+
+
+    @ManyToMany
+    @JoinTable(name = "STUDY_2_STUDY",
+               joinColumns = @JoinColumn(name = "SUB_STUDY_ID"),
+               inverseJoinColumns = @JoinColumn(name = "META_STUDY_ID"))
+    private Collection<Study> metaStudies;
+
+    @ManyToMany
+    @JoinTable(name = "STUDY_2_STUDY",
+               joinColumns = @JoinColumn(name = "STUDY_ID",referencedColumnName = "ID"),
+               inverseJoinColumns = @JoinColumn(name = "SUB_STUDY_ID"))
+    private Collection<Study> subStudies;
+
     @OneToMany(mappedBy = "study")
     private Collection<Association> associations;
 
@@ -81,16 +100,30 @@ public class Study {
     private Collection<EfoTrait> efoTraits;
 
     @ManyToMany
-    @JoinTable(name = "STUDY_SNP",
+    @JoinTable(name = "STUDY_VARIANT",
                joinColumns = @JoinColumn(name = "STUDY_ID"),
-               inverseJoinColumns = @JoinColumn(name = "SNP_ID"))
-    private Collection<SingleNucleotidePolymorphism> singleNucleotidePolymorphisms;
+               inverseJoinColumns = @JoinColumn(name = "VARIANT_ID"))
+    private Collection<Variant> variants;
 
     @OneToOne
     private Housekeeping housekeeping;
 
     @OneToOne(mappedBy = "study", cascade = CascadeType.REMOVE)
     private StudyReport studyReport;
+
+    @ManyToOne
+    @JoinColumn(name="study_type_dictionnary_id")
+    StudyTypeDictionnary studyTypeDictionnary;
+
+    @ManyToOne
+    @JoinColumn(name="imput_platform_dictionnary_id")
+    ImputPlatformDictionnary imputPlatformDictionnary;
+
+    @ManyToOne
+    @JoinColumn(name="reference_panel_dictionnary_id")
+    ReferencePanelDictionnary referencePanelDictionnary;
+
+    private Boolean isBinaryTrait = false;
 
     // JPA no-args constructor
     public Study() {
@@ -110,9 +143,14 @@ public class Study {
                  Boolean gxg,
                  DiseaseTrait diseaseTrait,
                  Collection<EfoTrait> efoTraits,
-                 Collection<SingleNucleotidePolymorphism> singleNucleotidePolymorphisms,
+                 Collection<Variant> variants,
                  Collection<Ethnicity> ethnicities,
-                 Housekeeping housekeeping) {
+                 Housekeeping housekeeping,
+                 StudyTypeDictionnary studyTypeDictionnary,
+                 ImputPlatformDictionnary imputPlatformDictionnary,
+                 long variantCount,
+                 boolean isBinaryTrait,
+                 ReferencePanelDictionnary referencePanelDictionnary) {
         this.author = author;
         this.publicationDate = publicationDate;
         this.publication = publication;
@@ -126,9 +164,14 @@ public class Study {
         this.gxg = gxg;
         this.diseaseTrait = diseaseTrait;
         this.efoTraits = efoTraits;
-        this.singleNucleotidePolymorphisms = singleNucleotidePolymorphisms;
+        this.variants = variants;
         this.ethnicities = ethnicities;
         this.housekeeping = housekeeping;
+        this.studyTypeDictionnary = studyTypeDictionnary;
+        this.imputPlatformDictionnary = imputPlatformDictionnary;
+        this.variantCount = variantCount;
+        this.isBinaryTrait = isBinaryTrait;
+        this.referencePanelDictionnary = referencePanelDictionnary;
     }
 
     public Long getId() {
@@ -251,12 +294,12 @@ public class Study {
         this.efoTraits = efoTraits;
     }
 
-    public Collection<SingleNucleotidePolymorphism> getSingleNucleotidePolymorphisms() {
-        return singleNucleotidePolymorphisms;
+    public Collection<Variant> getVariants() {
+        return variants;
     }
 
-    public void setSingleNucleotidePolymorphisms(Collection<SingleNucleotidePolymorphism> singleNucleotidePolymorphisms) {
-        this.singleNucleotidePolymorphisms = singleNucleotidePolymorphisms;
+    public void setVariants(Collection<Variant> variants) {
+        this.variants = variants;
     }
 
     public Housekeeping getHousekeeping() {
@@ -292,5 +335,44 @@ public class Study {
 
     public void setEthnicities(Collection<Ethnicity> ethnicities) {
         this.ethnicities = ethnicities;
+    }
+
+    public StudyTypeDictionnary getStudyTypeDictionnary() {
+        return studyTypeDictionnary;
+    }
+
+    public void setStudyTypeDictionnary(StudyTypeDictionnary studyTypeDictionnary) {
+        this.studyTypeDictionnary = studyTypeDictionnary;
+    }
+
+    public ImputPlatformDictionnary getImputPlatformDictionnary() {
+        return imputPlatformDictionnary;
+    }
+
+    public void setImputPlatformDictionnary(ImputPlatformDictionnary imputPlatformDictionnary) {
+        this.imputPlatformDictionnary = imputPlatformDictionnary;
+    }
+
+    public long getVariantCount() {
+        return variantCount;
+    }
+
+    public void setVariantCount(long variantCount) {
+        this.variantCount = variantCount;
+    }
+
+    public Boolean getIsBinaryTrait(){
+        return isBinaryTrait;
+    }
+    public void setIsBinaryTrait(Boolean isBinaryTrait){
+        this.isBinaryTrait = isBinaryTrait;
+    }
+
+    public ReferencePanelDictionnary getReferencePanelDictionnary() {
+        return referencePanelDictionnary;
+    }
+
+    public void setReferencePanelDictionnary(ReferencePanelDictionnary referencePanelDictionnary) {
+        this.referencePanelDictionnary = referencePanelDictionnary;
     }
 }

@@ -36,16 +36,16 @@ public class GeneService {
 
     @Transactional
     public Collection<Gene> findMappedGenesByStudyId(Long studyId) {
-        return geneRepository.findByGenomicContextsSnpRiskAllelesLociAssociationStudyId(studyId);
+        return geneRepository.findByGenomicContextsVariantEffectAllelesLociAssociationStudyId(studyId);
     }
 
     @Transactional(readOnly = true)
-    public Collection<Gene> findReportedGenesBySnpId(Long snpId) {
-        return geneRepository.findByAuthorReportedFromLociStrongestRiskAllelesSnpId(snpId);
+    public Collection<Gene> findReportedGenesByVariantId(Long variantId) {
+        return geneRepository.findByAuthorReportedFromLociStrongestEffectAllelesVariantId(variantId);
     }
 
-    public Collection<Gene> findMappedGenesBySnpId(Long snpId) {
-        return geneRepository.findByGenomicContextsSnpId(snpId);
+    public Collection<Gene> findMappedGenesByVariantId(Long variantId) {
+        return geneRepository.findByGenomicContextsVariantId(variantId);
     }
 
     public Collection<Gene> findReportedGenesByAssociationId(Long associationId) {
@@ -53,15 +53,15 @@ public class GeneService {
     }
 
     public Collection<Gene> findMappedGenesByAssociationId(Long associationId) {
-        return geneRepository.findByGenomicContextsSnpRiskAllelesLociAssociationId(associationId);
+        return geneRepository.findByGenomicContextsVariantEffectAllelesLociAssociationId(associationId);
     }
 
     public Collection<Gene> findReportedGenesByDiseaseTraitId(Long traitId) {
-        return geneRepository.findByGenomicContextsSnpRiskAllelesLociAssociationStudyDiseaseTraitId(
+        return geneRepository.findByGenomicContextsVariantEffectAllelesLociAssociationStudyDiseaseTraitId(
                 traitId);
     }
 
     public Collection<Gene> findMappedGenesByDiseaseTraitId(Long traitId) {
-        return geneRepository.findByGenomicContextsSnpRiskAllelesLociAssociationEfoTraitsId(traitId);
+        return geneRepository.findByGenomicContextsVariantEffectAllelesLociAssociationEfoTraitsId(traitId);
     }
 }

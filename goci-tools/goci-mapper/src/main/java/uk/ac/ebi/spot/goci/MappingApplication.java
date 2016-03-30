@@ -107,8 +107,8 @@ public class MappingApplication {
                 "m",
                 "mapping",
                 false,
-                "Maps all associations in the GWAS database. Mapping pipeline will map SNPs " +
-                        "in database and also validate the author reported gene linked to that SNP via the associations");
+                "Maps all associations in the GWAS database. Mapping pipeline will map Variants " +
+                        "in database and also validate the author reported gene linked to that Variant via the associations");
         mappingOption.setArgName("performer");
         mappingOption.setRequired(true);
         modeGroup.addOption(mappingOption);

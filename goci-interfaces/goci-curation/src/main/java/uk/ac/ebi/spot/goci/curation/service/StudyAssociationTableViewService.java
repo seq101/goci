@@ -59,8 +59,8 @@ public class StudyAssociationTableViewService {
             Collection<Association> studyAssociations = study.getAssociations();
             view.setTotalNumberOfAssociations(studyAssociations.size());
 
-            Integer multiSnpHaplotypeCount = 0;
-            Integer snpInteractionCount = 0;
+            Integer multiVariantHaplotypeCount = 0;
+            Integer variantInteractionCount = 0;
 
             // Using SET here as I don't want duplicates
             Set<String> allAssociationsEfoTraits = new HashSet<>();
@@ -68,11 +68,11 @@ public class StudyAssociationTableViewService {
             // Go through each association and find out its type and efo traits
             for (Association association : studyAssociations) {
 
-                if (association.getMultiSnpHaplotype()) {
-                    multiSnpHaplotypeCount++;
+                if (association.getMultiVariantHaplotype()) {
+                    multiVariantHaplotypeCount++;
                 }
-                if (association.getSnpInteraction()) {
-                    snpInteractionCount++;
+                if (association.getVariantInteraction()) {
+                    variantInteractionCount++;
                 }
 
                 for (EfoTrait efoTrait : association.getEfoTraits()) {
@@ -80,8 +80,8 @@ public class StudyAssociationTableViewService {
                 }
             }
 
-            view.setNumberOfMultiSnpHaplotypeAssociations(multiSnpHaplotypeCount);
-            view.setNumberOfSnpInteractiionAssociations(snpInteractionCount);
+            view.setNumberOfMultiEffectHaplotypeAssociations(multiVariantHaplotypeCount);
+            view.setNumberOfVariantInteractiionAssociations(variantInteractionCount);
             view.setAssociationEfoTraits(String.join(",", allAssociationsEfoTraits));
             views.add(view);
         }

@@ -164,10 +164,10 @@
     
 
 
-    <!-- http://rdf.ebi.ac.uk/terms/gwas/has_snp_reference_id -->
+    <!-- http://rdf.ebi.ac.uk/terms/gwas/has_variant_reference_id -->
 
-    <DatatypeProperty rdf:about="&gwas;has_snp_reference_id">
-        <rdfs:label xml:lang="en">has_snp_reference_id</rdfs:label>
+    <DatatypeProperty rdf:about="&gwas;has_variant_reference_id">
+        <rdfs:label xml:lang="en">has_variant_reference_id</rdfs:label>
         <efo:definition xml:lang="en">A single nucleotide polymorpism identifier, as assigned by the Single Nucleotide Polymorphism Database (dbSNP).</efo:definition>
         <efo:definition_editor xml:lang="en">Tony Burdett</efo:definition_editor>
     </DatatypeProperty>
@@ -427,9 +427,9 @@
     
 
 
-    <!-- http://rdf.ebi.ac.uk/terms/gwas/SingleNucleotidePolymorphism -->
+    <!-- http://rdf.ebi.ac.uk/terms/gwas/Variant -->
 
-    <Class rdf:about="&gwas;SingleNucleotidePolymorphism">
+    <Class rdf:about="&gwas;Variant">
         <rdfs:label xml:lang="en">single-nucleotide polymorphism</rdfs:label>
         <rdfs:subClassOf>
             <Restriction>
@@ -437,7 +437,7 @@
                 <someValuesFrom rdf:resource="&gwas;CytogeneticRegion"/>
             </Restriction>
         </rdfs:subClassOf>
-        <efo:definition xml:lang="en">A Single-nucleotide polymorphism (SNP) is a DNA sequence variation occurring when a Single Nucleotide in the genome (or other shared sequence) differs between members of a biological species or paired chromosomes</efo:definition>
+        <efo:definition xml:lang="en">A Single-nucleotide polymorphism (Variant) is a DNA sequence variation occurring when a Single Nucleotide in the genome (or other shared sequence) differs between members of a biological species or paired chromosomes</efo:definition>
         <efo:definition_editor xml:lang="en">Tony Burdett</efo:definition_editor>
     </Class>
     
@@ -468,7 +468,7 @@
                 <intersectionOf rdf:parseType="Collection">
                     <Restriction>
                         <onProperty rdf:resource="&obo;IAO_0000136"/>
-                        <someValuesFrom rdf:resource="&gwas;SingleNucleotidePolymorphism"/>
+                        <someValuesFrom rdf:resource="&gwas;Variant"/>
                     </Restriction>
                     <Restriction>
                         <onProperty rdf:resource="&obo;IAO_0000136"/>
@@ -483,7 +483,7 @@
                 <someValuesFrom rdf:resource="&gwas;Study"/>
             </Restriction>
         </rdfs:subClassOf>
-        <efo:definition xml:lang="en">An association that has been identified as part of a genome wide association study.  A trait association indicates that a SNP has been identified as being statistically significantly associated with a known phenotypic trait or disease at a genome-wide level.  The degree of confidence of this association can be expressed as a p-value.</efo:definition>
+        <efo:definition xml:lang="en">An association that has been identified as part of a genome wide association study.  A trait association indicates that a Variant has been identified as being statistically significantly associated with a known phenotypic trait or disease at a genome-wide level.  The degree of confidence of this association can be expressed as a p-value.</efo:definition>
         <efo:definition_editor xml:lang="en">Tony Burdett</efo:definition_editor>
     </Class>
     

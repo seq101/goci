@@ -26,7 +26,7 @@ public interface AssociationRepository extends JpaRepository<Association, Long> 
 
     List<Association> findByStudyIdAndLastUpdateDateIsNotNullOrderByLastUpdateDateDesc(Long studyId);
 
-    Collection<Association> findByLociStrongestRiskAllelesSnpId(long snpId);
+    Collection<Association> findByLociStrongestEffectAllelesVariantId(long variantId);
 
     List<Association> findByStudyHousekeepingCatalogPublishDateIsNotNullAndStudyHousekeepingCatalogUnpublishDateIsNull();
 
@@ -36,16 +36,16 @@ public interface AssociationRepository extends JpaRepository<Association, Long> 
     Page<Association> findByStudyHousekeepingCatalogPublishDateIsNotNullAndStudyHousekeepingCatalogUnpublishDateIsNull(
             Pageable pageable);
 
-    List<Association> findByLociStrongestRiskAllelesSnpIdAndStudyHousekeepingCatalogPublishDateIsNotNullAndStudyHousekeepingCatalogUnpublishDateIsNull(
-            Long snpId);
+    List<Association> findByLociStrongestEffectAllelesVariantIdAndStudyHousekeepingCatalogPublishDateIsNotNullAndStudyHousekeepingCatalogUnpublishDateIsNull(
+            Long variantId);
 
-    List<Association> findByLociStrongestRiskAllelesSnpIdAndStudyHousekeepingCatalogPublishDateIsNotNullAndStudyHousekeepingCatalogUnpublishDateIsNull(
+    List<Association> findByLociStrongestEffectAllelesVariantIdAndStudyHousekeepingCatalogPublishDateIsNotNullAndStudyHousekeepingCatalogUnpublishDateIsNull(
             Sort sort,
-            Long snpId);
+            Long variantId);
 
-    Page<Association> findByLociStrongestRiskAllelesSnpIdAndStudyHousekeepingCatalogPublishDateIsNotNullAndStudyHousekeepingCatalogUnpublishDateIsNull(
+    Page<Association> findByLociStrongestEffectAllelesVariantIdAndStudyHousekeepingCatalogPublishDateIsNotNullAndStudyHousekeepingCatalogUnpublishDateIsNull(
             Pageable pageable,
-            Long snpId);
+            Long variantId);
 
     List<Association> findByStudyDiseaseTraitIdAndStudyHousekeepingCatalogPublishDateIsNotNullAndStudyHousekeepingCatalogUnpublishDateIsNull(
             Long diseaseTraitId);

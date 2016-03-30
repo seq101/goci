@@ -3,7 +3,11 @@ package uk.ac.ebi.spot.goci.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import java.util.Collection;
 
 /**
  * Created by emma on 28/11/14.
@@ -38,6 +42,17 @@ public class Ethnicity {
 
     private String notes;
 
+    private long numberOfCases;
+
+    private long numberOfControls;
+
+    @ManyToMany
+    @JoinTable(name = "ETHNICITY_2_ARRAY_DICTIONNARY",
+               joinColumns = @JoinColumn(name = "ETHNICITY_ID"),
+               inverseJoinColumns = @JoinColumn(name = "ARRAY_DICTIONNARY_ID"))
+    Collection<ArrayDictionnary> arrayDictionnaries;
+
+
     @OneToOne
     private Study study;
 
@@ -53,7 +68,10 @@ public class Ethnicity {
                      String description,
                      String previouslyReported,
                      String sampleSizesMatch,
-                     String notes) {
+                     String notes,
+                     Collection<ArrayDictionnary> arrayDictionnaries,
+                     long numberOfCases,
+                     long numberOfControls) {
         this.type = type;
         this.numberOfIndividuals = numberOfIndividuals;
         this.ethnicGroup = ethnicGroup;
@@ -63,6 +81,9 @@ public class Ethnicity {
         this.previouslyReported = previouslyReported;
         this.sampleSizesMatch = sampleSizesMatch;
         this.notes = notes;
+        this.arrayDictionnaries = arrayDictionnaries;
+        this.numberOfCases = numberOfCases;
+        this.numberOfControls = numberOfControls;
     }
 
     public Long getId() {
@@ -151,6 +172,30 @@ public class Ethnicity {
 
     public void setStudy(Study study) {
         this.study = study;
+    }
+
+    public Collection<ArrayDictionnary> getArrayDictionnaries() {
+        return arrayDictionnaries;
+    }
+
+    public void setArrayDictionnaries(Collection<ArrayDictionnary> arrayDictionnaries) {
+        this.arrayDictionnaries = arrayDictionnaries;
+    }
+
+    public long getNumberOfCases() {
+        return numberOfCases;
+    }
+
+    public void setNumberOfCases(long numberOfCases) {
+        this.numberOfCases = numberOfCases;
+    }
+
+    public long getNumberOfControls() {
+        return numberOfControls;
+    }
+
+    public void setNumberOfControls(long numberOfControls) {
+        this.numberOfControls = numberOfControls;
     }
 
     @Override public String toString() {

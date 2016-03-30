@@ -46,7 +46,7 @@ public class AssociationQueryService {
         association.getLoci().forEach(
                 locus -> {
                     locus.getAuthorReportedGenes().size();
-                    locus.getStrongestRiskAlleles().size();
+                    locus.getStrongestEffectAlleles().size();
                 });
     }
 

@@ -34,12 +34,12 @@ import uk.ac.ebi.spot.goci.exception.OWLConversionException;
 import uk.ac.ebi.spot.goci.model.Association;
 import uk.ac.ebi.spot.goci.model.EfoTrait;
 import uk.ac.ebi.spot.goci.model.Locus;
-import uk.ac.ebi.spot.goci.model.RiskAllele;
-import uk.ac.ebi.spot.goci.model.SingleNucleotidePolymorphism;
+import uk.ac.ebi.spot.goci.model.EffectAllele;
+import uk.ac.ebi.spot.goci.model.Variant;
 import uk.ac.ebi.spot.goci.model.Study;
 import uk.ac.ebi.spot.goci.ontology.owl.OntologyLoader;
 import uk.ac.ebi.spot.goci.repository.AssociationRepository;
-import uk.ac.ebi.spot.goci.repository.SingleNucleotidePolymorphismRepository;
+import uk.ac.ebi.spot.goci.repository.VariantRepository;
 import uk.ac.ebi.spot.goci.repository.StudyRepository;
 import uk.ac.ebi.spot.goci.utils.FilterProperties;
 
@@ -67,8 +67,8 @@ public class DefaultGWASOWLPublisher implements GWASOWLPublisher {
     private AssociationRepository associationRepository;
     private AssociationService associationService;
 
-    private SingleNucleotidePolymorphismRepository singleNucleotidePolymorphismRepository;
-    private SingleNucleotidePolymorphismService singleNucleotidePolymorphismService;
+    private VariantRepository variantRepository;
+    private VariantService variantService;
 
     private GWASOWLConverter converter;
 
@@ -76,12 +76,12 @@ public class DefaultGWASOWLPublisher implements GWASOWLPublisher {
     @Autowired
     public DefaultGWASOWLPublisher(StudyService studyService,
                                    AssociationService associationService,
-                                   SingleNucleotidePolymorphismService singleNucleotidePolymorphismService,
+                                   VariantService variantService,
                                    GWASOWLConverter converter,
                                    OntologyLoader ontologyLoader) {
         this.studyService = studyService;
         this.associationService = associationService;
-        this.singleNucleotidePolymorphismService = singleNucleotidePolymorphismService;
+        this.variantService = variantService;
         this.converter = converter;
         this.ontologyLoader = ontologyLoader;
     }
@@ -122,12 +122,12 @@ public class DefaultGWASOWLPublisher implements GWASOWLPublisher {
     }
 
 
-    public SingleNucleotidePolymorphismRepository getSingleNucleotidePolymorphismRepository() {
-        return singleNucleotidePolymorphismRepository;
+    public VariantRepository getVariantRepository() {
+        return variantRepository;
     }
 
-    public SingleNucleotidePolymorphismService getSingleNucleotidePolymorphismService() {
-        return singleNucleotidePolymorphismService;
+    public VariantService getVariantService() {
+        return variantService;
     }
 
 
@@ -218,14 +218,14 @@ public class DefaultGWASOWLPublisher implements GWASOWLPublisher {
                 }
             }
             getLog().debug(
-                    "Fetching SNPs that require conversion to OWL using SingleNucleotidePolymorphismRepository...");
-            Collection<SingleNucleotidePolymorphism> snps = getSingleNucleotidePolymorphismService().findAll();
+                    "Fetching Variants that require conversion to OWL using VariantRepository...");
+            Collection<Variant> variants = getVariantService().findAll();
             getLog().debug("All data fetched");
 
             // convert this data, starting with SNPs (no dependencies) and working up to studies
             getLog().debug("Starting conversion to OWL...");
-            getLog().debug("Converting SNPs...");
-            getConverter().addSNPsToOntology(snps, conversion);
+            getLog().debug("Converting Variants...");
+            getConverter().addVariantsToOntology(variants, conversion);
             getLog().debug("Converting Trait Associations...");
             getConverter().addAssociationsToOntology(traitAssociations, conversion);
             getLog().debug("Converting Studies...");
@@ -263,7 +263,7 @@ public class DefaultGWASOWLPublisher implements GWASOWLPublisher {
 
         Collection<Study> filteredStudies = new ArrayList<Study>();
         Collection<Association> filteredTraitAssociations = new ArrayList<Association>();
-        Collection<SingleNucleotidePolymorphism> filteredSNPs = new ArrayList<SingleNucleotidePolymorphism>();
+        Collection<Variant> filteredVariants = new ArrayList<Variant>();
 
         int count = 0;
         int studyLimit = getStudiesLimit() == -1 ? Integer.MAX_VALUE : getStudiesLimit();
@@ -288,8 +288,8 @@ public class DefaultGWASOWLPublisher implements GWASOWLPublisher {
                         System.out.println("Qualifying association");
                         filteredTraitAssociations.add(nextTA);
                         for (Locus locus : nextTA.getLoci()) {
-                            for (RiskAllele riskAllele : locus.getStrongestRiskAlleles()) {
-                                filteredSNPs.add(riskAllele.getSnp());
+                            for (EffectAllele effectAllele : locus.getStrongestEffectAlleles()) {
+                                filteredVariants.add(effectAllele.getVariant());
                             }
                         }
                     }
@@ -300,8 +300,8 @@ public class DefaultGWASOWLPublisher implements GWASOWLPublisher {
         }
         // convert this data, starting with SNPs (no dependencies) and working up to studies
         getLog().debug("Starting conversion to OWL...");
-        getLog().debug("Converting " + filteredSNPs.size() + " filtered SNPs...");
-        getConverter().addSNPsToOntology(filteredSNPs, conversion);
+        getLog().debug("Converting " + filteredVariants.size() + " filtered Variants...");
+        getConverter().addVariantsToOntology(filteredVariants, conversion);
         getLog().debug("Converting " + filteredTraitAssociations.size() + " filtered Trait Associations...");
         getConverter().addAssociationsToOntology(filteredTraitAssociations, conversion);
         getLog().debug("Converting " + filteredStudies.size() + " filtered Studies...");
@@ -426,10 +426,10 @@ public class DefaultGWASOWLPublisher implements GWASOWLPublisher {
                         }
                     }
                     for (Locus locus : association.getLoci()) {
-                        for (RiskAllele riskAllele : locus.getStrongestRiskAlleles()) {
+                        for (EffectAllele effectAllele : locus.getStrongestEffectAlleles()) {
                             getLog().debug(
                                     //                                "    Association: SNP '" + association.getAssociatedSNP().getRSID() +
-                                    "    Association: SNP '" + riskAllele.getSnp().getRsId() +
+                                    "    Association: Variant '" + effectAllele.getVariant().getExternalId() +
                                             "' <-> Trait '" +
                                             efoTraitsDashSepList.toString() + "'");
                         }

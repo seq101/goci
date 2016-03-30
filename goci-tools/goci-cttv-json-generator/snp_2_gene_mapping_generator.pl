@@ -22,7 +22,7 @@ foreach my $snp_url (@lines) {
     $snp_url =~ tr/"//d;
     #    perl ./nearest_gene_to_snp.pl rs636864 1
     
-    $snp_url =~ s/http:\/\/rdf.ebi.ac.uk\/dataset\/gwas\/SingleNucleotidePolymorphism\///;
+    $snp_url =~ s/http:\/\/rdf.ebi.ac.uk\/dataset\/gwas\/Variant\///;
    
  
     my @args = ("perl","$dirname/nearest_gene_to_snp.pl",$snp_url, 0, $snp_2_gene_mapping_file, $failed_snp_file);

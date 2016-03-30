@@ -2,7 +2,7 @@ package uk.ac.ebi.spot.goci.pussycat.lang;
 
 import org.junit.Test;
 import uk.ac.ebi.spot.goci.model.Association;
-import uk.ac.ebi.spot.goci.model.SingleNucleotidePolymorphism;
+import uk.ac.ebi.spot.goci.model.Variant;
 import uk.ac.ebi.spot.goci.model.Study;
 
 import java.text.DateFormat;
@@ -25,16 +25,16 @@ public class TestFiltering {
 
     @Test
     public void testFilter() {
-        SingleNucleotidePolymorphism template = template(SingleNucleotidePolymorphism.class);
-        Filter<SingleNucleotidePolymorphism, String> filter =
-                refine(template).on(template.getRsId()).hasValue("rs123456");
+        Variant template = template(Variant.class);
+        Filter<Variant, String> filter =
+                refine(template).on(template.getExternalId()).hasValue("rs123456");
 
         assertEquals("Filter type does not match expected",
-                     SingleNucleotidePolymorphism.class,
+                     Variant.class,
                      filter.getFilteredType());
 
         assertEquals("Filtered method does not match expected",
-                     "getRsId",
+                     "getExternalId",
                      filter.getFilteredMethod().getName());
 
         assertEquals("Filtered value does not match expected",

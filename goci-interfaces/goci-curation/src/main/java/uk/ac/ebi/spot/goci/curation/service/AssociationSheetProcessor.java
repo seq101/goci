@@ -12,8 +12,8 @@ import uk.ac.ebi.spot.goci.model.Association;
 import uk.ac.ebi.spot.goci.model.EfoTrait;
 import uk.ac.ebi.spot.goci.model.Gene;
 import uk.ac.ebi.spot.goci.model.Locus;
-import uk.ac.ebi.spot.goci.model.RiskAllele;
-import uk.ac.ebi.spot.goci.model.SingleNucleotidePolymorphism;
+import uk.ac.ebi.spot.goci.model.EffectAllele;
+import uk.ac.ebi.spot.goci.model.Variant;
 import uk.ac.ebi.spot.goci.repository.EfoTraitRepository;
 import uk.ac.ebi.spot.goci.repository.LocusRepository;
 
@@ -26,8 +26,8 @@ import java.util.List;
 /**
  * @author emma
  *         <p>
- *         This class takes an Excel spreadsheet sheet and extracts all the association records For each SNP, an
- *         SnpAssociationForm object is created and passed back to the controller for further processing
+ *         This class takes an Excel spreadsheet sheet and extracts all the association records For each Variant, an
+ *         VariantAssociationForm object is created and passed back to the controller for further processing
  *         <p>
  *         Created from code originally written by Dani/Tony. Adapted to fit with new curation system.
  */
@@ -64,7 +64,7 @@ public class AssociationSheetProcessor {
 
 
     // Read and parse uploaded spreadsheet
-    public Collection<Association> readSnpAssociations(XSSFSheet sheet) {
+    public Collection<Association> readVariantAssociations(XSSFSheet sheet) {
 
         // Create collection to store all newly created associations
         Collection<Association> newAssociations = new ArrayList<>();
@@ -94,80 +94,80 @@ public class AssociationSheetProcessor {
                     logMessage = "Error in field 'Gene' in row " + rowNum + 1 + "\n";
                 }
 
-                // Get Strongest SNP-Risk Allele
+                // Get Strongest VARIANT-Effect Allele
                 String strongestAllele = null;
                 if (row.getCell(1, row.RETURN_BLANK_AS_NULL) != null) {
                     strongestAllele = row.getCell(1).getRichStringCellValue().getString();
-                    logMessage = "Error in field 'Risk allele' in row " + rowNum + 1 + "\n";
+                    logMessage = "Error in field 'Effect allele' in row " + rowNum + 1 + "\n";
 
                 }
                 else {
-                    getLog().debug("Risk allele is null in row " + row.getRowNum());
-                    logMessage = "Error in field 'Risk allele' in row " + rowNum + 1 + "\n";
+                    getLog().debug("Effect allele is null in row " + row.getRowNum());
+                    logMessage = "Error in field 'Effect allele' in row " + rowNum + 1 + "\n";
                 }
 
 
-                // Get SNP
-                String snp = null;
+                // Get VARIANT
+                String variant = null;
                 if (row.getCell(2, row.RETURN_BLANK_AS_NULL) != null) {
-                    snp = row.getCell(2).getRichStringCellValue().getString();
-                    logMessage = "Error in field 'SNP' in row " + rowNum + 1 + "\n";
+                    variant = row.getCell(2).getRichStringCellValue().getString();
+                    logMessage = "Error in field 'VARIANT' in row " + rowNum + 1 + "\n";
 
                 }
                 else {
-                    getLog().debug("SNP is null in row " + row.getRowNum());
-                    logMessage = "Error in field 'SNP' in row " + rowNum + 1 + "\n";
+                    getLog().debug("VARIANT is null in row " + row.getRowNum());
+                    logMessage = "Error in field 'VARIANT' in row " + rowNum + 1 + "\n";
 
                 }
 
-                // Get Proxy SNP
+                // Get Proxy VARIANT
                 String proxy = null;
                 if (row.getCell(3, row.RETURN_BLANK_AS_NULL) != null) {
                     proxy = row.getCell(3).getRichStringCellValue().getString();
-                    logMessage = "Error in field 'Proxy SNP' in row " + rowNum + 1 + "\n";
+                    logMessage = "Error in field 'Proxy VARIANT' in row " + rowNum + 1 + "\n";
 
                 }
                 else {
-                    getLog().debug("SNP is null in row " + row.getRowNum());
-                    logMessage = "Error in field 'Proxy SNP' in row " + rowNum + 1 + "\n";
+                    getLog().debug("VARIANT is null in row " + row.getRowNum());
+                    logMessage = "Error in field 'Proxy VARIANT' in row " + rowNum + 1 + "\n";
 
                 }
 
-                // Get Risk Allele Frequency, will contain multiple values for haplotype or interaction
-                String riskFrequency = null;
+                // Get Effect Allele Frequency, will contain multiple values for haplotype or interaction
+                String effectFrequency = null;
                 if (row.getCell(4, row.RETURN_BLANK_AS_NULL) != null) {
-                    XSSFCell risk = row.getCell(4);
-                    switch (risk.getCellType()) {
+                    XSSFCell effect = row.getCell(4);
+                    switch (effect.getCellType()) {
                         case Cell.CELL_TYPE_STRING:
-                            riskFrequency = risk.getRichStringCellValue().getString();
-                            logMessage = "Error in field 'Risk Frequency' in row " + rowNum + 1 + "\n";
+                            effectFrequency = effect.getRichStringCellValue().getString();
+                            logMessage = "Error in field 'Effect Frequency' in row " + rowNum + 1 + "\n";
                             break;
                         case Cell.CELL_TYPE_NUMERIC:
-                            riskFrequency = Double.toString(risk.getNumericCellValue());
+                            effectFrequency = Double.toString(effect.getNumericCellValue());
                             logMessage =
-                                    "Error in field 'Risk Allele Frequency in Controls' in row " + rowNum + 1 + "\n";
+                                    "Error in field 'Effect Allele Frequency in Controls' in row " + rowNum + 1 + "\n";
 
                             break;
                     }
                 }
                 else {
                     getLog().debug("RF is null in row " + row.getRowNum());
-                    logMessage = "Error in field 'Risk Allele Frequency in Controls' in row " + rowNum + 1 + "\n";
+                    logMessage = "Error in field 'Effect Allele Frequency in Controls' in row " + rowNum + 1 + "\n";
                 }
 
                 // Will be a single value that applies to association
-                String associationRiskFrequency = null;
+                String associationEffectAlleleFrequency = null;
                 if (row.getCell(5, row.RETURN_BLANK_AS_NULL) != null) {
-                    XSSFCell risk = row.getCell(5);
-                    switch (risk.getCellType()) {
+                    XSSFCell effect = row.getCell(5);
+                    switch (effect.getCellType()) {
                         case Cell.CELL_TYPE_STRING:
-                            associationRiskFrequency = risk.getRichStringCellValue().getString();
-                            logMessage = "Error in field 'Interacting SNPs combined risk allele frequency' in row " +
+                            associationEffectAlleleFrequency = effect.getRichStringCellValue().getString();
+                            logMessage = "Error in field 'Interacting VARIANTs combined effect allele frequency' in row " +
                                     rowNum + 1 + "\n";
                             break;
                         case Cell.CELL_TYPE_NUMERIC:
-                            associationRiskFrequency = Double.toString(risk.getNumericCellValue());
-                            logMessage = "Error in field 'Interacting SNPs combined risk allele frequency' in row " +
+                            associationEffectAlleleFrequency = Double.toString(effect.getNumericCellValue());
+                            logMessage = "Error in field 'Interacting VARIANTs combined effect allele frequency' in row " +
                                     rowNum + 1 + "\n";
 
                             break;
@@ -175,7 +175,7 @@ public class AssociationSheetProcessor {
                 }
                 else {
                     getLog().debug("RF is null in row " + row.getRowNum());
-                    logMessage = "Error in field 'Risk Frequency' in row " + rowNum + 1 + "\n";
+                    logMessage = "Error in field 'Effect Frequency' in row " + rowNum + 1 + "\n";
                 }
 
                 // Get P-value mantissa	and P-value exponent
@@ -293,28 +293,28 @@ public class AssociationSheetProcessor {
                     logMessage = "Error in field 'OR type' in row " + rowNum + 1 + "\n";
                 }
 
-                // Get Multi-SNP Haplotype value
-                String multiSnpHaplotype;
+                // Get Multi-VARIANT Haplotype value
+                String multiVariantHaplotype;
                 if (row.getCell(12, row.RETURN_BLANK_AS_NULL) != null) {
-                    multiSnpHaplotype = row.getCell(12).getRichStringCellValue().getString();
-                    logMessage = "Error in field 'Multi-SNP Haplotype' in row " + rowNum + 1 + "\n";
+                    multiVariantHaplotype = row.getCell(12).getRichStringCellValue().getString();
+                    logMessage = "Error in field 'Multi-VARIANT Haplotype' in row " + rowNum + 1 + "\n";
                 }
                 else {
-                    multiSnpHaplotype = null;
+                    multiVariantHaplotype = null;
                     getLog().debug("OR type is null in row " + row.getRowNum());
-                    logMessage = "Error in field 'Multi-SNP Haplotype' in row " + rowNum + 1 + "\n";
+                    logMessage = "Error in field 'Multi-VARIANT Haplotype' in row " + rowNum + 1 + "\n";
                 }
 
-                // Get SNP interaction value
-                String snpInteraction;
+                // Get VARIANT interaction value
+                String variantInteraction;
                 if (row.getCell(13, row.RETURN_BLANK_AS_NULL) != null) {
-                    snpInteraction = row.getCell(13).getRichStringCellValue().getString();
-                    logMessage = "Error in field 'SNP:SNP interaction' in row " + rowNum + 1 + "\n";
+                    variantInteraction = row.getCell(13).getRichStringCellValue().getString();
+                    logMessage = "Error in field 'VARIANT:VARIANT interaction' in row " + rowNum + 1 + "\n";
                 }
                 else {
-                    snpInteraction = null;
+                    variantInteraction = null;
                     getLog().debug("OR type is null in row " + row.getRowNum());
-                    logMessage = "Error in field 'SNP:SNP interaction' in row " + rowNum + 1 + "\n";
+                    logMessage = "Error in field 'VARIANT:VARIANT interaction' in row " + rowNum + 1 + "\n";
                 }
 
                 // Get Confidence Interval/Range
@@ -373,28 +373,28 @@ public class AssociationSheetProcessor {
                     logMessage = "Error in field 'Standard Error' in row " + rowNum + 1 + "\n";
                 }
 
-                // Get SNP type (novel / known)
-                String snpType;
+                // Get VARIANT type (novel / known)
+                String variantType;
                 if (row.getCell(18, row.RETURN_BLANK_AS_NULL) != null) {
-                    snpType = row.getCell(18).getRichStringCellValue().getString().toLowerCase();
-                    logMessage = "Error in field 'SNP type' in row " + rowNum + 1 + "\n";
+                    variantType = row.getCell(18).getRichStringCellValue().getString().toLowerCase();
+                    logMessage = "Error in field 'VARIANT type' in row " + rowNum + 1 + "\n";
                 }
                 else {
-                    snpType = null;
-                    getLog().debug("SNP type is null in row " + row.getRowNum());
-                    logMessage = "Error in field 'SNP type' in row " + rowNum + 1 + "\n";
+                    variantType = null;
+                    getLog().debug("VARIANT type is null in row " + row.getRowNum());
+                    logMessage = "Error in field 'VARIANT type' in row " + rowNum + 1 + "\n";
                 }
 
-                // Get SNP Status
-                String snpStatus;
+                // Get SNVARIANTP Status
+                String variantStatus;
                 if (row.getCell(19, row.RETURN_BLANK_AS_NULL) != null) {
-                    snpStatus = row.getCell(19).getRichStringCellValue().getString().toLowerCase();
-                    logMessage = "Error in field 'SNP type' in row " + rowNum + 1 + "\n";
+                    variantStatus = row.getCell(19).getRichStringCellValue().getString().toLowerCase();
+                    logMessage = "Error in field 'VARIANT type' in row " + rowNum + 1 + "\n";
                 }
                 else {
-                    snpStatus = null;
-                    getLog().debug("SNP type is null in row " + row.getRowNum());
-                    logMessage = "Error in field 'SNP type' in row " + rowNum + 1 + "\n";
+                    variantStatus = null;
+                    getLog().debug("VARIANT type is null in row " + row.getRowNum());
+                    logMessage = "Error in field 'VARIANT type' in row " + rowNum + 1 + "\n";
                 }
 
                 String efoTrait;
@@ -410,8 +410,8 @@ public class AssociationSheetProcessor {
 
 
                 // Once we have all the values entered in file process them
-                if (authorReportedGene == null && strongestAllele == null && snp == null && proxy == null &&
-                        riskFrequency == null) {
+                if (authorReportedGene == null && strongestAllele == null && variant == null && proxy == null &&
+                        effectFrequency == null) {
                     done = true;
                     getLog().debug("Empty row that wasn't caught via 'row = null'");
                 }
@@ -435,7 +435,7 @@ public class AssociationSheetProcessor {
                     }
 
                     // Set values common to all association types
-                    newAssociation.setRiskFrequency(associationRiskFrequency);
+                    newAssociation.setEffectAlleleFrequency(associationEffectAlleleFrequency);
                     newAssociation.setPvalueMantissa(pvalueMantissa);
                     newAssociation.setPvalueExponent(pvalueExponent);
                     newAssociation.setPvalueText(pvalueText);
@@ -443,7 +443,7 @@ public class AssociationSheetProcessor {
                     newAssociation.setOrPerCopyStdError(orPerCopyStdError);
                     newAssociation.setOrPerCopyRecipRange(orPerCopyRecipRange);
                     newAssociation.setOrPerCopyUnitDescr(orPerCopyUnitDescr);
-                    newAssociation.setSnpType(snpType);
+                    newAssociation.setVariantType(variantType);
 
                     boolean recipReverse = false;
                     // Calculate OR per copy num
@@ -477,35 +477,35 @@ public class AssociationSheetProcessor {
                         newAssociation.setOrType(false);
                     }
 
-                    if (multiSnpHaplotype.equalsIgnoreCase("Y")) {
-                        newAssociation.setMultiSnpHaplotype(true);
+                    if (multiVariantHaplotype.equalsIgnoreCase("Y")) {
+                        newAssociation.setMultiVariantHaplotype(true);
                     }
                     else {
-                        newAssociation.setMultiSnpHaplotype(false);
+                        newAssociation.setMultiVariantHaplotype(false);
                     }
 
-                    if (snpInteraction.equalsIgnoreCase("Y")) {
-                        newAssociation.setSnpInteraction(true);
+                    if (variantInteraction.equalsIgnoreCase("Y")) {
+                        newAssociation.setVariantInteraction(true);
                     }
                     else {
-                        newAssociation.setSnpInteraction(false);
+                        newAssociation.setVariantInteraction(false);
                     }
 
                     String delimiter;
                     Collection<Locus> loci = new ArrayList<>();
 
-                    if (newAssociation.getSnpInteraction()) {
+                    if (newAssociation.getVariantInteraction()) {
                         delimiter = "x";
 
-                        // For SNP interaction studies we need to create a locus per risk allele
-                        // Handle curator entered risk allele
-                        Collection<RiskAllele> locusRiskAlleles =
-                                createLocusRiskAlleles(strongestAllele,
-                                                       snp,
-                                                       proxy,
-                                                       riskFrequency,
-                                                       snpStatus,
-                                                       delimiter);
+                        // For SNP interaction studies we need to create a locus per effect allele
+                        // Handle curator entered effect allele
+                        Collection<EffectAllele> locusEffectAlleles =
+                                createLocusEffectAlleles(strongestAllele,
+                                                         variant,
+                                                         proxy,
+                                                         effectFrequency,
+                                                         variantStatus,
+                                                         delimiter);
 
                         // Add genes to relevant loci, split by 'x' delimiter first
                         Collection<Locus> lociWithAddedGenes = new ArrayList<>();
@@ -515,13 +515,13 @@ public class AssociationSheetProcessor {
                         String[] separatedGenes = authorReportedGene.split(delimiter);
                         int geneIndex = 0;
 
-                        for (RiskAllele riskAllele : locusRiskAlleles) {
+                        for (EffectAllele effectAllele : locusEffectAlleles) {
                             Locus locus = new Locus();
 
-                            // Set risk alleles, assume one locus per risk allele
-                            Collection<RiskAllele> currentLocusRiskAlleles = new ArrayList<>();
-                            currentLocusRiskAlleles.add(riskAllele);
-                            locus.setStrongestRiskAlleles(currentLocusRiskAlleles);
+                            // Set effect alleles, assume one locus per effect allele
+                            Collection<EffectAllele> currentLocusEffectAlleles = new ArrayList<>();
+                            currentLocusEffectAlleles.add(effectAllele);
+                            locus.setStrongestEffectAlleles(currentLocusEffectAlleles);
 
                             // Set gene
                             String interactionGene = separatedGenes[geneIndex];
@@ -530,7 +530,7 @@ public class AssociationSheetProcessor {
                             geneIndex++;
 
                             // Set description
-                            locus.setDescription("SNP x SNP interaction");
+                            locus.setDescription("VARIANT x VARIANT interaction");
 
                             // Save our newly created locus
                             locusRepository.save(locus);
@@ -538,47 +538,47 @@ public class AssociationSheetProcessor {
                         }
                     }
 
-                    // Handle multi-snp and standard snp
+                    // Handle multi-variant and standard variant
                     else {
                         delimiter = ";";
 
-                        // For multi-snp and standard snps we assume their is only one locus
+                        // For multi-variant and standard variants we assume their is only one locus
                         Locus locus = new Locus();
 
                         // Handle curator entered genes, for haplotype they are separated by a comma
                         Collection<Gene> locusGenes = createLocusGenes(authorReportedGene, ",");
                         locus.setAuthorReportedGenes(locusGenes);
 
-                        // Handle curator entered risk allele
-                        Collection<RiskAllele> locusRiskAlleles =
-                                createLocusRiskAlleles(strongestAllele,
-                                                       snp,
-                                                       proxy,
-                                                       riskFrequency,
-                                                       snpStatus,
-                                                       delimiter);
+                        // Handle curator entered effect allele
+                        Collection<EffectAllele> locusEffectAlleles =
+                                createLocusEffectAlleles(strongestAllele,
+                                                         variant,
+                                                         proxy,
+                                                         effectFrequency,
+                                                         variantStatus,
+                                                         delimiter);
 
 
-                        // For standard associations set the risk allele frequency to the
+                        // For standard associations set the effect allele frequency to the
                         // same value as the overall association frequency
-                        Collection<RiskAllele> locusRiskAllelesWithRiskFrequencyValues = new ArrayList<>();
-                        if (!newAssociation.getMultiSnpHaplotype()) {
-                            for (RiskAllele riskAllele : locusRiskAlleles) {
-                                riskAllele.setRiskFrequency(associationRiskFrequency);
-                                locusRiskAllelesWithRiskFrequencyValues.add(riskAllele);
+                        Collection<EffectAllele> locusEffectAllelesWithEffectFrequencyValues = new ArrayList<>();
+                        if (!newAssociation.getMultiVariantHaplotype()) {
+                            for (EffectAllele effectAllele : locusEffectAlleles) {
+                                effectAllele.setEffectFrequency(associationEffectAlleleFrequency);
+                                locusEffectAllelesWithEffectFrequencyValues.add(effectAllele);
                             }
-                            locus.setStrongestRiskAlleles(locusRiskAllelesWithRiskFrequencyValues);
+                            locus.setStrongestEffectAlleles(locusEffectAllelesWithEffectFrequencyValues);
                         }
 
                         else {
-                            locus.setStrongestRiskAlleles(locusRiskAlleles);
+                            locus.setStrongestEffectAlleles(locusEffectAlleles);
                         }
 
                         // Set locus attributes
-                        Integer haplotypeCount = locusRiskAlleles.size();
+                        Integer haplotypeCount = locusEffectAlleles.size();
                         if (haplotypeCount > 1) {
-                            locus.setHaplotypeSnpCount(haplotypeCount);
-                            locus.setDescription(String.valueOf(haplotypeCount) + "-SNP haplotype");
+                            locus.setHaplotypeVariantCount(haplotypeCount);
+                            locus.setDescription(String.valueOf(haplotypeCount) + "-variant haplotype");
                         }
 
                         else {
@@ -602,26 +602,26 @@ public class AssociationSheetProcessor {
         return newAssociations;
     }
 
-    private Collection<RiskAllele> createLocusRiskAlleles(String strongestAllele,
-                                                          String snp,
-                                                          String proxy,
-                                                          String riskFrequency,
-                                                          String snpStatus,
-                                                          String delimiter) {
+    private Collection<EffectAllele> createLocusEffectAlleles(String strongestAllele,
+                                                              String variant,
+                                                              String proxy,
+                                                              String effectFrequency,
+                                                              String variantStatus,
+                                                              String delimiter) {
 
 
-        Collection<RiskAllele> locusRiskAlleles = new ArrayList<>();
-        // For our list of snps, proxies and risk alleles separate by delimiter
-        List<String> snps = new ArrayList<>();
-        String[] separatedSnps = snp.split(delimiter);
-        for (String separatedSnp : separatedSnps) {
-            snps.add(separatedSnp.trim());
+        Collection<EffectAllele> locusEffectAlleles = new ArrayList<>();
+        // For our list of variants, proxies and effect alleles separate by delimiter
+        List<String> variants = new ArrayList<>();
+        String[] separatedVariants = variant.split(delimiter);
+        for (String separatedVariant : separatedVariants) {
+            variants.add(separatedVariant.trim());
         }
 
-        List<String> riskAlleles = new ArrayList<>();
-        String[] separatedRiskAlleles = strongestAllele.split(delimiter);
-        for (String separatedRiskAllele : separatedRiskAlleles) {
-            riskAlleles.add(separatedRiskAllele.trim());
+        List<String> effectAlleles = new ArrayList<>();
+        String[] separatedEffectAlleles = strongestAllele.split(delimiter);
+        for (String separatedEffectAllele : separatedEffectAlleles) {
+            effectAlleles.add(separatedEffectAllele.trim());
         }
 
         List<String> proxies = new ArrayList<>();
@@ -630,54 +630,54 @@ public class AssociationSheetProcessor {
             proxies.add(separatedProxy.trim());
         }
 
-        // Value is only recorded for SNP interaction associations
-        List<String> riskFrequencies = new ArrayList<>();
-        Iterator<String> riskFrequencyIterator = null;
-        if (riskFrequency != null) {
-            String[] separatedRiskFrequencies = riskFrequency.split(delimiter);
-            for (String separatedRiskFrequency : separatedRiskFrequencies) {
-                riskFrequencies.add(separatedRiskFrequency.trim());
+        // Value is only recorded for VARIANT interaction associations
+        List<String> effectFrequencies = new ArrayList<>();
+        Iterator<String> effectFrequencyIterator = null;
+        if (effectFrequency != null) {
+            String[] separatedVariantFrequencies = effectFrequency.split(delimiter);
+            for (String separatedVariantFrequency : separatedVariantFrequencies) {
+                effectFrequencies.add(separatedVariantFrequency.trim());
             }
-            riskFrequencyIterator = riskFrequencies.iterator();
+            effectFrequencyIterator = effectFrequencies.iterator();
         }
 
-        // Snp status
-        List<String> snpStatuses = new ArrayList<>();
-        Iterator<String> snpStatusIterator = null;
-        if (snpStatus != null) {
-            String[] separatedSnpStatuses = snpStatus.split(delimiter);
-            for (String separatedSnpStatus : separatedSnpStatuses) {
-                snpStatuses.add(separatedSnpStatus.trim());
+        // Variant status
+        List<String> variantStatuses = new ArrayList<>();
+        Iterator<String> variantStatusIterator = null;
+        if (variantStatus != null) {
+            String[] separatedVariantStatuses = variantStatus.split(delimiter);
+            for (String separatedVariantStatus : separatedVariantStatuses) {
+                variantStatuses.add(separatedVariantStatus.trim());
             }
-            snpStatusIterator = snpStatuses.iterator();
+            variantStatusIterator = variantStatuses.iterator();
         }
 
-        Iterator<String> riskAlleleIterator = riskAlleles.iterator();
-        Iterator<String> snpIterator = snps.iterator();
+        Iterator<String> variantAlleleIterator = effectAlleles.iterator();
+        Iterator<String> variantIterator = variants.iterator();
         Iterator<String> proxyIterator = proxies.iterator();
 
-        // Loop through our risk alleles
-        if (riskAlleles.size() == snps.size()) {
+        // Loop through our effect alleles
+        if (effectAlleles.size() == variants.size()) {
 
-            while (riskAlleleIterator.hasNext()) {
+            while (variantAlleleIterator.hasNext()) {
 
-                String snpValue = snpIterator.next().trim();
-                String riskAlleleValue = riskAlleleIterator.next().trim();
+                String variantValue = variantIterator.next().trim();
+                String effectAlleleValue = variantAlleleIterator.next().trim();
                 String proxyValue = proxyIterator.next().trim();
 
-                SingleNucleotidePolymorphism newSnp = lociAttributesService.createSnp(snpValue);
+                Variant newVariant = lociAttributesService.createVariant(variantValue);
 
-                // Create a new risk allele and assign newly created snp
-                RiskAllele newRiskAllele = lociAttributesService.createRiskAllele(riskAlleleValue, newSnp);
+                // Create a new effect allele and assign newly created variant
+                EffectAllele newEffectAllele = lociAttributesService.createEffectAllele(effectAlleleValue, newVariant);
 
-                // Check for proxies and if we have one create a proxy snp
-                Collection<SingleNucleotidePolymorphism> newRiskAlleleProxies = new ArrayList<>();
+                // Check for proxies and if we have one create a proxy variant
+                Collection<Variant> newEffectAlleleProxies = new ArrayList<>();
                 if (proxyValue.contains(":")) {
                     String[] splitProxyValues = proxyValue.split(":");
 
                     for (String splitProxyValue : splitProxyValues) {
-                        SingleNucleotidePolymorphism proxySnp = lociAttributesService.createSnp(splitProxyValue.trim());
-                        newRiskAlleleProxies.add(proxySnp);
+                        Variant proxyVariant = lociAttributesService.createVariant(splitProxyValue.trim());
+                        newEffectAlleleProxies.add(proxyVariant);
                     }
                 }
 
@@ -685,49 +685,49 @@ public class AssociationSheetProcessor {
                     String[] splitProxyValues = proxyValue.split(",");
 
                     for (String splitProxyValue : splitProxyValues) {
-                        SingleNucleotidePolymorphism proxySnp = lociAttributesService.createSnp(splitProxyValue.trim());
-                        newRiskAlleleProxies.add(proxySnp);
+                        Variant proxyVariant = lociAttributesService.createVariant(splitProxyValue.trim());
+                        newEffectAlleleProxies.add(proxyVariant);
                     }
                 }
 
                 else {
-                    SingleNucleotidePolymorphism proxySnp = lociAttributesService.createSnp(proxyValue);
-                    newRiskAlleleProxies.add(proxySnp);
+                    Variant proxyVariant = lociAttributesService.createVariant(proxyValue);
+                    newEffectAlleleProxies.add(proxyVariant);
                 }
-                newRiskAllele.setProxySnps(newRiskAlleleProxies);
+                newEffectAllele.setProxyVariants(newEffectAlleleProxies);
 
-                // If there is no curator entered value for risk allele frequency don't save
-                String riskFrequencyValue = null;
-                if (riskFrequencyIterator != null) {
-                    riskFrequencyValue = riskFrequencyIterator.next().trim();
+                // If there is no curator entered value for effect allele frequency don't save
+                String effectFrequencyValue = null;
+                if (effectFrequencyIterator != null) {
+                    effectFrequencyValue = effectFrequencyIterator.next().trim();
                 }
-                if (riskFrequencyValue != null) {
-                    newRiskAllele.setRiskFrequency(riskFrequencyValue);
-                }
-
-                // Handle snp statuses, these should only apply to SNP interaction associations
-                String snpStatusValue = null;
-                if (snpStatusIterator != null) {
-                    snpStatusValue = snpStatusIterator.next().trim();
+                if (effectFrequencyValue != null) {
+                    newEffectAllele.setEffectFrequency(effectFrequencyValue);
                 }
 
-                if (snpStatus != null && !snpStatus.equalsIgnoreCase("NR")) {
-                    if (snpStatusValue.contains("GW") || snpStatusValue.contains("gw")) {
-                        newRiskAllele.setGenomeWide(true);
+                // Handle variant statuses, these should only apply to VARIANT interaction associations
+                String variantStatusValue = null;
+                if (variantStatusIterator != null) {
+                    variantStatusValue = variantStatusIterator.next().trim();
+                }
+
+                if (variantStatus != null && !variantStatus.equalsIgnoreCase("NR")) {
+                    if (variantStatusValue.contains("GW") || variantStatusValue.contains("gw")) {
+                        newEffectAllele.setGenomeWide(true);
                     }
-                    if (snpStatusValue.contains("LL") || snpStatusValue.contains("ll")) {
-                        newRiskAllele.setLimitedList(true);
+                    if (variantStatusValue.contains("LL") || variantStatusValue.contains("ll")) {
+                        newEffectAllele.setLimitedList(true);
                     }
                 }
 
-                locusRiskAlleles.add(newRiskAllele);
+                locusEffectAlleles.add(newEffectAllele);
             }
         }
         else {
-            getLog().error("Mismatched number of snps and risk alleles");
+            getLog().error("Mismatched number of variants and effect alleles");
         }
 
-        return locusRiskAlleles;
+        return locusEffectAlleles;
     }
 
     private Collection<Gene> createLocusGenes(String authorReportedGene, String delimiter) {

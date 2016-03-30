@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.ac.ebi.spot.goci.model.Gene;
 import uk.ac.ebi.spot.goci.model.Locus;
-import uk.ac.ebi.spot.goci.model.RiskAllele;
-import uk.ac.ebi.spot.goci.model.SingleNucleotidePolymorphism;
+import uk.ac.ebi.spot.goci.model.EffectAllele;
+import uk.ac.ebi.spot.goci.model.Variant;
 import uk.ac.ebi.spot.goci.repository.GeneRepository;
 import uk.ac.ebi.spot.goci.repository.LocusRepository;
-import uk.ac.ebi.spot.goci.repository.RiskAlleleRepository;
-import uk.ac.ebi.spot.goci.repository.SingleNucleotidePolymorphismRepository;
+import uk.ac.ebi.spot.goci.repository.EffectAlleleRepository;
+import uk.ac.ebi.spot.goci.repository.VariantRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,9 +26,9 @@ import java.util.Collection;
 @Service
 public class LociAttributesService {
 
-    private SingleNucleotidePolymorphismRepository singleNucleotidePolymorphismRepository;
+    private VariantRepository variantRepository;
     private GeneRepository geneRepository;
-    private RiskAlleleRepository riskAlleleRepository;
+    private EffectAlleleRepository effectAlleleRepository;
     private LocusRepository locusRepository;
 
     private Logger log = LoggerFactory.getLogger(getClass());
@@ -38,13 +38,13 @@ public class LociAttributesService {
 
     // Constructor
     @Autowired
-    public LociAttributesService(SingleNucleotidePolymorphismRepository singleNucleotidePolymorphismRepository,
+    public LociAttributesService(VariantRepository variantRepository,
                                  GeneRepository geneRepository,
-                                 RiskAlleleRepository riskAlleleRepository,
+                                 EffectAlleleRepository effectAlleleRepository,
                                  LocusRepository locusRepository) {
-        this.singleNucleotidePolymorphismRepository = singleNucleotidePolymorphismRepository;
+        this.variantRepository = variantRepository;
         this.geneRepository = geneRepository;
-        this.riskAlleleRepository = riskAlleleRepository;
+        this.effectAlleleRepository = effectAlleleRepository;
         this.locusRepository = locusRepository;
     }
 
@@ -81,49 +81,49 @@ public class LociAttributesService {
         return locusGenes;
     }
 
-    public RiskAllele createRiskAllele(String curatorEnteredRiskAllele, SingleNucleotidePolymorphism snp) {
+    public EffectAllele createEffectAllele(String curatorEnteredEffectAllele, Variant variant) {
 
         //Create new risk allele, at present we always create a new risk allele for each locus within an association
-        RiskAllele riskAllele = new RiskAllele();
-        riskAllele.setRiskAlleleName(tidy_curator_entered_string(curatorEnteredRiskAllele));
-        riskAllele.setSnp(snp);
+        EffectAllele effectAllele = new EffectAllele();
+        effectAllele.setEffectAlleleName(tidy_curator_entered_string(curatorEnteredEffectAllele));
+        effectAllele.setVariant(variant);
 
         // Save risk allele
-        riskAlleleRepository.save(riskAllele);
-        return riskAllele;
+        effectAlleleRepository.save(effectAllele);
+        return effectAllele;
     }
 
-    public void deleteRiskAllele(RiskAllele riskAllele) {
-        riskAlleleRepository.delete(riskAllele);
+    public void deleteEffectAllele(EffectAllele effectAllele) {
+        effectAlleleRepository.delete(effectAllele);
     }
 
     public void deleteLocus(Locus locus) {
         locusRepository.delete(locus);
     }
 
-    public SingleNucleotidePolymorphism createSnp(String curatorEnteredSNP) {
+    public Variant createVariant(String curatorEnteredVariant) {
 
-        curatorEnteredSNP = tidy_curator_entered_string(curatorEnteredSNP);
+        curatorEnteredVariant = tidy_curator_entered_string(curatorEnteredVariant);
 
         // Check if SNP already exists database
-        SingleNucleotidePolymorphism snpInDatabase =
-                singleNucleotidePolymorphismRepository.findByRsIdIgnoreCase(curatorEnteredSNP);
-        SingleNucleotidePolymorphism snp;
-        if (snpInDatabase != null) {
-            snp = snpInDatabase;
+        Variant variantInDatabase =
+                variantRepository.findByExternalIdIgnoreCase(curatorEnteredVariant);
+        Variant variant;
+        if (variantInDatabase != null) {
+            variant = variantInDatabase;
         }
 
         // If SNP doesn't exist, create and save
         else {
             // Create new SNP
-            SingleNucleotidePolymorphism newSNP = new SingleNucleotidePolymorphism();
-            newSNP.setRsId(curatorEnteredSNP);
+            Variant newVARIANT = new Variant();
+            newVARIANT.setExternalId(curatorEnteredVariant);
 
             // Save SNP
-            snp = singleNucleotidePolymorphismRepository.save(newSNP);
+            variant = variantRepository.save(newVARIANT);
         }
 
-        return snp;
+        return variant;
 
     }
 

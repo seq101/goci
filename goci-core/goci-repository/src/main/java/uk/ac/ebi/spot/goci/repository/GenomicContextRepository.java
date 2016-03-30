@@ -17,7 +17,7 @@ import java.util.List;
 @RepositoryRestResource
 public interface GenomicContextRepository extends JpaRepository<GenomicContext, Long> {
 
-    Collection<GenomicContext> findBySnpId(Long snpId);
+    Collection<GenomicContext> findByVariantId(Long variantId);
 
     List<GenomicContext> findByLocationId(Long locationId);
 

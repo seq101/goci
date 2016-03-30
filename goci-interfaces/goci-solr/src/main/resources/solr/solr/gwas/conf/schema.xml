@@ -184,7 +184,7 @@
     <field name="child" type="text_general" indexed="true" stored="true" multiValued="true" />
 
     <!-- association -->
-    <field name="riskFrequency" type="text_general" indexed="true" stored="true" multiValued="false" />
+    <field name="effectAlleleFrequency" type="text_general" indexed="true" stored="true" multiValued="false" />
     <field name="qualifier" type="text_general" indexed="true" stored="true" multiValued="true" />
     <field name="pValueMantissa" type="int" indexed="true" stored="true" multiValued="false" />
     <field name="pValueExponent" type="int" indexed="true" stored="true" multiValued="false" />
@@ -192,7 +192,7 @@
     <field name="orPerCopyUnitDescr" type="text_general" indexed="true" stored="true" multiValued="false" />
     <field name="orPerCopyRange" type="text_general" indexed="false" stored="true" multiValued="false" />
     <field name="orType" type="boolean" indexed="true" stored="true" multiValued="false" />
-    <field name="rsId" type="text_general" indexed="true" stored="true" multiValued="true" />
+    <field name="externalId" type="text_general" indexed="true" stored="true" multiValued="true" />
     <field name="strongestAllele" type="text_general" indexed="true" stored="true" multiValued="true" />
     <field name="context" type="text_general" indexed="true" stored="true" multiValued="true" />
     <field name="region" type="text_general" indexed="true" stored="true" multiValued="true" />
@@ -212,7 +212,7 @@
 
     <!-- embedded association -->
     <field name="association_qualifier" type="text_general" indexed="true" stored="true" multiValued="true" />
-    <field name="association_rsId" type="text_general" indexed="true" stored="true" multiValued="true" />
+    <field name="association_externalId" type="text_general" indexed="true" stored="true" multiValued="true" />
     <field name="association_strongestAllele" type="text_general" indexed="true" stored="true" multiValued="true" />
     <field name="association_context" type="text_general" indexed="true" stored="true" multiValued="true" />
     <field name="association_regions" type="text_general" indexed="true" stored="true" multiValued="true" />

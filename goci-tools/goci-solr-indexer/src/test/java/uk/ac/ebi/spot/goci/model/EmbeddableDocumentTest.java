@@ -8,6 +8,8 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 
@@ -29,9 +31,18 @@ public class EmbeddableDocumentTest {
     private AssociationDocument associationDoc;
     private DiseaseTraitDocument traitDoc;
 
+
+
+
+
+
+
     @Before
     public void setUp() {
         Housekeeping h = new Housekeeping();
+        StudyTypeDictionnary s = new StudyTypeDictionnary();
+        ImputPlatformDictionnary i = new ImputPlatformDictionnary();
+        ReferencePanelDictionnary r = new ReferencePanelDictionnary();
         h.setLastUpdateDate(new Date());
         h.setCatalogPublishDate(new Date());
         this.study = new Study("author",
@@ -48,17 +59,60 @@ public class EmbeddableDocumentTest {
                                false,
                                null,
                                Collections.<EfoTrait>emptyList(),
-                               Collections.<SingleNucleotidePolymorphism>emptyList(),
+                               Collections.<Variant>emptyList(),
                                Collections.<Ethnicity>emptyList(),
-                               h);
+                               h,
+                               s,
+                               i,
+                               0,
+                               Boolean.TRUE,
+                               r);
         study.setId(1l);
         this.studyDoc = new StudyDocument(study);
 
-        this.association = new Association("riskFrequency",
+
+
+
+//        Association(String effectAlleleFrequency,
+//                    String effectAlleleFrequencyCases,
+//                    String effectAlleleFrequencyControls,
+//                    String pvalueText,
+//                    Float orPerCopyNum,
+//                    Boolean orType,
+//                    String variantType,
+//                    Boolean multiSnpHaplotype,
+//                    Boolean snpInteraction,
+//                    Boolean snpApproved,
+//                    Integer pvalueMantissa,
+//                    Integer pvalueExponent,
+//                    Float orPerCopyRecip,
+//                    Float orPerCopyStdError,
+//                    String orPerCopyRange,
+//                    String orPerCopyRecipRange,
+//                    String orPerCopyUnitDescr,
+//                    Study study,
+//                    Collection<Locus> loci,
+//                    Collection<EfoTrait> efoTraits,
+//                    AssociationReport associationReport,
+//                    Date lastMappingDate,
+//                    String lastMappingPerformedBy,
+//                    Date lastUpdateDate,
+//                    BigDecimal imputationQualityScore,
+//                    BigDecimal bayesFactorLog10,
+//                    String metaDirection,
+//                    BigDecimal heterogeneityScore,
+//                    Integer heterogeneityPvalueMantissa,
+//                    Integer heterogeneityPvalueExponent,
+//                    BigDecimal beta,
+//                    BigDecimal standardError) {
+
+        this.association = new Association("effectFrequency",
+                                           "effectFreqCases",
+                                           "effectFreqControls",
                                            "pValueText",
                                            1.0f,
                                            false,
-                                           "snpType",
+                                           "variantType",
                                            false,
                                            false,
                                            true,
@@ -71,7 +125,7 @@ public class EmbeddableDocumentTest {
                                            "orPerCopyDescr",
                                            study,
                                            Collections.emptyList(),
-                                           Collections.emptyList(), null, null, null, null);
+                                           Collections.emptyList(), null, null, null, null, BigDecimal.ZERO,BigDecimal.ZERO, "++-+",BigDecimal.ZERO,0,0,BigDecimal.ZERO,BigDecimal.ZERO);
         association.setId(2l);
         this.associationDoc = new AssociationDocument(association);
 

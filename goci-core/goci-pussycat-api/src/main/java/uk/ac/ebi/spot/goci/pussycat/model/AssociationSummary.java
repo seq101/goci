@@ -15,7 +15,7 @@ public interface AssociationSummary {
 
     String getPublicationDate();
 
-    String getSNP();
+    String getVariant();
 
     String getPvalue();
 

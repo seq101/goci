@@ -239,7 +239,7 @@ public class FileController {
 
         String releasedate;
         String studycount;
-        String snpcount;
+        String variantCount;
         String associationcount;
         String genebuild;
         String dbsnpbuild;
@@ -250,7 +250,7 @@ public class FileController {
             properties.load(catalogStatsFile.getInputStream());
             releasedate = properties.getProperty("releasedate");
             studycount = properties.getProperty("studycount");
-            snpcount = properties.getProperty("snpcount");
+            variantCount = properties.getProperty("variantCount");
             associationcount = properties.getProperty("associationcount");
             genebuild = properties.getProperty("genomebuild");
             dbsnpbuild = properties.getProperty("dbsnpbuild");
@@ -258,7 +258,7 @@ public class FileController {
 
             response.put("date", releasedate);
             response.put("studies", studycount);
-            response.put("snps", snpcount);
+            response.put("variants", variantCount);
             response.put("associations", associationcount);
             response.put("genebuild", genebuild);
             response.put("dbsnpbuild", dbsnpbuild);

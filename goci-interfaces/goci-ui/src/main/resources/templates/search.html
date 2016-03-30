@@ -203,7 +203,7 @@
                                             <span class="filter-label">p-value
                                                 <span class="glyphicon glyphicon-question-sign context-help"
                                                       data-toggle="tooltip"
-                                                      data-original-title="p-value for SNP-disease/trait association"></span>
+                                                      data-original-title="p-value for Variant-disease/trait association"></span>
                                             </span>
                                                 <span class="pval-label">&le;</span>
                                                 <input class="p-value" type="text" id="pval-mant" placeholder="5"/>
@@ -215,7 +215,7 @@
                                             <span class="filter-label">Odds ratio
                                                 <span class="glyphicon glyphicon-question-sign context-help"
                                                       data-toggle="tooltip"
-                                                      data-original-title="Odds ratio associated with SNP-disease/trait association"></span>
+                                                      data-original-title="Odds ratio associated with Variant-disease/trait association"></span>
                                             </span>
                                                 <input class="filter-value" type="text" id="or-min" placeholder="from"/>
                                                 <input class="filter-value" type="text" id="or-max" placeholder="to"/>
@@ -225,7 +225,7 @@
                                             <span class="filter-label">Beta coefficient
                                                 <span class="glyphicon glyphicon-question-sign context-help"
                                                       data-toggle="tooltip"
-                                                      data-original-title="Beta coefficient associated with SNP-disease/trait association"></span>
+                                                      data-original-title="Beta coefficient associated with Variant-disease/trait association"></span>
                                             </span>
                                                 <input class="filter-value"
                                                        type="text"
@@ -290,7 +290,7 @@
                                 <ul>
                                     <li id="releasedate-stat"></li>
                                     <li id="studies-stat"></li>
-                                    <li id="snps-stat"></li>
+                                    <li id="variants-stat"></li>
                                     <li id="associations-stat"></li>
                                     <li id="genomebuild"></li>
                                     <li id="dbsnpbuild"></li>
@@ -372,7 +372,7 @@
                                     <th style="width: 8%" id="associationCount">Association count
                                         <span class="glyphicon glyphicon-question-sign context-help"
                                               data-toggle="tooltip"
-                                              data-original-title="Number of SNP-disease/trait associations included in the Catalog"></span>
+                                              data-original-title="Number of Variant-disease/trait associations included in the Catalog"></span>
                                         <span class="glyphicon glyphicon-sort clickable sorting unsorted"> </span>
                                     </th>
                                     <th style="width: 5%"></th>
@@ -393,13 +393,13 @@
                             <table id="association-table" class="table table-striped">
                                 <thead id="association-table-header">
                                 <tr>
-                                    <th style="width: 10%" id="strongestAllele">SNP
+                                    <th style="width: 10%" id="strongestAllele">VARIANT
                                         <span class="glyphicon glyphicon-question-sign context-help"
                                               data-toggle="tooltip"
-                                              data-original-title="SNP most strongly associated with trait + risk/effect allele. This may also be haplotype or SNPxSNP interaction."></span>
+                                              data-original-title="Variant most strongly associated with trait + effect/effect allele. This may also be haplotype or VariantxVariant interaction."></span>
                                                                                 <!--<span class="glyphicon glyphicon-sort clickable sorting unsorted"> </span>-->
                                     </th>
-                                    <th style="width: 8%" id="riskFrequency">RAF
+                                    <th style="width: 8%" id="effectAlleleFrequency">RAF
                                         <span class="glyphicon glyphicon-question-sign context-help"
                                               data-toggle="tooltip"
                                               data-original-title="Risk/effect allele frequency in controls"></span>
@@ -408,19 +408,19 @@
                                     <th style="width: 8%" id="pValue">p-value
                                         <span class="glyphicon glyphicon-question-sign context-help"
                                               data-toggle="tooltip"
-                                              data-original-title="p-value for most strongly associated SNP, along with any information describing context of p-value"></span>
+                                              data-original-title="p-value for most strongly associated Variant, along with any information describing context of p-value"></span>
                                         <span class="glyphicon glyphicon-sort clickable sorting unsorted"> </span>
                                     </th>
                                     <th style="width: 6%" id="orPerCopyNum">OR
                                         <span class="glyphicon glyphicon-question-sign context-help"
                                               data-toggle="tooltip"
-                                              data-original-title="Odds ratio associated with SNP"></span>
+                                              data-original-title="Odds ratio associated with Variant"></span>
                                         <span class="glyphicon glyphicon-sort clickable sorting unsorted"> </span>
                                     </th>
                                     <th style="width: 8%" id="orType">Beta
                                         <span class="glyphicon glyphicon-question-sign context-help"
                                               data-toggle="tooltip"
-                                              data-original-title="Beta-coefficient and unit increase/decrease associated with SNP"></span>
+                                              data-original-title="Beta-coefficient and unit increase/decrease associated with Variant"></span>
                                         <span class="glyphicon glyphicon-sort clickable sorting unsorted"> </span>
                                     </th>
                                     <th style="width: 6%">CI
@@ -431,19 +431,19 @@
                                     <th style="width: 6%">Region
                                         <span class="glyphicon glyphicon-question-sign context-help"
                                               data-toggle="tooltip"
-                                              data-original-title="Cytogenetic region of SNP"></span>
+                                              data-original-title="Cytogenetic region of Variant"></span>
                                     </th>
                                     <th style="width: 6%" id="chromosomePosition">Location
                                         <span class="glyphicon glyphicon-question-sign context-help"
                                               data-toggle="tooltip"
-                                              data-original-title="Chromosome and base pair location of SNP"></span>
+                                              data-original-title="Chromosome and base pair location of Variant"></span>
                                                                                   <!--<span class="glyphicon glyphicon-sort clickable sorting unsorted"> </span>-->
 
                                     </th>
                                     <th style="width: 8%">Functional class
                                         <span class="glyphicon glyphicon-question-sign context-help"
                                               data-toggle="tooltip"
-                                              data-original-title="Functional class of SNP"></span>
+                                              data-original-title="Functional class of Variant"></span>
                                     </th>
                                     <th style="width: 8%">Reported gene(s)
                                         <span class="glyphicon glyphicon-question-sign context-help"

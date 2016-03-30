@@ -12,14 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import uk.ac.ebi.spot.goci.model.Association;
-import uk.ac.ebi.spot.goci.model.SingleNucleotidePolymorphism;
+import uk.ac.ebi.spot.goci.model.Variant;
 import uk.ac.ebi.spot.goci.model.Study;
 import uk.ac.ebi.spot.goci.pussycat.exception.NoRenderableDataException;
 import uk.ac.ebi.spot.goci.pussycat.exception.PussycatSessionNotReadyException;
 import uk.ac.ebi.spot.goci.pussycat.lang.Filter;
 import uk.ac.ebi.spot.goci.pussycat.manager.PussycatManager;
 import uk.ac.ebi.spot.goci.pussycat.renderlet.RenderletNexus;
-import uk.ac.ebi.spot.goci.pussycat.service.DiagramConversionService;
 import uk.ac.ebi.spot.goci.pussycat.session.PussycatSession;
 import uk.ac.ebi.spot.goci.pussycat.session.PussycatSessionStrategy;
 
@@ -252,18 +251,18 @@ public class PussycatGOCIController {
     }
 
 
-    @RequestMapping(value = "/snps")
-    public @ResponseBody String renderSNPs(HttpSession session)
+    @RequestMapping(value = "/variants")
+    public @ResponseBody String renderVariants(HttpSession session)
             throws PussycatSessionNotReadyException, NoRenderableDataException {
-        SingleNucleotidePolymorphism snp = template(SingleNucleotidePolymorphism.class);
-        return getPussycatSession(session).performRendering(getRenderletNexus(session), filter(snp));
+        Variant variant = template(Variant.class);
+        return getPussycatSession(session).performRendering(getRenderletNexus(session), filter(variant));
     }
 
-    @RequestMapping(value = "/snps/{rsID}")
-    public @ResponseBody String renderSNP(@PathVariable String rsID, HttpSession session)
+    @RequestMapping(value = "/variants/{externalId}")
+    public @ResponseBody String renderVariant(@PathVariable String externalId, HttpSession session)
             throws PussycatSessionNotReadyException, NoRenderableDataException {
-        SingleNucleotidePolymorphism snp = template(SingleNucleotidePolymorphism.class);
-        Filter filter = refine(snp).on(snp.getRsId()).hasValue(rsID);
+        Variant variant = template(Variant.class);
+        Filter filter = refine(variant).on(variant.getExternalId()).hasValue(externalId);
         return getPussycatSession(session).performRendering(getRenderletNexus(session), filter);
     }
 

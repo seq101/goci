@@ -16,7 +16,7 @@ public class OntologyConstants {
     // Class IRIs
     public static final String STUDY_CLASS_IRI = GWAS_ONTOLOGY_SCHEMA_IRI + "/Study";
     public static final String TRAIT_ASSOCIATION_CLASS_IRI = GWAS_ONTOLOGY_SCHEMA_IRI + "/TraitAssociation";
-    public static final String SNP_CLASS_IRI = GWAS_ONTOLOGY_SCHEMA_IRI + "/SingleNucleotidePolymorphism";
+    public static final String VARIANT_CLASS_IRI = GWAS_ONTOLOGY_SCHEMA_IRI + "/Variant";
     public static final String CYTOGENIC_REGION_CLASS_IRI = GWAS_ONTOLOGY_SCHEMA_IRI + "/CytogeneticRegion";
     public static final String CHROMOSOME_CLASS_IRI = GWAS_ONTOLOGY_SCHEMA_IRI + "/Chromosome";
     public static final String EXPERIMENTAL_FACTOR_CLASS_IRI = "http://www.ebi.ac.uk/efo/EFO_0000001";
@@ -30,7 +30,7 @@ public class OntologyConstants {
     public static final String HAS_P_VALUE_PROPERTY_IRI = GWAS_ONTOLOGY_SCHEMA_IRI + "/has_p_value";
     public static final String HAS_PUBLICATION_DATE_PROPERTY_IRI = GWAS_ONTOLOGY_SCHEMA_IRI + "/has_publication_date";
     public static final String HAS_PUBMED_ID_PROPERTY_IRI = GWAS_ONTOLOGY_SCHEMA_IRI + "/has_pubmed_id";
-    public static final String HAS_SNP_REFERENCE_ID_PROPERTY_IRI = GWAS_ONTOLOGY_SCHEMA_IRI + "/has_snp_reference_id";
+    public static final String HAS_VARIANT_REFERENCE_ID_PROPERTY_IRI = GWAS_ONTOLOGY_SCHEMA_IRI + "/has_variant_reference_id";
 
     // Object Property IRIs
     public static final String ASSOCIATED_WITH_PROPERTY_IRI = GWAS_ONTOLOGY_SCHEMA_IRI + "/associated_with";

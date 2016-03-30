@@ -2,13 +2,13 @@ package uk.ac.ebi.spot.goci.curation.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import uk.ac.ebi.spot.goci.curation.model.SnpAssociationTableView;
+import uk.ac.ebi.spot.goci.curation.model.VariantAssociationTableView;
 import uk.ac.ebi.spot.goci.model.Association;
 import uk.ac.ebi.spot.goci.model.EfoTrait;
 import uk.ac.ebi.spot.goci.model.Gene;
 import uk.ac.ebi.spot.goci.model.Locus;
-import uk.ac.ebi.spot.goci.model.RiskAllele;
-import uk.ac.ebi.spot.goci.model.SingleNucleotidePolymorphism;
+import uk.ac.ebi.spot.goci.model.EffectAllele;
+import uk.ac.ebi.spot.goci.model.Variant;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,26 +40,26 @@ public class AssociationViewService {
      *
      * @param association Association object
      */
-    public SnpAssociationTableView createSnpAssociationTableView(Association association) {
-        SnpAssociationTableView snpAssociationTableView = new SnpAssociationTableView();
+    public VariantAssociationTableView createVariantAssociationTableView(Association association) {
+        VariantAssociationTableView variantAssociationTableView = new VariantAssociationTableView();
 
         // For SNP interaction studies snp, proxy snps, risk alleles etc
         // should be separated by an 'x'
         String delimiter = "; ";
-        if (association.getSnpInteraction()) {
+        if (association.getVariantInteraction()) {
             delimiter = " x ";
         }
 
-        snpAssociationTableView.setAssociationId(association.getId());
+        variantAssociationTableView.setAssociationId(association.getId());
 
         // For each locus relevant attributes
         Collection<Locus> loci = association.getLoci();
         Collection<String> allLociGenes = new ArrayList<>();
-        Collection<String> allLociRiskAlleles = new ArrayList<String>();
-        Collection<String> allLociSnps = new ArrayList<String>();
-        Collection<String> allLociProxySnps = new ArrayList<String>();
-        Collection<String> allLociRiskAlleleFrequencies = new ArrayList<String>();
-        Collection<String> allLociSnpStatuses = new ArrayList<String>();
+        Collection<String> allLociEffectAlleles = new ArrayList<String>();
+        Collection<String> allLociVariants = new ArrayList<String>();
+        Collection<String> allLociProxyVariants = new ArrayList<String>();
+        Collection<String> allLociEffectAlleleFrequencies = new ArrayList<String>();
+        Collection<String> allLociVariantStatuses = new ArrayList<String>();
 
         // By looking at each locus in turn we can keep order in view
         String syntaxError = ""; // store any syntax errors
@@ -80,77 +80,77 @@ public class AssociationViewService {
             }
             else { allLociGenes.add("NR"); }
 
-            for (RiskAllele riskAllele : locus.getStrongestRiskAlleles()) {
-                allLociRiskAlleles.add(riskAllele.getRiskAlleleName());
+            for (EffectAllele effectAllele : locus.getStrongestEffectAlleles()) {
+                allLociEffectAlleles.add(effectAllele.getEffectAlleleName());
 
                 // Check for any potential errors
-                syntaxError = syntaxError + associationComponentsSyntaxChecks.checkRiskAllele(riskAllele.getRiskAlleleName());
+                syntaxError = syntaxError + associationComponentsSyntaxChecks.checkEffectAllele(effectAllele.getEffectAlleleName());
 
                 // For standard association set the risk allele frequency
                 // Based on assumption we only have one locus with a single risk allele attached
-                if (!association.getMultiSnpHaplotype() && !association.getSnpInteraction()) {
-                    if (riskAllele.getRiskFrequency() != null && !riskAllele.getRiskFrequency().isEmpty()) {
-                        allLociRiskAlleleFrequencies.add(riskAllele.getRiskFrequency());
+                if (!association.getMultiVariantHaplotype() && !association.getVariantInteraction()) {
+                    if (effectAllele.getEffectFrequency() != null && !effectAllele.getEffectFrequency().isEmpty()) {
+                        allLociEffectAlleleFrequencies.add(effectAllele.getEffectFrequency());
                     }
                 }
 
                 // SNPs attached to risk allele
-                SingleNucleotidePolymorphism snp = riskAllele.getSnp();
-                allLociSnps.add(snp.getRsId());
+                Variant variant = effectAllele.getVariant();
+                allLociVariants.add(variant.getExternalId());
 
                 // Check for any potential errors
-                syntaxError = syntaxError + associationComponentsSyntaxChecks.checkSnp(snp.getRsId());
+                syntaxError = syntaxError + associationComponentsSyntaxChecks.checkVariant(variant.getExternalId());
 
                 // Set proxies if present
                 Collection<String> currentLocusProxies = new ArrayList<>();
                 String commaSeparatedProxies = "";
-                if (riskAllele.getProxySnps() != null) {
-                    for (SingleNucleotidePolymorphism proxySnp : riskAllele.getProxySnps()) {
-                        currentLocusProxies.add(proxySnp.getRsId());
+                if (effectAllele.getProxyVariants() != null) {
+                    for (Variant proxyVariant : effectAllele.getProxyVariants()) {
+                        currentLocusProxies.add(proxyVariant.getExternalId());
 
                         // Check for any potential errors
-                        syntaxError = syntaxError + associationComponentsSyntaxChecks.checkProxy(proxySnp.getRsId());
+                        syntaxError = syntaxError + associationComponentsSyntaxChecks.checkProxy(proxyVariant.getExternalId());
                     }
                 }
 
                 // Comma separate proxies in view
                 if (!currentLocusProxies.isEmpty()) {
                     commaSeparatedProxies = String.join(", ", currentLocusProxies);
-                    allLociProxySnps.add(commaSeparatedProxies);
+                    allLociProxyVariants.add(commaSeparatedProxies);
                 }
 
-                else { allLociProxySnps.add("NR");}
+                else { allLociProxyVariants.add("NR");}
 
                 // Only required for SNP interaction studies
-                if (association.getSnpInteraction() != null) {
-                    if (association.getSnpInteraction()) {
+                if (association.getVariantInteraction() != null) {
+                    if (association.getVariantInteraction()) {
 
                         // Genome wide Vs Limited List
-                        Collection<String> snpStatus = new ArrayList<>();
-                        String commaSeparatedSnpStatus = "";
-                        if (riskAllele.getLimitedList() != null) {
-                            if (riskAllele.getLimitedList()) {
-                                snpStatus.add("LL");
+                        Collection<String> variantStatus = new ArrayList<>();
+                        String commaSeparatedVariantStatus = "";
+                        if (effectAllele.getLimitedList() != null) {
+                            if (effectAllele.getLimitedList()) {
+                                variantStatus.add("LL");
                             }
                         }
-                        if (riskAllele.getGenomeWide() != null) {
-                            if (riskAllele.getGenomeWide()) {
-                                snpStatus.add("GW");
+                        if (effectAllele.getGenomeWide() != null) {
+                            if (effectAllele.getGenomeWide()) {
+                                variantStatus.add("GW");
                             }
                         }
-                        if (!snpStatus.isEmpty()) {
-                            commaSeparatedSnpStatus = String.join(", ", snpStatus);
-                            allLociSnpStatuses.add(commaSeparatedSnpStatus);
+                        if (!variantStatus.isEmpty()) {
+                            commaSeparatedVariantStatus = String.join(", ", variantStatus);
+                            allLociVariantStatuses.add(commaSeparatedVariantStatus);
                         }
-                        else { allLociSnpStatuses.add("NR");}
+                        else { allLociVariantStatuses.add("NR");}
 
 
                         // Allele risk frequency
-                        if (riskAllele.getRiskFrequency() != null && !riskAllele.getRiskFrequency().isEmpty()) {
-                            allLociRiskAlleleFrequencies.add(riskAllele.getRiskFrequency());
+                        if (effectAllele.getEffectFrequency() != null && !effectAllele.getEffectFrequency().isEmpty()) {
+                            allLociEffectAlleleFrequencies.add(effectAllele.getEffectFrequency());
                         }
                         else {
-                            allLociRiskAlleleFrequencies.add("NR");
+                            allLociEffectAlleleFrequencies.add("NR");
                         }
                     }
                 }
@@ -165,58 +165,58 @@ public class AssociationViewService {
         else {
             authorReportedGenes = String.join("", allLociGenes);
         }
-        snpAssociationTableView.setAuthorReportedGenes(authorReportedGenes);
+        variantAssociationTableView.setAuthorReportedGenes(authorReportedGenes);
 
-        String strongestRiskAlleles = null;
-        if (allLociRiskAlleles.size() > 1) {
-            strongestRiskAlleles = String.join(delimiter, allLociRiskAlleles);
+        String strongestEffectAlleles = null;
+        if (allLociEffectAlleles.size() > 1) {
+            strongestEffectAlleles = String.join(delimiter, allLociEffectAlleles);
         }
         else {
-            strongestRiskAlleles = String.join("", allLociRiskAlleles);
+            strongestEffectAlleles = String.join("", allLociEffectAlleles);
         }
-        snpAssociationTableView.setStrongestRiskAlleles(strongestRiskAlleles);
+        variantAssociationTableView.setStrongestEffectAlleles(strongestEffectAlleles);
 
-        String associationSnps = null;
-        if (allLociSnps.size() > 1) {
-            associationSnps = String.join(delimiter, allLociSnps);
+        String associationVariants = null;
+        if (allLociVariants.size() > 1) {
+            associationVariants = String.join(delimiter, allLociVariants);
         }
         else {
-            associationSnps = String.join("", allLociSnps);
+            associationVariants = String.join("", allLociVariants);
         }
-        snpAssociationTableView.setSnps(associationSnps);
+        variantAssociationTableView.setVariants(associationVariants);
 
         String associationProxies = null;
-        if (allLociProxySnps.size() > 1) {
-            associationProxies = String.join(delimiter, allLociProxySnps);
+        if (allLociProxyVariants.size() > 1) {
+            associationProxies = String.join(delimiter, allLociProxyVariants);
         }
         else {
-            associationProxies = String.join("", allLociProxySnps);
+            associationProxies = String.join("", allLociProxyVariants);
         }
-        snpAssociationTableView.setProxySnps(associationProxies);
+        variantAssociationTableView.setProxyVariants(associationProxies);
 
         // Set both risk frequencies
-        String associationRiskAlleleFrequencies = null;
-        if (allLociRiskAlleleFrequencies.size() > 1) {
-            associationRiskAlleleFrequencies = String.join(delimiter, allLociRiskAlleleFrequencies);
+        String associationEffectAlleleFrequencies = null;
+        if (allLociEffectAlleleFrequencies.size() > 1) {
+            associationEffectAlleleFrequencies = String.join(delimiter, allLociEffectAlleleFrequencies);
         }
         else {
-            associationRiskAlleleFrequencies = String.join("", allLociRiskAlleleFrequencies);
+            associationEffectAlleleFrequencies = String.join("", allLociEffectAlleleFrequencies);
         }
-        snpAssociationTableView.setRiskAlleleFrequencies(associationRiskAlleleFrequencies);
-        snpAssociationTableView.setAssociationRiskFrequency(association.getRiskFrequency());
+        variantAssociationTableView.setEffectAlleleFrequencies(associationEffectAlleleFrequencies);
+        variantAssociationTableView.setAssociationEffectFrequency(association.getEffectAlleleFrequency());
 
-        String associationSnpStatuses = null;
-        if (allLociSnpStatuses.size() > 1) {
-            associationSnpStatuses = String.join(delimiter, allLociSnpStatuses);
+        String associationVariantStatuses = null;
+        if (allLociVariantStatuses.size() > 1) {
+            associationVariantStatuses = String.join(delimiter, allLociVariantStatuses);
         }
         else {
-            associationSnpStatuses = String.join("", allLociSnpStatuses);
+            associationVariantStatuses = String.join("", allLociVariantStatuses);
         }
-        snpAssociationTableView.setSnpStatuses(associationSnpStatuses);
+        variantAssociationTableView.setVariantStatuses(associationVariantStatuses);
 
-        snpAssociationTableView.setPvalueMantissa(association.getPvalueMantissa());
-        snpAssociationTableView.setPvalueExponent(association.getPvalueExponent());
-        snpAssociationTableView.setPvalueText(association.getPvalueText());
+        variantAssociationTableView.setPvalueMantissa(association.getPvalueMantissa());
+        variantAssociationTableView.setPvalueExponent(association.getPvalueExponent());
+        variantAssociationTableView.setPvalueText(association.getPvalueText());
 
 
         Collection<String> efoTraits = new ArrayList<>();
@@ -226,56 +226,56 @@ public class AssociationViewService {
         }
         String associationEfoTraits = null;
         associationEfoTraits = String.join(", ", efoTraits);
-        snpAssociationTableView.setEfoTraits(associationEfoTraits);
+        variantAssociationTableView.setEfoTraits(associationEfoTraits);
 
-        snpAssociationTableView.setOrPerCopyNum(association.getOrPerCopyNum());
-        snpAssociationTableView.setOrPerCopyRecip(association.getOrPerCopyRecip());
+        variantAssociationTableView.setOrPerCopyNum(association.getOrPerCopyNum());
+        variantAssociationTableView.setOrPerCopyRecip(association.getOrPerCopyRecip());
 
         if (association.getOrType() != null) {
             if (association.getOrType()) {
-                snpAssociationTableView.setOrType("Yes");
+                variantAssociationTableView.setOrType("Yes");
             }
 
             if (!association.getOrType()) {
-                snpAssociationTableView.setOrType("No");
+                variantAssociationTableView.setOrType("No");
             }
         }
 
-        snpAssociationTableView.setOrPerCopyRange(association.getOrPerCopyRange());
-        snpAssociationTableView.setOrPerCopyRecipRange(association.getOrPerCopyRecipRange());
-        snpAssociationTableView.setOrPerCopyUnitDescr(association.getOrPerCopyUnitDescr());
-        snpAssociationTableView.setOrPerCopyStdError(association.getOrPerCopyStdError());
-        snpAssociationTableView.setAssociationType(association.getSnpType());
+        variantAssociationTableView.setOrPerCopyRange(association.getOrPerCopyRange());
+        variantAssociationTableView.setOrPerCopyRecipRange(association.getOrPerCopyRecipRange());
+        variantAssociationTableView.setOrPerCopyUnitDescr(association.getOrPerCopyUnitDescr());
+        variantAssociationTableView.setOrPerCopyStdError(association.getOrPerCopyStdError());
+        variantAssociationTableView.setAssociationType(association.getVariantType());
 
 
-        if (association.getMultiSnpHaplotype() != null) {
-            if (association.getMultiSnpHaplotype()) {
-                snpAssociationTableView.setMultiSnpHaplotype("Yes");
+        if (association.getMultiVariantHaplotype() != null) {
+            if (association.getMultiVariantHaplotype()) {
+                variantAssociationTableView.setMultiVariantHaplotype("Yes");
             }
 
-            if (!association.getMultiSnpHaplotype()) {
-                snpAssociationTableView.setMultiSnpHaplotype("No");
-            }
-        }
-
-        if (association.getSnpInteraction() != null) {
-            if (association.getSnpInteraction()) {
-                snpAssociationTableView.setSnpInteraction("Yes");
-            }
-
-            if (!association.getSnpInteraction()) {
-                snpAssociationTableView.setSnpInteraction("No");
+            if (!association.getMultiVariantHaplotype()) {
+                variantAssociationTableView.setMultiVariantHaplotype("No");
             }
         }
 
-        if (association.getSnpApproved() != null) {
-            if (association.getSnpApproved()) {
-                snpAssociationTableView.setSnpApproved("Yes");
+        if (association.getVariantInteraction() != null) {
+            if (association.getVariantInteraction()) {
+                variantAssociationTableView.setVariantInteraction("Yes");
+            }
+
+            if (!association.getVariantInteraction()) {
+                variantAssociationTableView.setVariantInteraction("No");
+            }
+        }
+
+        if (association.getVariantApproved() != null) {
+            if (association.getVariantApproved()) {
+                variantAssociationTableView.setVariantApproved("Yes");
             }
 
 
-            if (!association.getSnpApproved()) {
-                snpAssociationTableView.setSnpApproved("No");
+            if (!association.getVariantApproved()) {
+                variantAssociationTableView.setVariantApproved("No");
             }
         }
 
@@ -283,36 +283,36 @@ public class AssociationViewService {
         if (association.getAssociationReport() != null) {
             if (association.getAssociationReport().getErrorCheckedByCurator() != null) {
                 if (association.getAssociationReport().getErrorCheckedByCurator()) {
-                    snpAssociationTableView.setAssociationErrorsChecked("Yes");
+                    variantAssociationTableView.setAssociationErrorsChecked("Yes");
                 }
 
                 if (!association.getAssociationReport().getErrorCheckedByCurator()) {
-                    snpAssociationTableView.setAssociationErrorsChecked("No");
+                    variantAssociationTableView.setAssociationErrorsChecked("No");
                 }
             }
         }
 
         // Set error map
-        snpAssociationTableView.setAssociationErrorMap(associationMappingErrorService.createAssociationErrorMap(
+        variantAssociationTableView.setAssociationErrorMap(associationMappingErrorService.createAssociationErrorMap(
                 association.getAssociationReport()));
 
         // Set syntax errors
         if (!syntaxError.isEmpty()) {
-            snpAssociationTableView.setSyntaxErrorsFound("Yes");
+            variantAssociationTableView.setSyntaxErrorsFound("Yes");
         }
-        else {snpAssociationTableView.setSyntaxErrorsFound("No");}
+        else {variantAssociationTableView.setSyntaxErrorsFound("No");}
 
         // Get mapping details
         if (association.getLastMappingPerformedBy() != null) {
-            snpAssociationTableView.setLastMappingPerformedBy(association.getLastMappingPerformedBy());
+            variantAssociationTableView.setLastMappingPerformedBy(association.getLastMappingPerformedBy());
         }
 
         if (association.getLastMappingDate() != null) {
             DateFormat df = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
             String dateOfLastMapping = df.format(association.getLastMappingDate());
-            snpAssociationTableView.setLastMappingDate(dateOfLastMapping);
+            variantAssociationTableView.setLastMappingDate(dateOfLastMapping);
         }
 
-        return snpAssociationTableView;
+        return variantAssociationTableView;
     }
 }

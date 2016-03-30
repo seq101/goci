@@ -31,7 +31,7 @@ function filterTraits(traitName) {
         });
         console.log("All filtered traits should now be shown");
 
-        var traitCount = '<p>SNP-trait associations for "' + traitName + '" on the diagram: ' + existing + '</p>';
+        var traitCount = '<p>Variant-trait associations for "' + traitName + '" on the diagram: ' + existing + '</p>';
 
         $('#filter-counter').empty().append(traitCount);
         $('#filter-counter').show();
@@ -77,7 +77,7 @@ function processAssociationSummary(data, name) {
 
     var documents = data.response.docs;
 
-    var trait = "SNPs associated with trait '".concat(name).concat("'");
+    var trait = "Variants associated with trait '".concat(name).concat("'");
 
 
     var summaryTable = $('#summary-table-body').empty();
@@ -95,12 +95,12 @@ function processAssociationSummary(data, name) {
             }
 
             //build SNP search and Ensembl link
-            var rsidsearch = "<span><a href='search?query=".concat(summary.rsId[0]).concat("'  target='_blank'>").concat(
-                    summary.rsId[0]).concat("</a></span>");
-            var dbsnp = "<span><a href='http://www.ensembl.org/Homo_sapiens/Variation/Summary?v=".concat(summary.rsId[0]).concat(
+            var externalidsearch = "<span><a href='search?query=".concat(summary.externalId[0]).concat("'  target='_blank'>").concat(
+                    summary.externalId[0]).concat("</a></span>");
+            var dbsnp = "<span><a href='http://www.ensembl.org/Homo_sapiens/Variation/Summary?v=".concat(summary.externalId[0]).concat(
                     "'  target='_blank'>").concat(
                     "<img alt='externalLink' class='link-icon' src='icons/external1.png' th:src='@{icons/external1.png}'/></a></span>");
-            row.append($("<td>").html(rsidsearch.concat('&nbsp;&nbsp;').concat(dbsnp)));
+            row.append($("<td>").html(externalidsearch.concat('&nbsp;&nbsp;').concat(dbsnp)));
 
 
             var pval = "".concat(summary.pValueMantissa).concat(" x10").concat("<sup>").concat(summary.pValueExponent).concat(

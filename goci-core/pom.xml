@@ -24,7 +24,6 @@
         <module>goci-sparql-renderlets</module>
         <module>goci-renderlets-core</module>
         <module>goci-ontology</module>
-        <module>goci-db-binding</module>
     </modules>
 
 </project>

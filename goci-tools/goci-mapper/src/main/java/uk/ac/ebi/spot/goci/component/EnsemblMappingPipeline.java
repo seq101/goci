@@ -17,7 +17,7 @@ import uk.ac.ebi.spot.goci.model.GenomicContext;
 import uk.ac.ebi.spot.goci.model.Location;
 import uk.ac.ebi.spot.goci.model.Region;
 import uk.ac.ebi.spot.goci.model.RestResponseResult;
-import uk.ac.ebi.spot.goci.model.SingleNucleotidePolymorphism;
+import uk.ac.ebi.spot.goci.model.Variant;
 import uk.ac.ebi.spot.goci.service.EnsemblRestService;
 
 import java.util.ArrayList;
@@ -76,15 +76,15 @@ public class EnsemblMappingPipeline {
     }
 
     // Run the pipeline for a given SNP
-    public synchronized EnsemblMappingResult run_pipeline(String rsId, Collection<String> reportedGenes)
+    public synchronized EnsemblMappingResult run_pipeline(String externalId, Collection<String> reportedGenes)
             throws EnsemblRestIOException {
 
         // Create our result object
         setEnsemblMappingResult(new EnsemblMappingResult());
-        getEnsemblMappingResult().setRsId(rsId);
+        getEnsemblMappingResult().setExternalId(externalId);
 
         // Variation call
-        RestResponseResult variationDataApiResult = ensemblRestService.getRestCall("variation", rsId, "");
+        RestResponseResult variationDataApiResult = ensemblRestService.getRestCall("variation", externalId, "");
         String restApiError = variationDataApiResult.getError();
 
         // Check for any errors
@@ -96,12 +96,12 @@ public class EnsemblMappingPipeline {
             JSONObject variationResult = variationDataApiResult.getRestResult().getObject();
 
             if (variationResult.has("error")) {
-                checkError(variationResult, "variation", "Variant " + rsId + " is not found in Ensembl");
+                checkError(variationResult, "variation", "Variant " + externalId + " is not found in Ensembl");
             }
             else if (variationResult.length() > 0) {
 
                 // Merged SNP
-                getEnsemblMappingResult().setMerged((variationResult.getString("name").equals(rsId)) ? 0 : 1);
+                getEnsemblMappingResult().setMerged((variationResult.getString("name").equals(externalId)) ? 0 : 1);
 
                 // Mapping errors
                 if (variationResult.has("failed")) {
@@ -123,14 +123,14 @@ public class EnsemblMappingPipeline {
                     }
 
                     // Genomic context (loop over the "locations" object)
-                    for (Location snp_location : locations) {
-                        getAllGenomicContexts(snp_location);
+                    for (Location variantLocation : locations) {
+                        getAllGenomicContexts(variantLocation);
                     }
                 }
             }
         }
         else {
-            getLog().error("Variation call for SNP " + rsId + " returned no result");
+            getLog().error("Variation call for Variant " + externalId + " returned no result");
         }
 
         // Reported genes checks
@@ -176,8 +176,8 @@ public class EnsemblMappingPipeline {
                             String gene_chromosome = reported_gene_result.getString("seq_region_name");
                             int same_chromosome = 0;
                             for (Location location : locations) {
-                                String snp_chromosome = location.getChromosomeName();
-                                if (gene_chromosome.equals(snp_chromosome)) {
+                                String variantChromosome = location.getChromosomeName();
+                                if (gene_chromosome.equals(variantChromosome)) {
                                     same_chromosome = 1;
                                     break;
                                 }
@@ -267,27 +267,27 @@ public class EnsemblMappingPipeline {
     /**
      * Run the genomic context pipeline for both sources (Ensembl and NCBI)
      *
-     * @param snp_location an instance of the Location class (chromosome name and position)
+     * @param variantLocation an instance of the Location class (chromosome name and position)
      */
-    private void getAllGenomicContexts(Location snp_location) throws EnsemblRestIOException {
+    private void getAllGenomicContexts(Location variantLocation) throws EnsemblRestIOException {
 
         int chr_start = 1;
-        int chr_end = getChromosomeEnd(snp_location.getChromosomeName());
+        int chr_end = getChromosomeEnd(variantLocation.getChromosomeName());
 
-        getGenomicContext(snp_location, chr_start, chr_end, getEnsemblSource());
-        getGenomicContext(snp_location, chr_start, chr_end, getNcbiSource());
+        getGenomicContext(variantLocation, chr_start, chr_end, getEnsemblSource());
+        getGenomicContext(variantLocation, chr_start, chr_end, getNcbiSource());
     }
 
 
     /**
      * Get the genomic context in 3 calls: overlap, upstream and downstream genes
      *
-     * @param snp_location an instance of the Location class (chromosome name and position)
+     * @param variantLocation an instance of the Location class (chromosome name and position)
      * @param chr_start    5' start position of the chromosome
      * @param chr_end      3' end position of the chromosome
      * @param source       the source of the data (Ensembl or NCBI)
      */
-    private void getGenomicContext(Location snp_location, int chr_start, int chr_end, String source)
+    private void getGenomicContext(Location variantLocation, int chr_start, int chr_end, String source)
             throws EnsemblRestIOException {
         // By default the db_type is 'core' (i.e. Ensembl)
         String rest_opt = "feature=gene";
@@ -296,31 +296,31 @@ public class EnsemblMappingPipeline {
             rest_opt += "&db_type=" + getNcbiDbType();
         }
         // Overlapping genes
-        getLog().debug("Getting overlapping genes from " + source + " for " + getEnsemblMappingResult().getRsId());
-        getOverlappingGenes(snp_location, source, rest_opt);
+        getLog().debug("Getting overlapping genes from " + source + " for " + getEnsemblMappingResult().getExternalId());
+        getOverlappingGenes(variantLocation, source, rest_opt);
 
         // Upstream genes
-        getLog().debug("Getting upstream genes from " + source + " for " + getEnsemblMappingResult().getRsId());
-        getUpstreamGenes(snp_location, source, chr_start, rest_opt);
+        getLog().debug("Getting upstream genes from " + source + " for " + getEnsemblMappingResult().getExternalId());
+        getUpstreamGenes(variantLocation, source, chr_start, rest_opt);
 
         // Downstream genes
-        getLog().debug("Getting downstream genes from " + source + " for " + getEnsemblMappingResult().getRsId());
-        getDownstreamGenes(snp_location, source, chr_end, rest_opt);
+        getLog().debug("Getting downstream genes from " + source + " for " + getEnsemblMappingResult().getExternalId());
+        getDownstreamGenes(variantLocation, source, chr_end, rest_opt);
     }
 
 
     /**
      * Get the list of overlapping genes
      *
-     * @param snp_location an instance of the Location class (chromosome name and position)
+     * @param variantLocation an instance of the Location class (chromosome name and position)
      * @param source       the source of the data (Ensembl or NCBI)
      * @param rest_opt     the extra parameters to add at the end of the REST call url
      */
-    private void getOverlappingGenes(Location snp_location, String source, String rest_opt)
+    private void getOverlappingGenes(Location variantLocation, String source, String rest_opt)
             throws EnsemblRestIOException {
 
-        String chromosome = snp_location.getChromosomeName();
-        String position = snp_location.getChromosomePosition();
+        String chromosome = variantLocation.getChromosomeName();
+        String position = variantLocation.getChromosomePosition();
 
         // Check if there are overlap genes
         JSONArray overlap_gene_result = getOverlapRegionCalls(chromosome, position, position, rest_opt);
@@ -338,7 +338,7 @@ public class EnsemblMappingPipeline {
                     getEnsemblMappingResult().addEnsemblOverlappingGene(geneName);
                 }
             }
-            addGenomicContext(overlap_gene_result, snp_location, source, "overlap");
+            addGenomicContext(overlap_gene_result, variantLocation, source, "overlap");
         }
     }
 
@@ -346,19 +346,19 @@ public class EnsemblMappingPipeline {
     /**
      * Get the list of upstream genes
      *
-     * @param snp_location an instance of the Location class (chromosome name and position)
+     * @param variantLocation an instance of the Location class (chromosome name and position)
      * @param source       the source of the data (Ensembl or NCBI)
      * @param chr_start    5' start position of the chromosome
      * @param rest_opt     the extra parameters to add at the end of the REST call url
      */
-    private void getUpstreamGenes(Location snp_location, String source, int chr_start, String rest_opt)
+    private void getUpstreamGenes(Location variantLocation, String source, int chr_start, String rest_opt)
             throws EnsemblRestIOException {
         String type = "upstream";
 
-        String chromosome = snp_location.getChromosomeName();
-        String position = snp_location.getChromosomePosition();
+        String chromosome = variantLocation.getChromosomeName();
+        String position = variantLocation.getChromosomePosition();
 
-        int position_up = Integer.parseInt(snp_location.getChromosomePosition()) - getGenomicDistance();
+        int position_up = Integer.parseInt(variantLocation.getChromosomePosition()) - getGenomicDistance();
         if (position_up < 0) {
             position_up = chr_start;
         }
@@ -369,12 +369,12 @@ public class EnsemblMappingPipeline {
 
         if ((overlap_gene_result.length() != 0 && !overlap_gene_result.getJSONObject(0).has("overlap_error")) ||
                 overlap_gene_result.length() == 0) {
-            boolean closest_found = addGenomicContext(overlap_gene_result, snp_location, source, type);
+            boolean closest_found = addGenomicContext(overlap_gene_result, variantLocation, source, type);
             if (!closest_found) {
                 if (position_up > chr_start) {
                     JSONArray closest_gene = getNearestGene(chromosome, position, pos_up, 1, rest_opt, type, source);
                     if (closest_gene.length() > 0) {
-                        addGenomicContext(closest_gene, snp_location, source, type);
+                        addGenomicContext(closest_gene, variantLocation, source, type);
                     }
                 }
             }
@@ -385,19 +385,19 @@ public class EnsemblMappingPipeline {
     /**
      * Get the list of downstream genes
      *
-     * @param snp_location an instance of the Location class (chromosome name and position)
+     * @param variantLocation an instance of the Location class (chromosome name and position)
      * @param source       the source of the data (Ensembl or NCBI)
      * @param chr_end      3' end position of the chromosome
      * @param rest_opt     the extra parameters to add at the end of the REST call url
      */
-    private void getDownstreamGenes(Location snp_location, String source, int chr_end, String rest_opt)
+    private void getDownstreamGenes(Location variantLocation, String source, int chr_end, String rest_opt)
             throws EnsemblRestIOException {
         String type = "downstream";
 
-        String chromosome = snp_location.getChromosomeName();
-        String position = snp_location.getChromosomePosition();
+        String chromosome = variantLocation.getChromosomeName();
+        String position = variantLocation.getChromosomePosition();
 
-        int position_down = Integer.parseInt(snp_location.getChromosomePosition()) + getGenomicDistance();
+        int position_down = Integer.parseInt(variantLocation.getChromosomePosition()) + getGenomicDistance();
         // Check the downstream position to avoid having a position over the 3' end of the chromosome
         if (chr_end != 0) {
             if (position_down > chr_end) {
@@ -410,13 +410,13 @@ public class EnsemblMappingPipeline {
 
             if ((overlap_gene_result.length() != 0 && !overlap_gene_result.getJSONObject(0).has("overlap_error")) ||
                     overlap_gene_result.length() == 0) {
-                boolean closest_found = addGenomicContext(overlap_gene_result, snp_location, source, type);
+                boolean closest_found = addGenomicContext(overlap_gene_result, variantLocation, source, type);
                 if (!closest_found) {
                     if (position_down != chr_end) {
                         JSONArray closest_gene =
                                 getNearestGene(chromosome, position, pos_down, chr_end, rest_opt, type, source);
                         if (closest_gene.length() > 0) {
-                            addGenomicContext(closest_gene, snp_location, source, type);
+                            addGenomicContext(closest_gene, variantLocation, source, type);
                         }
                     }
                 }
@@ -429,24 +429,24 @@ public class EnsemblMappingPipeline {
      * "GenomicContext" classes)
      *
      * @param json_gene_list the list of overlapping genes in JSONObject format
-     * @param snp_location   an instance of the Location class (chromosome name and position)
+     * @param variantLocation   an instance of the Location class (chromosome name and position)
      * @param source         the source of the data (Ensembl or NCBI)
      * @param type           the type of genomic context (i.e. overlap, upstream, downstream)
      * @return boolean to indicate whether a closest gene has been found or not (only relevant for upstream and
      * downstream gene)
      */
-    private boolean addGenomicContext(JSONArray json_gene_list, Location snp_location, String source, String type) {
+    private boolean addGenomicContext(JSONArray json_gene_list, Location variantLocation, String source, String type) {
         String closest_gene = "";
         int closest_distance = 0;
         boolean intergenic = (type.equals("overlap")) ? false : true;
         boolean upstream = (type.equals("upstream")) ? true : false;
         boolean downstream = (type.equals("downstream")) ? true : false;
 
-        String position = snp_location.getChromosomePosition();
+        String position = variantLocation.getChromosomePosition();
 
-        SingleNucleotidePolymorphism snp_tmp =
-                new SingleNucleotidePolymorphism();
-        snp_tmp.setRsId(getEnsemblMappingResult().getRsId());
+        Variant variantTmp =
+                new Variant();
+        variantTmp.setExternalId(getEnsemblMappingResult().getExternalId());
 
         // Get closest gene
         if (intergenic) {
@@ -540,9 +540,9 @@ public class EnsemblMappingPipeline {
                                                    upstream,
                                                    downstream,
                                                    dist,
-                                                   snp_tmp,
+                                                   variantTmp,
                                                    gene_object,
-                                                   snp_location,
+                                                   variantLocation,
                                                    source,
                                                    getMappingMethod(),
                                                    is_closest_gene);
@@ -558,7 +558,7 @@ public class EnsemblMappingPipeline {
      * until a gene is found or the boundary of the chromosome is reached.
      *
      * @param chromosome   the chromosome name
-     * @param snp_position the position of the variant
+     * @param variantPosition the position of the variant
      * @param position     the start position for the search (at least 100kb upstream or downstream from the variant)
      * @param boundary     the chromosome boundary (upstream: beginning of the chromosome (position 1), downstream: end
      *                     of the chromosome)
@@ -569,7 +569,7 @@ public class EnsemblMappingPipeline {
      * downstream) over the 100kb range
      */
     private JSONArray getNearestGene(String chromosome,
-                                     String snp_position,
+                                     String variantPosition,
                                      String position,
                                      int boundary,
                                      String rest_opt,
@@ -577,7 +577,7 @@ public class EnsemblMappingPipeline {
 
         int position1 = Integer.parseInt(position);
         int position2 = Integer.parseInt(position);
-        int snp_pos = Integer.parseInt(snp_position);
+        int variantPos = Integer.parseInt(variantPosition);
 
         int new_pos = position1;
 
@@ -632,10 +632,10 @@ public class EnsemblMappingPipeline {
 
                     int distance = 0;
                     if (type.equals("upstream")) {
-                        distance = snp_pos - json_gene.getInt("end");
+                        distance = variantPos - json_gene.getInt("end");
                     }
                     else if (type.equals("downstream")) {
-                        distance = json_gene.getInt("start") - snp_pos;
+                        distance = json_gene.getInt("start") - variantPos;
                     }
 
                     if ((distance < closest_distance && distance > 0) || closest_distance == 0) {
@@ -646,7 +646,7 @@ public class EnsemblMappingPipeline {
                 if (closest_gene.length() == 0 && new_pos != boundary) {
                     // Recursive code to find the nearest upstream or downstream gene
                     closest_gene =
-                            this.getNearestGene(chromosome, snp_position, new_pos_string, boundary, rest_opt, type,
+                            this.getNearestGene(chromosome, variantPosition, new_pos_string, boundary, rest_opt, type,
                                                 source);
                 }
             }
@@ -654,7 +654,7 @@ public class EnsemblMappingPipeline {
         else {
             if (new_pos != boundary) {
                 // Recursive code to find the nearest upstream or downstream gene
-                closest_gene = this.getNearestGene(chromosome, snp_position, new_pos_string, boundary, rest_opt, type,
+                closest_gene = this.getNearestGene(chromosome, variantPosition, new_pos_string, boundary, rest_opt, type,
                                                    source);
             }
         }

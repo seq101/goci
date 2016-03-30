@@ -72,7 +72,7 @@ clean.close()
 
 
 #all
-sparqlurl = sparqlEndPoint + "/sparql?default-graph-uri=&query=%0D%0APREFIX+rdf%3A+%3Chttp%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%3E%0D%0APREFIX+rdfs%3A+%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23%3E%0D%0APREFIX+owl%3A+%3Chttp%3A%2F%2Fwww.w3.org%2F2002%2F07%2Fowl%23%3E%0D%0APREFIX+xsd%3A+%3Chttp%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%23%3E%0D%0APREFIX+dc%3A+%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2F%3E%0D%0APREFIX+dcterms%3A+%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Fterms%2F%3E%0D%0APREFIX+oban%3A+%3Chttp%3A%2F%2Fpurl.org%2Foban%2F%3E%0D%0APREFIX+ro%3A+%3Chttp%3A%2F%2Fwww.obofoundry.org%2Fro%2Fro.owl%23%3E%0D%0APREFIX+efo%3A+%3Chttp%3A%2F%2Fwww.ebi.ac.uk%2Fefo%2F%3E%0D%0APREFIX+gt%3A+%3Chttp%3A%2F%2Frdf.ebi.ac.uk%2Fterms%2Fgwas%2F%3E%0D%0APREFIX+gd%3A+%3Chttp%3A%2F%2Frdf.ebi.ac.uk%2Fdataset%2Fgwas%2F%3E%0D%0A%0D%0ASELECT+DISTINCT+%3Fsnp+%3Fpubmed_id+%3Fdate+%3Fpvalue+%3Ftrait%0D%0AWHERE+%7B%0D%0A++%3Fassociation+a+gt%3ATraitAssociation+%3B%0D%0A+++++++++++++++gt%3Ahas_p_value+%3Fpvalue+%3B%0D%0A+++++++++++++++oban%3Ahas_subject+%3Fsnp+%3B%0D%0A+++++++++++++++oban%3Ahas_object+%3Ftrait+%3B%0D%0A+++++++++++++++ro%3Apart_of+%3Fstudy+.%0D%0A++%0D%0A++%3Fstudy+gt%3Ahas_pubmed_id+%3Fpubmed_id+.%0D%0A++%3Fstudy+gt%3Ahas_publication_date+%3Fdate+.%0D%0A%7D&format=text%2Ftab-separated-values&timeout=0&debug=on"
+sparqlurl = sparqlEndPoint + "/sparql?default-graph-uri=&query=%0D%0APREFIX+rdf%3A+%3Chttp%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%3E%0D%0APREFIX+rdfs%3A+%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23%3E%0D%0APREFIX+owl%3A+%3Chttp%3A%2F%2Fwww.w3.org%2F2002%2F07%2Fowl%23%3E%0D%0APREFIX+xsd%3A+%3Chttp%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%23%3E%0D%0APREFIX+dc%3A+%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2F%3E%0D%0APREFIX+dcterms%3A+%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Fterms%2F%3E%0D%0APREFIX+oban%3A+%3Chttp%3A%2F%2Fpurl.org%2Foban%2F%3E%0D%0APREFIX+ro%3A+%3Chttp%3A%2F%2Fwww.obofoundry.org%2Fro%2Fro.owl%23%3E%0D%0APREFIX+efo%3A+%3Chttp%3A%2F%2Fwww.ebi.ac.uk%2Fefo%2F%3E%0D%0APREFIX+gt%3A+%3Chttp%3A%2F%2Frdf.ebi.ac.uk%2Fterms%2Fgwas%2F%3E%0D%0APREFIX+gd%3A+%3Chttp%3A%2F%2Frdf.ebi.ac.uk%2Fdataset%2Fgwas%2F%3E%0D%0A%0D%0ASELECT+DISTINCT+%3Fvariant+%3Fpubmed_id+%3Fdate+%3Fpvalue+%3Ftrait%0D%0AWHERE+%7B%0D%0A++%3Fassociation+a+gt%3ATraitAssociation+%3B%0D%0A+++++++++++++++gt%3Ahas_p_value+%3Fpvalue+%3B%0D%0A+++++++++++++++oban%3Ahas_subject+%3Fvariant+%3B%0D%0A+++++++++++++++oban%3Ahas_object+%3Ftrait+%3B%0D%0A+++++++++++++++ro%3Apart_of+%3Fstudy+.%0D%0A++%0D%0A++%3Fstudy+gt%3Ahas_pubmed_id+%3Fpubmed_id+.%0D%0A++%3Fstudy+gt%3Ahas_publication_date+%3Fdate+.%0D%0A%7D&format=text%2Ftab-separated-values&timeout=0&debug=on"
 
 sparqlresults = urllib.urlretrieve(sparqlurl, "sparql-retrieved-results.txt")
 
@@ -98,19 +98,19 @@ with open(sparqlresults[0]) as results:
 		if not line[0].startswith("#"):
 			# grab snp, can we map?
 			snpid = line[0]
-			snpid = snpid[63:]
+			variantid = variantid[63:]
 			pid = line[1]
 			print ""
 			print "pid=  ", pid
-			print "snpid = ", snpid
+			print "variantid = ", variantid
 
 		if not snpid in snpGeneMappings:
 			noMappingCount += 1
-			print "NO MAPPING snpid = " + snpid
+			print "NO MAPPING variantid = " + variantid
 		else:
 			for gene2so in snpGeneMappings[snpid]:
 				geneid, so = gene2so.split(":")
-				print "Generating JSON for gene '" + geneid + " -> SNP '" + snpid + "'"
+				print "Generating JSON for gene '" + geneid + " -> Variant '" + variantid + "'"
 				soId = soName2soId[so]
 				geneToVariantProbability=soName2probability[so]
 				print "soId" + soId
@@ -145,7 +145,7 @@ with open(sparqlresults[0]) as results:
 				json["access_level"]="public"
 
 				json["unique_association_fields"] = {
-					"variant": "http://identifiers.org/dbsnp/" + snpid,
+					"variant": "http://identifiers.org/dbsnp/" + variantid,
 					"object": efo_disease,
 					"study_name": "cttv009_gwas_catalog",
 					"pubmed_refs": "http://europepmc.org/abstract/MED/" + pmid,
@@ -159,8 +159,8 @@ with open(sparqlresults[0]) as results:
 				json["target"] = target
 
 				variant = {}
-				variant["id"] = ["http://identifiers.org/dbsnp/" + snpid]
-				variant["type"] = "snp single";
+				variant["id"] = ["http://identifiers.org/dbsnp/" + variantid]
+				variant["type"] = "variant single";
 				json["variant"] = variant
 
 				disease = {}

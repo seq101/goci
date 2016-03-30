@@ -176,16 +176,16 @@
             </table>
             <table id="associationTable"
                    class="table table-condensed table-bordered"
-                   th:if="${not #lists.isEmpty(snpAssociationTableViews)}">
-                <caption>SNP association details</caption>
+                   th:if="${not #lists.isEmpty(variantAssociationTableViews)}">
+                <caption>VARIANT association details</caption>
                 <thead>
                 <tr>
                     <th style="font-size: small">Genes (author reported)</th>
                     <th style="font-size: small">Strongest Allele</th>
-                    <th style="font-size: small">SNP</th>
-                    <th style="font-size: small">Proxy SNP</th>
-                    <th style="font-size: small">Independent SNP risk allele frequency in controls</th>
-                    <th style="font-size: small">Risk element (allele, haplotype or SNPxSNP interaction) frequency in
+                    <th style="font-size: small">VARIANT</th>
+                    <th style="font-size: small">Proxy VARIANT</th>
+                    <th style="font-size: small">Independent VARIANT effect allele frequency in controls</th>
+                    <th style="font-size: small">Risk element (allele, haplotype or VARIANTxVARIANT interaction) frequency in
                                                  controls
                     </th>
                     <th style="font-size: small">p-Value (mantissa x 10 exponent)</th>
@@ -198,65 +198,65 @@
                     <th style="font-size: small">OR per Copy Range (reciprocal)</th>
                     <th style="font-size: small">OR per Copy Unit Description</th>
                     <th style="font-size: small">Std Error</th>
-                    <th style="font-size: small">SNP Type</th>
-                    <th style="font-size: small">SNP Status</th>
-                    <th style="font-size: small">Multi-SNP haplotype</th>
-                    <th style="font-size: small">SNP:SNP interaction</th>
+                    <th style="font-size: small">VARIANT Type</th>
+                    <th style="font-size: small">VARIANT Status</th>
+                    <th style="font-size: small">Multi-VARIANT haplotype</th>
+                    <th style="font-size: small">VARIANT:VARIANT interaction</th>
                     <th style="font-size: small">Errors/ Mapping Details</th>
-                    <th style="font-size: small">SNP Approved</th>
+                    <th style="font-size: small">VARIANT Approved</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="snpAssociationTableView: ${snpAssociationTableViews}">
+                <tr th:each="variantAssociationTableView: ${variantAssociationTableViews}">
 
                     <!--Gene-->
-                    <td style="font-size: small" th:text="${snpAssociationTableView.authorReportedGenes}?: '' "></td>
+                    <td style="font-size: small" th:text="${variantAssociationTableView.authorReportedGenes}?: '' "></td>
 
                     <!--Strongest risk allele-->
-                    <td style="font-size: small" th:text="${snpAssociationTableView.strongestRiskAlleles}?: '' "></td>
+                    <td style="font-size: small" th:text="${variantAssociationTableView.strongestEffectAlleles}?: '' "></td>
 
-                    <!--SNPs-->
-                    <td style="font-size: small" th:text="${snpAssociationTableView.snps}?: '' "></td>
+                    <!--VARIANTs-->
+                    <td style="font-size: small" th:text="${variantAssociationTableView.variants}?: '' "></td>
 
-                    <!--Proxy SNPs-->
-                    <td style="font-size: small" th:text="${snpAssociationTableView.proxySnps}?: '' "></td>
+                    <!--Proxy VARIANTs-->
+                    <td style="font-size: small" th:text="${variantAssociationTableView.proxyVariants}?: '' "></td>
 
                     <!--Risk Allele Frequency-->
-                    <td style="font-size: small" th:text="${snpAssociationTableView.riskAlleleFrequencies}?: '' "></td>
+                    <td style="font-size: small" th:text="${variantAssociationTableView.effectAlleleFrequencies}?: '' "></td>
 
                     <!--Association Risk Frequency-->
                     <td style="font-size: small"
-                        th:text="${snpAssociationTableView.associationRiskFrequency}?: '' "></td>
+                        th:text="${variantAssociationTableView.associationEffectFrequency}?: '' "></td>
 
                     <!--P Value-->
                     <td style="font-size: small"
-                        th:text="${snpAssociationTableView.pvalueMantissa} + 'x 10' + ${snpAssociationTableView.pvalueExponent} ?: ''"></td>
-                    <td style="font-size: small" th:text="${snpAssociationTableView.pvalueText} ?: ''"></td>
+                        th:text="${variantAssociationTableView.pvalueMantissa} + 'x 10' + ${variantAssociationTableView.pvalueExponent} ?: ''"></td>
+                    <td style="font-size: small" th:text="${variantAssociationTableView.pvalueText} ?: ''"></td>
 
                     <!--EFO traits-->
-                    <td style="font-size: small" th:text="${snpAssociationTableView.efoTraits} ?: ''"></td>
+                    <td style="font-size: small" th:text="${variantAssociationTableView.efoTraits} ?: ''"></td>
 
-                    <td style="font-size: small" th:text="${snpAssociationTableView.orPerCopyNum} ?: ''"></td>
-                    <td style="font-size: small" th:text="${snpAssociationTableView.orPerCopyRecip} ?: ''"></td>
-                    <td style="font-size: small" th:text="${snpAssociationTableView.orType} ?:''"></td>
-                    <td style="font-size: small" th:text="${snpAssociationTableView.orPerCopyRange} ?: ''"></td>
-                    <td style="font-size: small" th:text="${snpAssociationTableView.orPerCopyRecipRange} ?: ''"></td>
-                    <td style="font-size: small" th:text="${snpAssociationTableView.orPerCopyUnitDescr} ?: ''"></td>
-                    <td style="font-size: small" th:text="${snpAssociationTableView.orPerCopyStdError} ?: ''"></td>
-                    <td style="font-size: small" th:text="${snpAssociationTableView.associationType} ?: ''"></td>
-                    <td style="font-size: small" th:text="${snpAssociationTableView.snpStatuses} ?:''"></td>
-                    <td style="font-size: small" th:text="${snpAssociationTableView.multiSnpHaplotype} ?:''"></td>
-                    <td style="font-size: small" th:text="${snpAssociationTableView.snpInteraction} ?:''"></td>
+                    <td style="font-size: small" th:text="${variantAssociationTableView.orPerCopyNum} ?: ''"></td>
+                    <td style="font-size: small" th:text="${variantAssociationTableView.orPerCopyRecip} ?: ''"></td>
+                    <td style="font-size: small" th:text="${variantAssociationTableView.orType} ?:''"></td>
+                    <td style="font-size: small" th:text="${variantAssociationTableView.orPerCopyRange} ?: ''"></td>
+                    <td style="font-size: small" th:text="${variantAssociationTableView.orPerCopyRecipRange} ?: ''"></td>
+                    <td style="font-size: small" th:text="${variantAssociationTableView.orPerCopyUnitDescr} ?: ''"></td>
+                    <td style="font-size: small" th:text="${variantAssociationTableView.orPerCopyStdError} ?: ''"></td>
+                    <td style="font-size: small" th:text="${variantAssociationTableView.associationType} ?: ''"></td>
+                    <td style="font-size: small" th:text="${variantAssociationTableView.variantStatuses} ?:''"></td>
+                    <td style="font-size: small" th:text="${variantAssociationTableView.multiVariantHaplotype} ?:''"></td>
+                    <td style="font-size: small" th:text="${variantAssociationTableView.variantInteraction} ?:''"></td>
 
 
                     <!-- Errors-->
                     <td>
-                         <span th:switch="${snpAssociationTableView.associationErrorsChecked}">
+                         <span th:switch="${variantAssociationTableView.associationErrorsChecked}">
                              <span th:case="'Yes'">
                                   <span style="color:darkgrey; font-size: small"
-                                        th:each="error: ${snpAssociationTableView.associationErrorMap}"
+                                        th:each="error: ${variantAssociationTableView.associationErrorMap}"
                                         th:utext="${error.value} + '&lt;br /&gt;'?: ''"
-                                        th:if="${not #maps.isEmpty(snpAssociationTableView.associationErrorMap)}">
+                                        th:if="${not #maps.isEmpty(variantAssociationTableView.associationErrorMap)}">
 
                                   </span>
                                   <span class="glyphicon glyphicon-ok pull-right"></span>
@@ -264,18 +264,18 @@
 
                              <span th:case="'No'">
                                   <span style="color:red; font-size: small"
-                                        th:each="error: ${snpAssociationTableView.associationErrorMap}"
+                                        th:each="error: ${variantAssociationTableView.associationErrorMap}"
                                         th:utext="${error.value} + '&lt;br /&gt;' ?: ''"
-                                        th:if="${not #maps.isEmpty(snpAssociationTableView.associationErrorMap)}">
+                                        th:if="${not #maps.isEmpty(variantAssociationTableView.associationErrorMap)}">
 
                                   </span>
                              </span>
 
                              <span th:case="null">
                                   <span style="color:red; font-size: small"
-                                        th:each="error: ${snpAssociationTableView.associationErrorMap}"
+                                        th:each="error: ${variantAssociationTableView.associationErrorMap}"
                                         th:utext="${error.value} + '&lt;br /&gt;'?: ''"
-                                        th:if="${not #maps.isEmpty(snpAssociationTableView.associationErrorMap)}">
+                                        th:if="${not #maps.isEmpty(variantAssociationTableView.associationErrorMap)}">
                                   </span>
                              </span>
                         </span>
@@ -283,17 +283,17 @@
                         <br/>
 
                         <span style="font-style: italic; font-size: small"
-                              th:if="${snpAssociationTableView.lastMappingDate != null}"
-                              th:utext="'Mapping date: '+${snpAssociationTableView.lastMappingDate} ?: ''"></span>
+                              th:if="${variantAssociationTableView.lastMappingDate != null}"
+                              th:utext="'Mapping date: '+${variantAssociationTableView.lastMappingDate} ?: ''"></span>
 
                         <span style="font-style: italic; font-size: small"
-                              th:if="${snpAssociationTableView.lastMappingPerformedBy != null}"
-                              th:utext="'&lt;br /&gt;' +'Performer: '+${snpAssociationTableView.lastMappingPerformedBy} ?: ''"></span>
+                              th:if="${variantAssociationTableView.lastMappingPerformedBy != null}"
+                              th:utext="'&lt;br /&gt;' +'Performer: '+${variantAssociationTableView.lastMappingPerformedBy} ?: ''"></span>
 
                     </td>
 
 
-                    <td th:text="${snpAssociationTableView.snpApproved} ?: '' "></td>
+                    <td th:text="${variantAssociationTableView.variantApproved} ?: '' "></td>
                 </tr>
                 </tbody>
             </table>
@@ -377,8 +377,8 @@
                 </tr>
 
                 <tr>
-                    <th>Study/SNP checked, first level</th>
-                    <td th:switch="${housekeeping.studySnpCheckedLevelOne}">
+                    <th>Study/VARIANT checked, first level</th>
+                    <td th:switch="${housekeeping.studyVariantCheckedLvlOne}">
                         <p th:case="'null'"></p>
 
                         <p th:case="false">No</p>
@@ -388,8 +388,8 @@
                 </tr>
 
                 <tr>
-                    <th>Study/SNP checked, second level</th>
-                    <td th:switch="${housekeeping.studySnpCheckedLevelTwo}">
+                    <th>Study/VARIANT checked, second level</th>
+                    <td th:switch="${housekeeping.studyVariantCheckedLvlTwo}">
                         <p th:case="'null'"></p>
 
                         <p th:case="false">No</p>
@@ -410,8 +410,8 @@
                 </tr>
 
                 <tr>
-                    <th>SNPs rechecked</th>
-                    <td th:switch="${housekeeping.snpsRechecked}">
+                    <th>VARIANTs rechecked</th>
+                    <td th:switch="${housekeeping.variantsRechecked}">
                         <p th:case="'null'"></p>
 
                         <p th:case="false">No</p>

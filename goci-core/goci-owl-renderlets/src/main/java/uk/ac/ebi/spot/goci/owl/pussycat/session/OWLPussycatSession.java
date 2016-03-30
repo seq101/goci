@@ -172,16 +172,16 @@ public class OWLPussycatSession extends AbstractSVGIOPussycatSession {
             OWLObjectProperty has_subject = df.getOWLObjectProperty(IRI.create(OntologyConstants.HAS_SUBJECT_IRI));
             Set<OWLIndividual> related = association.getObjectPropertyValues(has_subject, ontology);
 
-            IRI snp_class = IRI.create(OntologyConstants.SNP_CLASS_IRI);
-            OWLNamedIndividual snp = null;
+            IRI variantclass = IRI.create(OntologyConstants.VARIANT_CLASS_IRI);
+            OWLNamedIndividual variant = null;
             OWLNamedIndividual trait = null;
 
             // get the trait associated with this association
             for (OWLIndividual ind : related) {
-                boolean isSNP = checkType((OWLNamedIndividual) ind, ontology, snp_class);
-                if (isSNP) {
-                    snp = (OWLNamedIndividual) ind;
-                    getLog().debug("The SNP for this association is " + snp);
+                boolean isVariant = checkType((OWLNamedIndividual) ind, ontology, variantclass);
+                if (isVariant) {
+                    variant = (OWLNamedIndividual) ind;
+                    getLog().debug("The VARIANT for this association is " + variant);
                 }
                 else {
                     trait = (OWLNamedIndividual) ind;
@@ -237,21 +237,22 @@ public class OWLPussycatSession extends AbstractSVGIOPussycatSession {
             }
 
             //get the RS id for the SNP
-            if (snp != null) {
-                OWLDataProperty has_rsID =
-                        df.getOWLDataProperty(IRI.create(OntologyConstants.HAS_SNP_REFERENCE_ID_PROPERTY_IRI));
-                if (snp.getDataPropertyValues(has_rsID, ontology).size() != 0) {
-                    OWLLiteral id = snp.getDataPropertyValues(has_rsID, ontology).iterator().next();
+            if (variant != null) {
+                //variant external id (eg. : rs_id for a snp)
+                OWLDataProperty has_externalId =
+                        df.getOWLDataProperty(IRI.create(OntologyConstants.HAS_VARIANT_REFERENCE_ID_PROPERTY_IRI));
+                if (variant.getDataPropertyValues(has_externalId, ontology).size() != 0) {
+                    OWLLiteral id = variant.getDataPropertyValues(has_externalId, ontology).iterator().next();
                     rs_id = id.getLiteral();
                     getLog().debug("The RS id is " + rs_id);
                 }
                 else {
-                    getLog().error("Unable to acquire SNP rsID for snp '" + snp.getIRI() + "'");
+                    getLog().error("Unable to acquire VARIANT externalId for variant '" + variant.getIRI() + "'");
                     rs_id = "N/A";
                 }
             }
             else {
-                getLog().error("No SNP related to association '" + association + "'");
+                getLog().error("No VARIANT related to association '" + association + "'");
                 rs_id = "N/A";
             }
 
@@ -439,7 +440,7 @@ public class OWLPussycatSession extends AbstractSVGIOPussycatSession {
         private final String pubmedID;
         private final String firstAuthor;
         private final String publicationDate;
-        private final String snp;
+        private final String variant;
         private final String pValue;
         private final String gwasTraitName;
         private final String efoTraitLabel;
@@ -448,7 +449,7 @@ public class OWLPussycatSession extends AbstractSVGIOPussycatSession {
         public OWLAssociationSummary(String pubmedID,
                                      String firstAuthor,
                                      String publicationDate,
-                                     String snp,
+                                     String variant,
                                      String pValue,
                                      String gwasTraitName,
                                      String efoTraitLabel,
@@ -456,7 +457,7 @@ public class OWLPussycatSession extends AbstractSVGIOPussycatSession {
             this.pubmedID = pubmedID;
             this.firstAuthor = firstAuthor;
             this.publicationDate = publicationDate;
-            this.snp = snp;
+            this.variant = variant;
             this.pValue = pValue;
             this.gwasTraitName = gwasTraitName;
             this.efoTraitLabel = efoTraitLabel;
@@ -475,8 +476,8 @@ public class OWLPussycatSession extends AbstractSVGIOPussycatSession {
             return publicationDate;
         }
 
-        public String getSNP() {
-            return snp;
+        public String getVariant() {
+            return variant;
         }
 
         @Override public String getPvalue() {

@@ -23,34 +23,34 @@ import uk.ac.ebi.spot.goci.curation.exception.DataIntegrityException;
 import uk.ac.ebi.spot.goci.curation.model.AssociationFormErrorView;
 import uk.ac.ebi.spot.goci.curation.model.LastViewedAssociation;
 import uk.ac.ebi.spot.goci.curation.model.MappingDetails;
-import uk.ac.ebi.spot.goci.curation.model.SnpAssociationForm;
-import uk.ac.ebi.spot.goci.curation.model.SnpAssociationInteractionForm;
-import uk.ac.ebi.spot.goci.curation.model.SnpAssociationTableView;
-import uk.ac.ebi.spot.goci.curation.model.SnpFormColumn;
-import uk.ac.ebi.spot.goci.curation.model.SnpFormRow;
+import uk.ac.ebi.spot.goci.curation.model.VariantAssociationForm;
+import uk.ac.ebi.spot.goci.curation.model.VariantAssociationInteractionForm;
+import uk.ac.ebi.spot.goci.curation.model.VariantAssociationTableView;
+import uk.ac.ebi.spot.goci.curation.model.VariantFormColumn;
+import uk.ac.ebi.spot.goci.curation.model.VariantFormRow;
 import uk.ac.ebi.spot.goci.curation.service.AssociationBatchLoaderService;
 import uk.ac.ebi.spot.goci.curation.service.AssociationDownloadService;
 import uk.ac.ebi.spot.goci.curation.service.AssociationFormErrorViewService;
 import uk.ac.ebi.spot.goci.curation.service.AssociationViewService;
 import uk.ac.ebi.spot.goci.curation.service.CheckEfoTermAssignment;
 import uk.ac.ebi.spot.goci.curation.service.LociAttributesService;
-import uk.ac.ebi.spot.goci.curation.service.SingleSnpMultiSnpAssociationService;
-import uk.ac.ebi.spot.goci.curation.service.SnpInteractionAssociationService;
-import uk.ac.ebi.spot.goci.curation.validator.SnpFormColumnValidator;
-import uk.ac.ebi.spot.goci.curation.validator.SnpFormRowValidator;
+import uk.ac.ebi.spot.goci.curation.service.SingleVariantMultiVariantAssociationService;
+import uk.ac.ebi.spot.goci.curation.service.VariantInteractionAssociationService;
+import uk.ac.ebi.spot.goci.curation.validator.VariantFormColumnValidator;
+import uk.ac.ebi.spot.goci.curation.validator.VariantFormRowValidator;
 import uk.ac.ebi.spot.goci.exception.EnsemblMappingException;
 import uk.ac.ebi.spot.goci.model.Association;
 import uk.ac.ebi.spot.goci.model.AssociationReport;
 import uk.ac.ebi.spot.goci.model.Curator;
 import uk.ac.ebi.spot.goci.model.EfoTrait;
 import uk.ac.ebi.spot.goci.model.Locus;
-import uk.ac.ebi.spot.goci.model.RiskAllele;
+import uk.ac.ebi.spot.goci.model.EffectAllele;
 import uk.ac.ebi.spot.goci.model.Study;
 import uk.ac.ebi.spot.goci.repository.AssociationReportRepository;
 import uk.ac.ebi.spot.goci.repository.AssociationRepository;
 import uk.ac.ebi.spot.goci.repository.EfoTraitRepository;
 import uk.ac.ebi.spot.goci.repository.LocusRepository;
-import uk.ac.ebi.spot.goci.repository.SingleNucleotidePolymorphismRepository;
+import uk.ac.ebi.spot.goci.repository.VariantRepository;
 import uk.ac.ebi.spot.goci.repository.StudyRepository;
 import uk.ac.ebi.spot.goci.service.MappingService;
 
@@ -73,8 +73,8 @@ import java.util.Map;
  *
  * @author emma
  *         <p>
- *         Association controller, interpret user input and transform it into a snp/association model that is
- *         represented to the user by the associated HTML page. Used to view, add and edit existing snp/assocaition
+ *         Association controller, interpret user input and transform it into a variant/association model that is
+ *         represented to the user by the associated HTML page. Used to view, add and edit existing variant/assocaition
  *         information.
  */
 
@@ -92,15 +92,15 @@ public class AssociationController {
     private AssociationBatchLoaderService associationBatchLoaderService;
     private AssociationDownloadService associationDownloadService;
     private AssociationViewService associationViewService;
-    private SingleSnpMultiSnpAssociationService singleSnpMultiSnpAssociationService;
-    private SnpInteractionAssociationService snpInteractionAssociationService;
+    private SingleVariantMultiVariantAssociationService singleVariantMultiVariantAssociationService;
+    private VariantInteractionAssociationService variantInteractionAssociationService;
     private LociAttributesService lociAttributesService;
     private AssociationFormErrorViewService associationFormErrorViewService;
     private CheckEfoTermAssignment checkEfoTermAssignment;
 
     // Validators
-    private SnpFormRowValidator snpFormRowValidator;
-    private SnpFormColumnValidator snpFormColumnValidator;
+    private VariantFormRowValidator variantFormRowValidator;
+    private VariantFormColumnValidator variantFormColumnValidator;
 
     // Uses goci-mapper service to run mapping
     private MappingService mappingService;
@@ -116,17 +116,17 @@ public class AssociationController {
                                  StudyRepository studyRepository,
                                  EfoTraitRepository efoTraitRepository,
                                  LocusRepository locusRepository,
-                                 SingleNucleotidePolymorphismRepository singleNucleotidePolymorphismRepository,
+                                 VariantRepository variantRepository,
                                  AssociationReportRepository associationReportRepository,
                                  AssociationBatchLoaderService associationBatchLoaderService,
                                  AssociationDownloadService associationDownloadService,
                                  AssociationViewService associationViewService,
-                                 SingleSnpMultiSnpAssociationService singleSnpMultiSnpAssociationService,
-                                 SnpInteractionAssociationService snpInteractionAssociationService,
+                                 SingleVariantMultiVariantAssociationService singleVariantMultiVariantAssociationService,
+                                 VariantInteractionAssociationService variantInteractionAssociationService,
                                  LociAttributesService lociAttributesService,
                                  AssociationFormErrorViewService associationFormErrorViewService,
-                                 SnpFormRowValidator snpFormRowValidator,
-                                 SnpFormColumnValidator snpFormColumnValidator,
+                                 VariantFormRowValidator variantFormRowValidator,
+                                 VariantFormColumnValidator variantFormColumnValidator,
                                  MappingService mappingService, CheckEfoTermAssignment checkEfoTermAssignment) {
         this.associationRepository = associationRepository;
         this.studyRepository = studyRepository;
@@ -136,12 +136,12 @@ public class AssociationController {
         this.associationBatchLoaderService = associationBatchLoaderService;
         this.associationDownloadService = associationDownloadService;
         this.associationViewService = associationViewService;
-        this.singleSnpMultiSnpAssociationService = singleSnpMultiSnpAssociationService;
-        this.snpInteractionAssociationService = snpInteractionAssociationService;
+        this.singleVariantMultiVariantAssociationService = singleVariantMultiVariantAssociationService;
+        this.variantInteractionAssociationService = variantInteractionAssociationService;
         this.lociAttributesService = lociAttributesService;
         this.associationFormErrorViewService = associationFormErrorViewService;
-        this.snpFormRowValidator = snpFormRowValidator;
-        this.snpFormColumnValidator = snpFormColumnValidator;
+        this.variantFormRowValidator = variantFormRowValidator;
+        this.variantFormColumnValidator = variantFormColumnValidator;
         this.mappingService = mappingService;
         this.checkEfoTermAssignment = checkEfoTermAssignment;
     }
@@ -152,7 +152,7 @@ public class AssociationController {
     @RequestMapping(value = "/studies/{studyId}/associations",
                     produces = MediaType.TEXT_HTML_VALUE,
                     method = RequestMethod.GET)
-    public String viewStudySnps(Model model,
+    public String viewStudyVariants(Model model,
                                 @PathVariable Long studyId,
                                 @RequestParam(required = false) Long associationId) {
 
@@ -161,13 +161,13 @@ public class AssociationController {
         associations.addAll(associationRepository.findByStudyId(studyId));
 
         // For our associations create a table view object and return
-        Collection<SnpAssociationTableView> snpAssociationTableViews = new ArrayList<SnpAssociationTableView>();
+        Collection<VariantAssociationTableView> variantAssociationTableViews = new ArrayList<VariantAssociationTableView>();
         for (Association association : associations) {
-            SnpAssociationTableView snpAssociationTableView =
-                    associationViewService.createSnpAssociationTableView(association);
-            snpAssociationTableViews.add(snpAssociationTableView);
+            VariantAssociationTableView variantAssociationTableView =
+                    associationViewService.createVariantAssociationTableView(association);
+            variantAssociationTableViews.add(variantAssociationTableView);
         }
-        model.addAttribute("snpAssociationTableViews", snpAssociationTableViews);
+        model.addAttribute("variantAssociationTableViews", variantAssociationTableViews);
 
         // Determine last viewed association
         LastViewedAssociation lastViewedAssociation = getLastViewedAssociation(associationId);
@@ -185,7 +185,7 @@ public class AssociationController {
     @RequestMapping(value = "/studies/{studyId}/associations/sortpvalue",
                     produces = MediaType.TEXT_HTML_VALUE,
                     method = RequestMethod.GET)
-    public String sortStudySnpsByPvalue(Model model,
+    public String sortStudyVariantsByPvalue(Model model,
                                         @PathVariable Long studyId,
                                         @RequestParam(required = true) String direction,
                                         @RequestParam(required = false) Long associationId) {
@@ -206,13 +206,13 @@ public class AssociationController {
         }
 
         // For our associations create a table view object and return
-        Collection<SnpAssociationTableView> snpAssociationTableViews = new ArrayList<SnpAssociationTableView>();
+        Collection<VariantAssociationTableView> variantAssociationTableViews = new ArrayList<VariantAssociationTableView>();
         for (Association association : associations) {
-            SnpAssociationTableView snpAssociationTableView = associationViewService.createSnpAssociationTableView(
+            VariantAssociationTableView variantAssociationTableView = associationViewService.createVariantAssociationTableView(
                     association);
-            snpAssociationTableViews.add(snpAssociationTableView);
+            variantAssociationTableViews.add(variantAssociationTableView);
         }
-        model.addAttribute("snpAssociationTableViews", snpAssociationTableViews);
+        model.addAttribute("variantAssociationTableViews", variantAssociationTableViews);
 
         // Determine last viewed association
         LastViewedAssociation lastViewedAssociation = getLastViewedAssociation(associationId);
@@ -228,10 +228,10 @@ public class AssociationController {
     }
 
 
-    @RequestMapping(value = "/studies/{studyId}/associations/sortrsid",
+    @RequestMapping(value = "/studies/{studyId}/associations/sortexternalid",
                     produces = MediaType.TEXT_HTML_VALUE,
                     method = RequestMethod.GET)
-    public String sortStudySnpsByRsid(Model model,
+    public String sortStudyVariantsByExternalId(Model model,
                                       @PathVariable Long studyId,
                                       @RequestParam(required = true) String direction,
                                       @RequestParam(required = false) Long associationId) {
@@ -239,15 +239,15 @@ public class AssociationController {
         // Get all associations for a study and perform relevant sorting
         Collection<Association> associations = new ArrayList<>();
 
-        // Sorting will not work for multi-snp haplotype or snp interactions so need to check for that
+        // Sorting will not work for multi-variant haplotype or variant interactions so need to check for that
         Boolean sortValues = true;
 
         switch (direction) {
             case "asc":
-                associations.addAll(associationRepository.findByStudyId(studyId, sortByRsidAsc()));
+                associations.addAll(associationRepository.findByStudyId(studyId, sortByExternalIdAsc()));
                 break;
             case "desc":
-                associations.addAll(associationRepository.findByStudyId(studyId, sortByRsidDesc()));
+                associations.addAll(associationRepository.findByStudyId(studyId, sortByExternalIdDesc()));
                 break;
             default:
                 associations.addAll(associationRepository.findByStudyId(studyId));
@@ -259,31 +259,31 @@ public class AssociationController {
         model.addAttribute("totalAssociations", totalAssociations);
 
         // For our associations create a table view object and return
-        Collection<SnpAssociationTableView> snpAssociationTableViews = new ArrayList<SnpAssociationTableView>();
+        Collection<VariantAssociationTableView> variantAssociationTableViews = new ArrayList<VariantAssociationTableView>();
         for (Association association : associations) {
-            SnpAssociationTableView snpAssociationTableView = associationViewService.createSnpAssociationTableView(
+            VariantAssociationTableView variantAssociationTableView = associationViewService.createVariantAssociationTableView(
                     association);
 
             // Cannot sort multi field values
-            if (snpAssociationTableView.getMultiSnpHaplotype() != null) {
-                if (snpAssociationTableView.getMultiSnpHaplotype().equalsIgnoreCase("Yes")) {
+            if (variantAssociationTableView.getMultiVariantHaplotype() != null) {
+                if (variantAssociationTableView.getMultiVariantHaplotype().equalsIgnoreCase("Yes")) {
                     sortValues = false;
                 }
             }
 
-            if (snpAssociationTableView.getSnpInteraction() != null) {
-                if (snpAssociationTableView.getSnpInteraction().equalsIgnoreCase("Yes")) {
+            if (variantAssociationTableView.getVariantInteraction() != null) {
+                if (variantAssociationTableView.getVariantInteraction().equalsIgnoreCase("Yes")) {
                     sortValues = false;
                 }
             }
 
-            snpAssociationTableViews.add(snpAssociationTableView);
+            variantAssociationTableViews.add(variantAssociationTableView);
         }
 
-        // Only return sorted results if its not a multi-snp haplotype or snp interaction
+        // Only return sorted results if its not a multi-variant haplotype or variant interaction
         if (sortValues) {
 
-            model.addAttribute("snpAssociationTableViews", snpAssociationTableViews);
+            model.addAttribute("variantAssociationTableViews", variantAssociationTableViews);
 
             // Determine last viewed association
             LastViewedAssociation lastViewedAssociation = getLastViewedAssociation(associationId);
@@ -302,11 +302,11 @@ public class AssociationController {
     }
 
 
-    // Upload a spreadsheet of snp association information
+    // Upload a spreadsheet of variant association information
     @RequestMapping(value = "/studies/{studyId}/associations/upload",
                     produces = MediaType.TEXT_HTML_VALUE,
                     method = RequestMethod.POST)
-    public String uploadStudySnps(@RequestParam("file") MultipartFile file, @PathVariable Long studyId, Model model)
+    public String uploadStudyVariants(@RequestParam("file") MultipartFile file, @PathVariable Long studyId, Model model)
             throws EnsemblMappingException {
 
         // Establish our study object
@@ -399,139 +399,139 @@ public class AssociationController {
         else {
             // File is empty so let user know
             model.addAttribute("study", studyRepository.findOne(studyId));
-            return "empty_snpfile_upload_warning";
+            return "empty_variantfile_upload_warning";
         }
 
     }
 
-    // Generate a empty form page to add standard snp
+    // Generate a empty form page to add standard variant
     @RequestMapping(value = "/studies/{studyId}/associations/add_standard",
                     produces = MediaType.TEXT_HTML_VALUE,
                     method = RequestMethod.GET)
-    public String addStandardSnps(Model model, @PathVariable Long studyId) {
+    public String addStandardVariants(Model model, @PathVariable Long studyId) {
 
         // Return form object
-        SnpAssociationForm emptyForm = new SnpAssociationForm();
+        VariantAssociationForm emptyForm = new VariantAssociationForm();
 
         // Add one row by default and set description
-        emptyForm.getSnpFormRows().add(new SnpFormRow());
-        emptyForm.setMultiSnpHaplotypeDescr("Single variant");
+        emptyForm.getVariantFormRows().add(new VariantFormRow());
+        emptyForm.setMultiVariantHaplotypeDescr("Single variant");
 
-        model.addAttribute("snpAssociationForm", emptyForm);
+        model.addAttribute("variantAssociationForm", emptyForm);
 
         // Also passes back study object to view so we can create links back to main study page
         model.addAttribute("study", studyRepository.findOne(studyId));
-        return "add_standard_snp_association";
+        return "add_standard_variant_association";
     }
 
 
-    // Generate a empty form page to add multi-snp haplotype
+    // Generate a empty form page to add multi-variant haplotype
     @RequestMapping(value = "/studies/{studyId}/associations/add_multi",
                     produces = MediaType.TEXT_HTML_VALUE,
                     method = RequestMethod.GET)
-    public String addMultiSnps(Model model, @PathVariable Long studyId) {
+    public String addMultiVariants(Model model, @PathVariable Long studyId) {
 
         // Return form object
-        SnpAssociationForm emptyForm = new SnpAssociationForm();
-        emptyForm.setMultiSnpHaplotype(true);
+        VariantAssociationForm emptyForm = new VariantAssociationForm();
+        emptyForm.setMultiVariantHaplotype(true);
 
-        model.addAttribute("snpAssociationForm", emptyForm);
+        model.addAttribute("variantAssociationForm", emptyForm);
 
         // Also passes back study object to view so we can create links back to main study page
         model.addAttribute("study", studyRepository.findOne(studyId));
-        return "add_multi_snp_association";
+        return "add_multi_variant_association";
     }
 
     // Generate a empty form page to add a interaction association
     @RequestMapping(value = "/studies/{studyId}/associations/add_interaction",
                     produces = MediaType.TEXT_HTML_VALUE,
                     method = RequestMethod.GET)
-    public String addSnpInteraction(Model model, @PathVariable Long studyId) {
+    public String addVariantInteraction(Model model, @PathVariable Long studyId) {
 
         // Return form object
-        SnpAssociationInteractionForm emptyForm = new SnpAssociationInteractionForm();
-        model.addAttribute("snpAssociationInteractionForm", emptyForm);
+        VariantAssociationInteractionForm emptyForm = new VariantAssociationInteractionForm();
+        model.addAttribute("variantAssociationInteractionForm", emptyForm);
 
         // Also passes back study object to view so we can create links back to main study page
         model.addAttribute("study", studyRepository.findOne(studyId));
-        return "add_snp_interaction_association";
+        return "add_variant_interaction_association";
     }
 
     // Add multiple rows to table
     @RequestMapping(value = "/studies/{studyId}/associations/add_multi", params = {"addRows"})
-    public String addRows(SnpAssociationForm snpAssociationForm, Model model, @PathVariable Long studyId) {
-        Integer numberOfRows = snpAssociationForm.getMultiSnpHaplotypeNum();
+    public String addRows(VariantAssociationForm variantAssociationForm, Model model, @PathVariable Long studyId) {
+        Integer numberOfRows = variantAssociationForm.getMultiVariantHaplotypeNum();
 
         // Add number of rows curator selected
         while (numberOfRows != 0) {
-            snpAssociationForm.getSnpFormRows().add(new SnpFormRow());
+            variantAssociationForm.getVariantFormRows().add(new VariantFormRow());
             numberOfRows--;
         }
 
         // Pass back updated form
-        model.addAttribute("snpAssociationForm", snpAssociationForm);
+        model.addAttribute("variantAssociationForm", variantAssociationForm);
 
         // Also passes back study object to view so we can create links back to main study page
         model.addAttribute("study", studyRepository.findOne(studyId));
 
-        return "add_multi_snp_association";
+        return "add_multi_variant_association";
     }
 
     // Add multiple rows to table
     @RequestMapping(value = "/studies/{studyId}/associations/add_interaction", params = {"addCols"})
-    public String addRows(SnpAssociationInteractionForm snpAssociationInteractionForm,
+    public String addRows(VariantAssociationInteractionForm variantAssociationInteractionForm,
                           Model model,
                           @PathVariable Long studyId) {
-        Integer numberOfCols = snpAssociationInteractionForm.getNumOfInteractions();
+        Integer numberOfCols = variantAssociationInteractionForm.getNumOfInteractions();
 
         // Add number of cols curator selected
         while (numberOfCols != 0) {
-            snpAssociationInteractionForm.getSnpFormColumns().add(new SnpFormColumn());
+            variantAssociationInteractionForm.getVariantFormColumns().add(new VariantFormColumn());
             numberOfCols--;
         }
 
         // Pass back updated form
-        model.addAttribute("snpAssociationInteractionForm", snpAssociationInteractionForm);
+        model.addAttribute("variantAssociationInteractionForm", variantAssociationInteractionForm);
 
         // Also passes back study object to view so we can create links back to main study page
         model.addAttribute("study", studyRepository.findOne(studyId));
 
-        return "add_snp_interaction_association";
+        return "add_variant_interaction_association";
     }
 
     // Add single row to table
     @RequestMapping(value = "/studies/{studyId}/associations/add_multi", params = {"addRow"})
-    public String addRow(SnpAssociationForm snpAssociationForm, Model model, @PathVariable Long studyId) {
-        snpAssociationForm.getSnpFormRows().add(new SnpFormRow());
+    public String addRow(VariantAssociationForm variantAssociationForm, Model model, @PathVariable Long studyId) {
+        variantAssociationForm.getVariantFormRows().add(new VariantFormRow());
 
         // Pass back updated form
-        model.addAttribute("snpAssociationForm", snpAssociationForm);
+        model.addAttribute("variantAssociationForm", variantAssociationForm);
 
         // Also passes back study object to view so we can create links back to main study page
         model.addAttribute("study", studyRepository.findOne(studyId));
 
-        return "add_multi_snp_association";
+        return "add_multi_variant_association";
     }
 
     // Add single column to table
     @RequestMapping(value = "/studies/{studyId}/associations/add_interaction", params = {"addCol"})
-    public String addCol(SnpAssociationInteractionForm snpAssociationInteractionForm,
+    public String addCol(VariantAssociationInteractionForm variantAssociationInteractionForm,
                          Model model,
                          @PathVariable Long studyId) {
-        snpAssociationInteractionForm.getSnpFormColumns().add(new SnpFormColumn());
+        variantAssociationInteractionForm.getVariantFormColumns().add(new VariantFormColumn());
 
         // Pass back updated form
-        model.addAttribute("snpAssociationInteractionForm", snpAssociationInteractionForm);
+        model.addAttribute("variantAssociationInteractionForm", variantAssociationInteractionForm);
 
         // Also passes back study object to view so we can create links back to main study page
         model.addAttribute("study", studyRepository.findOne(studyId));
 
-        return "add_snp_interaction_association";
+        return "add_variant_interaction_association";
     }
 
     // Remove row from table
     @RequestMapping(value = "/studies/{studyId}/associations/add_multi", params = {"removeRow"})
-    public String removeRow(SnpAssociationForm snpAssociationForm,
+    public String removeRow(VariantAssociationForm variantAssociationForm,
                             HttpServletRequest req,
                             Model model,
                             @PathVariable Long studyId) {
@@ -540,20 +540,20 @@ public class AssociationController {
         final Integer rowId = Integer.valueOf(req.getParameter("removeRow"));
 
         // Remove row
-        snpAssociationForm.getSnpFormRows().remove(rowId.intValue());
+        variantAssociationForm.getVariantFormRows().remove(rowId.intValue());
 
         // Pass back updated form
-        model.addAttribute("snpAssociationForm", snpAssociationForm);
+        model.addAttribute("variantAssociationForm", variantAssociationForm);
 
         // Also passes back study object to view so we can create links back to main study page
         model.addAttribute("study", studyRepository.findOne(studyId));
 
-        return "add_multi_snp_association";
+        return "add_multi_variant_association";
     }
 
     // Remove column from table
     @RequestMapping(value = "/studies/{studyId}/associations/add_interaction", params = {"removeCol"})
-    public String removeCol(SnpAssociationInteractionForm snpAssociationInteractionForm,
+    public String removeCol(VariantAssociationInteractionForm variantAssociationInteractionForm,
                             HttpServletRequest req,
                             Model model,
                             @PathVariable Long studyId) {
@@ -562,43 +562,43 @@ public class AssociationController {
         final Integer colId = Integer.valueOf(req.getParameter("removeCol"));
 
         // Remove col
-        snpAssociationInteractionForm.getSnpFormColumns().remove(colId.intValue());
+        variantAssociationInteractionForm.getVariantFormColumns().remove(colId.intValue());
 
         // Pass back updated form
-        model.addAttribute("snpAssociationInteractionForm", snpAssociationInteractionForm);
+        model.addAttribute("variantAssociationInteractionForm", variantAssociationInteractionForm);
 
         // Also passes back study object to view so we can create links back to main study page
         model.addAttribute("study", studyRepository.findOne(studyId));
 
-        return "add_snp_interaction_association";
+        return "add_variant_interaction_association";
     }
 
 
-    // Add new standard association/snp information to a study
+    // Add new standard association/variant information to a study
     @RequestMapping(value = "/studies/{studyId}/associations/add_standard",
                     produces = MediaType.TEXT_HTML_VALUE,
                     method = RequestMethod.POST)
-    public String addStandardSnps(@ModelAttribute SnpAssociationForm snpAssociationForm,
+    public String addStandardVariants(@ModelAttribute VariantAssociationForm variantAssociationForm,
                                   @PathVariable Long studyId,
                                   BindingResult result,
                                   Model model) throws EnsemblMappingException {
 
         // Check for errors in form
-        Boolean hasErrors = checkSnpAssociationFormErrors(result, snpAssociationForm);
+        Boolean hasErrors = checkVariantAssociationFormErrors(result, variantAssociationForm);
 
         if (hasErrors) {
-            model.addAttribute("snpAssociationForm", snpAssociationForm);
+            model.addAttribute("variantAssociationForm", variantAssociationForm);
 
             // Also passes back study object to view so we can create links back to main study page
             model.addAttribute("study", studyRepository.findOne(studyId));
-            return "add_standard_snp_association";
+            return "add_standard_variant_association";
         }
         else {
             // Get our study object
             Study study = studyRepository.findOne(studyId);
 
             // Create an association object from details in returned form
-            Association newAssociation = singleSnpMultiSnpAssociationService.createAssociation(snpAssociationForm);
+            Association newAssociation = singleVariantMultiVariantAssociationService.createAssociation(variantAssociationForm);
 
             // Set the study ID for our association
             newAssociation.setStudy(study);
@@ -627,20 +627,20 @@ public class AssociationController {
     @RequestMapping(value = "/studies/{studyId}/associations/add_multi",
                     produces = MediaType.TEXT_HTML_VALUE,
                     method = RequestMethod.POST)
-    public String addMultiSnps(@ModelAttribute SnpAssociationForm snpAssociationForm,
+    public String addMultiVariants(@ModelAttribute VariantAssociationForm variantAssociationForm,
                                @PathVariable Long studyId,
                                BindingResult result,
                                Model model) throws EnsemblMappingException {
 
         // Check for errors in form
-        Boolean hasErrors = checkSnpAssociationFormErrors(result, snpAssociationForm);
+        Boolean hasErrors = checkVariantAssociationFormErrors(result, variantAssociationForm);
 
         if (hasErrors) {
-            model.addAttribute("snpAssociationForm", snpAssociationForm);
+            model.addAttribute("variantAssociationForm", variantAssociationForm);
 
             // Also passes back study object to view so we can create links back to main study page
             model.addAttribute("study", studyRepository.findOne(studyId));
-            return "add_multi_snp_association";
+            return "add_multi_variant_association";
         }
         else {
 
@@ -648,7 +648,7 @@ public class AssociationController {
             Study study = studyRepository.findOne(studyId);
 
             // Create an association object from details in returned form
-            Association newAssociation = singleSnpMultiSnpAssociationService.createAssociation(snpAssociationForm);
+            Association newAssociation = singleVariantMultiVariantAssociationService.createAssociation(variantAssociationForm);
 
             // Set the study ID for our association
             newAssociation.setStudy(study);
@@ -677,19 +677,19 @@ public class AssociationController {
     @RequestMapping(value = "/studies/{studyId}/associations/add_interaction",
                     produces = MediaType.TEXT_HTML_VALUE,
                     method = RequestMethod.POST)
-    public String addSnpInteraction(@ModelAttribute SnpAssociationInteractionForm snpAssociationInteractionForm,
+    public String addVariantInteraction(@ModelAttribute VariantAssociationInteractionForm variantAssociationInteractionForm,
                                     @PathVariable Long studyId, BindingResult result, Model model)
             throws EnsemblMappingException {
 
         // Check for errors in form
-        Boolean hasErrors = checkSnpAssociationInteractionFormErrors(result, snpAssociationInteractionForm);
+        Boolean hasErrors = checkVariantAssociationInteractionFormErrors(result, variantAssociationInteractionForm);
 
         if (hasErrors) {
-            model.addAttribute("snpAssociationInteractionForm", snpAssociationInteractionForm);
+            model.addAttribute("variantAssociationInteractionForm", variantAssociationInteractionForm);
 
             // Also passes back study object to view so we can create links back to main study page
             model.addAttribute("study", studyRepository.findOne(studyId));
-            return "add_snp_interaction_association";
+            return "add_variant_interaction_association";
         }
         else {
             // Get our study object
@@ -697,7 +697,7 @@ public class AssociationController {
 
             // Create an association object from details in returned form
             Association newAssociation =
-                    snpInteractionAssociationService.createAssociation(snpAssociationInteractionForm);
+                    variantInteractionAssociationService.createAssociation(variantAssociationInteractionForm);
 
             // Set the study ID for our association
             newAssociation.setStudy(study);
@@ -749,53 +749,53 @@ public class AssociationController {
         // Also passes back study object to view so we can create links back to main study page
         model.addAttribute("study", studyRepository.findOne(studyId));
 
-        if (associationToView.getSnpInteraction() != null && associationToView.getSnpInteraction()) {
-            SnpAssociationInteractionForm snpAssociationInteractionForm =
-                    snpInteractionAssociationService.createSnpAssociationInteractionForm(associationToView);
-            model.addAttribute("snpAssociationInteractionForm", snpAssociationInteractionForm);
-            return "edit_snp_interaction_association";
+        if (associationToView.getVariantInteraction() != null && associationToView.getVariantInteraction()) {
+            VariantAssociationInteractionForm variantAssociationInteractionForm =
+                    variantInteractionAssociationService.createVariantAssociationInteractionForm(associationToView);
+            model.addAttribute("variantAssociationInteractionForm", variantAssociationInteractionForm);
+            return "edit_variant_interaction_association";
         }
 
-        else if (associationToView.getMultiSnpHaplotype() != null && associationToView.getMultiSnpHaplotype()) {
+        else if (associationToView.getMultiVariantHaplotype() != null && associationToView.getMultiVariantHaplotype()) {
             // Create form and return to user
-            SnpAssociationForm snpAssociationForm = singleSnpMultiSnpAssociationService.createSnpAssociationForm(
+            VariantAssociationForm variantAssociationForm = singleVariantMultiVariantAssociationService.createVariantAssociationForm(
                     associationToView);
-            model.addAttribute("snpAssociationForm", snpAssociationForm);
-            return "edit_multi_snp_association";
+            model.addAttribute("variantAssociationForm", variantAssociationForm);
+            return "edit_multi_variant_association";
         }
 
         // If attributes haven't been set determine based on locus count and risk allele count
         else {
             Integer locusCount = associationToView.getLoci().size();
 
-            List<RiskAllele> riskAlleles = new ArrayList<>();
+            List<EffectAllele> effectAlleles = new ArrayList<>();
             for (Locus locus : associationToView.getLoci()) {
-                for (RiskAllele riskAllele : locus.getStrongestRiskAlleles()) {
-                    riskAlleles.add(riskAllele);
+                for (EffectAllele effectAllele : locus.getStrongestEffectAlleles()) {
+                    effectAlleles.add(effectAllele);
                 }
             }
 
             // Case where we have SNP interaction
             if (locusCount > 1) {
-                SnpAssociationInteractionForm snpAssociationInteractionForm =
-                        snpInteractionAssociationService.createSnpAssociationInteractionForm(associationToView);
-                model.addAttribute("snpAssociationInteractionForm", snpAssociationInteractionForm);
-                return "edit_snp_interaction_association";
+                VariantAssociationInteractionForm variantAssociationInteractionForm =
+                        variantInteractionAssociationService.createVariantAssociationInteractionForm(associationToView);
+                model.addAttribute("variantAssociationInteractionForm", variantAssociationInteractionForm);
+                return "edit_variant_interaction_association";
             }
             else {
 
                 // Create form and return to user
-                SnpAssociationForm snpAssociationForm = singleSnpMultiSnpAssociationService.createSnpAssociationForm(
+                VariantAssociationForm variantAssociationForm = singleVariantMultiVariantAssociationService.createVariantAssociationForm(
                         associationToView);
-                model.addAttribute("snpAssociationForm", snpAssociationForm);
+                model.addAttribute("variantAssociationForm", variantAssociationForm);
 
 
-                // If editing multi-snp haplotype
-                if (riskAlleles.size() > 1) {
-                    return "edit_multi_snp_association";
+                // If editing multi-variant haplotype
+                if (effectAlleles.size() > 1) {
+                    return "edit_multi_variant_association";
                 }
                 else {
-                    return "edit_standard_snp_association";
+                    return "edit_standard_variant_association";
                 }
             }
         }
@@ -805,10 +805,10 @@ public class AssociationController {
     @RequestMapping(value = "/associations/{associationId}",
                     produces = MediaType.TEXT_HTML_VALUE,
                     method = RequestMethod.POST)
-    public String editAssociation(@ModelAttribute SnpAssociationForm snpAssociationForm,
-                                  BindingResult snpAssociationFormBindingResult,
-                                  @ModelAttribute SnpAssociationInteractionForm snpAssociationInteractionForm,
-                                  BindingResult snpAssociationInteractionFormBindingResult,
+    public String editAssociation(@ModelAttribute VariantAssociationForm variantAssociationForm,
+                                  BindingResult variantAssociationFormBindingResult,
+                                  @ModelAttribute VariantAssociationInteractionForm variantAssociationInteractionForm,
+                                  BindingResult variantAssociationInteractionFormBindingResult,
                                   @PathVariable Long associationId,
                                   @RequestParam(value = "associationtype", required = true) String associationType,
                                   Model model) throws EnsemblMappingException {
@@ -817,11 +817,11 @@ public class AssociationController {
         // Validate returned form depending on association type
         Boolean hasErrors;
         if (associationType.equalsIgnoreCase("interaction")) {
-            hasErrors = checkSnpAssociationInteractionFormErrors(snpAssociationInteractionFormBindingResult,
-                                                                 snpAssociationInteractionForm);
+            hasErrors = checkVariantAssociationInteractionFormErrors(variantAssociationInteractionFormBindingResult,
+                                                                     variantAssociationInteractionForm);
         }
         else {
-            hasErrors = checkSnpAssociationFormErrors(snpAssociationFormBindingResult, snpAssociationForm);
+            hasErrors = checkVariantAssociationFormErrors(variantAssociationFormBindingResult, variantAssociationForm);
         }
 
         // If errors found then return the edit form with all information entered by curator preserved
@@ -847,28 +847,28 @@ public class AssociationController {
             model.addAttribute("study", studyRepository.findOne(studyId));
 
             if (associationType.equalsIgnoreCase("interaction")) {
-                model.addAttribute("snpAssociationInteractionForm", snpAssociationInteractionForm);
-                return "edit_snp_interaction_association";
+                model.addAttribute("variantAssociationInteractionForm", variantAssociationInteractionForm);
+                return "edit_variant_interaction_association";
             }
 
             else {
                 Integer locusCount = associationToEdit.getLoci().size();
 
-                List<RiskAllele> riskAlleles = new ArrayList<>();
+                List<EffectAllele> effectAlleles = new ArrayList<>();
                 for (Locus locus : associationToEdit.getLoci()) {
-                    for (RiskAllele riskAllele : locus.getStrongestRiskAlleles()) {
-                        riskAlleles.add(riskAllele);
+                    for (EffectAllele effectAllele : locus.getStrongestEffectAlleles()) {
+                        effectAlleles.add(effectAllele);
                     }
                 }
 
-                model.addAttribute("snpAssociationForm", snpAssociationForm);
+                model.addAttribute("variantAssociationForm", variantAssociationForm);
 
                 // Determine html view to display
-                if (riskAlleles.size() > 1) {
-                    return "edit_multi_snp_association";
+                if (effectAlleles.size() > 1) {
+                    return "edit_multi_variant_association";
                 }
                 else {
-                    return "edit_standard_snp_association";
+                    return "edit_standard_variant_association";
                 }
             }
         }
@@ -878,16 +878,16 @@ public class AssociationController {
 
             // Request parameter determines how to process form and also which form to process
             if (associationType.equalsIgnoreCase("interaction")) {
-                editedAssociation = snpInteractionAssociationService.createAssociation(snpAssociationInteractionForm);
+                editedAssociation = variantInteractionAssociationService.createAssociation(variantAssociationInteractionForm);
             }
 
             else if (associationType.equalsIgnoreCase("standardormulti")) {
-                editedAssociation = singleSnpMultiSnpAssociationService.createAssociation(snpAssociationForm);
+                editedAssociation = singleVariantMultiVariantAssociationService.createAssociation(variantAssociationForm);
             }
 
             // default to standard view
             else {
-                editedAssociation = singleSnpMultiSnpAssociationService.createAssociation(snpAssociationForm);
+                editedAssociation = singleVariantMultiVariantAssociationService.createAssociation(variantAssociationForm);
             }
 
             // Set ID of new  association to the ID of the association we're currently editing
@@ -921,11 +921,11 @@ public class AssociationController {
 
     // Add single row to table
     @RequestMapping(value = "/associations/{associationId}", params = {"addRow"})
-    public String addRowEditMode(SnpAssociationForm snpAssociationForm, Model model, @PathVariable Long associationId) {
-        snpAssociationForm.getSnpFormRows().add(new SnpFormRow());
+    public String addRowEditMode(VariantAssociationForm variantAssociationForm, Model model, @PathVariable Long associationId) {
+        variantAssociationForm.getVariantFormRows().add(new VariantFormRow());
 
         // Pass back updated form
-        model.addAttribute("snpAssociationForm", snpAssociationForm);
+        model.addAttribute("variantAssociationForm", variantAssociationForm);
 
         // Also passes back study object to view so we can create links back to main study page
         Association currentAssociation = associationRepository.findOne(associationId);
@@ -942,18 +942,18 @@ public class AssociationController {
                 currentAssociation);
         model.addAttribute("errors", associationFormErrorView);
 
-        return "edit_multi_snp_association";
+        return "edit_multi_variant_association";
     }
 
     // Add single column to table
     @RequestMapping(value = "/associations/{associationId}", params = {"addCol"})
-    public String addColEditMode(SnpAssociationInteractionForm snpAssociationInteractionForm,
+    public String addColEditMode(VariantAssociationInteractionForm variantAssociationInteractionForm,
                                  Model model, @PathVariable Long associationId) {
 
-        snpAssociationInteractionForm.getSnpFormColumns().add(new SnpFormColumn());
+        variantAssociationInteractionForm.getVariantFormColumns().add(new VariantFormColumn());
 
         // Pass back updated form
-        model.addAttribute("snpAssociationInteractionForm", snpAssociationInteractionForm);
+        model.addAttribute("variantAssociationInteractionForm", variantAssociationInteractionForm);
 
         // Also passes back study object to view so we can create links back to main study page
         Association currentAssociation = associationRepository.findOne(associationId);
@@ -970,12 +970,12 @@ public class AssociationController {
                 currentAssociation);
         model.addAttribute("errors", associationFormErrorView);
 
-        return "edit_snp_interaction_association";
+        return "edit_variant_interaction_association";
     }
 
     // Remove row from table
     @RequestMapping(value = "/associations/{associationId}", params = {"removeRow"})
-    public String removeRowEditMode(SnpAssociationForm snpAssociationForm,
+    public String removeRowEditMode(VariantAssociationForm variantAssociationForm,
                                     HttpServletRequest req,
                                     Model model,
                                     @PathVariable Long associationId) {
@@ -984,10 +984,10 @@ public class AssociationController {
         final Integer rowId = Integer.valueOf(req.getParameter("removeRow"));
 
         // Remove row
-        snpAssociationForm.getSnpFormRows().remove(rowId.intValue());
+        variantAssociationForm.getVariantFormRows().remove(rowId.intValue());
 
         // Pass back updated form
-        model.addAttribute("snpAssociationForm", snpAssociationForm);
+        model.addAttribute("variantAssociationForm", variantAssociationForm);
 
         // Also passes back study object to view so we can create links back to main study page
         Association currentAssociation = associationRepository.findOne(associationId);
@@ -1004,12 +1004,12 @@ public class AssociationController {
                 currentAssociation);
         model.addAttribute("errors", associationFormErrorView);
 
-        return "edit_multi_snp_association";
+        return "edit_multi_variant_association";
     }
 
     // Remove column from table
     @RequestMapping(value = "/associations/{associationId}", params = {"removeCol"})
-    public String removeColEditMode(SnpAssociationInteractionForm snpAssociationInteractionForm,
+    public String removeColEditMode(VariantAssociationInteractionForm variantAssociationInteractionForm,
                                     HttpServletRequest req,
                                     Model model,
                                     @PathVariable Long associationId) {
@@ -1018,10 +1018,10 @@ public class AssociationController {
         final Integer colId = Integer.valueOf(req.getParameter("removeCol"));
 
         // Remove col
-        snpAssociationInteractionForm.getSnpFormColumns().remove(colId.intValue());
+        variantAssociationInteractionForm.getVariantFormColumns().remove(colId.intValue());
 
         // Pass back updated form
-        model.addAttribute("snpAssociationInteractionForm", snpAssociationInteractionForm);
+        model.addAttribute("variantAssociationInteractionForm", variantAssociationInteractionForm);
 
         // Also passes back study object to view so we can create links back to main study page
         Association currentAssociation = associationRepository.findOne(associationId);
@@ -1038,7 +1038,7 @@ public class AssociationController {
                 currentAssociation);
         model.addAttribute("errors", associationFormErrorView);
 
-        return "edit_snp_interaction_association";
+        return "edit_variant_interaction_association";
     }
 
 
@@ -1058,12 +1058,12 @@ public class AssociationController {
         }
 
         // Delete each locus and risk allele, which in turn deletes link to genes via author_reported_gene table,
-        // Snps are not deleted as they may be used in other associations
+        // Variants are not deleted as they may be used in other associations
         for (Locus locus : loci) {
-            Collection<RiskAllele> locusRiskAlleles = locus.getStrongestRiskAlleles();
-            locus.setStrongestRiskAlleles(new ArrayList<>());
-            for (RiskAllele riskAllele : locusRiskAlleles) {
-                lociAttributesService.deleteRiskAllele(riskAllele);
+            Collection<EffectAllele> locusEffectAlleles = locus.getStrongestEffectAlleles();
+            locus.setStrongestEffectAlleles(new ArrayList<>());
+            for (EffectAllele effectAllele : locusEffectAlleles) {
+                lociAttributesService.deleteEffectAllele(effectAllele);
             }
             locusRepository.delete(locus);
         }
@@ -1097,12 +1097,12 @@ public class AssociationController {
         }
 
         // Delete each locus and risk allele, which in turn deletes link to genes via author_reported_gene table,
-        // Snps are not deleted as they may be used in other associations
+        // Variants are not deleted as they may be used in other associations
         for (Locus locus : loci) {
-            Collection<RiskAllele> locusRiskAlleles = locus.getStrongestRiskAlleles();
-            locus.setStrongestRiskAlleles(new ArrayList<>());
-            for (RiskAllele riskAllele : locusRiskAlleles) {
-                lociAttributesService.deleteRiskAllele(riskAllele);
+            Collection<EffectAllele> locusEffectAlleles = locus.getStrongestEffectAlleles();
+            locus.setStrongestEffectAlleles(new ArrayList<>());
+            for (EffectAllele effectAllele : locusEffectAlleles) {
+                lociAttributesService.deleteEffectAllele(effectAllele);
             }
             locusRepository.delete(locus);
         }
@@ -1125,7 +1125,7 @@ public class AssociationController {
     @RequestMapping(value = "associations/{associationId}/approve",
                     produces = MediaType.TEXT_HTML_VALUE,
                     method = RequestMethod.GET)
-    public String approveSnpAssociation(@PathVariable Long associationId, RedirectAttributes redirectAttributes) {
+    public String approveVariantAssociation(@PathVariable Long associationId, RedirectAttributes redirectAttributes) {
 
         Association association = associationRepository.findOne(associationId);
 
@@ -1140,8 +1140,8 @@ public class AssociationController {
             // Mark errors as checked
             associationErrorsChecked(association);
 
-            // Set snpChecked attribute to true
-            association.setSnpApproved(true);
+            // Set variantChecked attribute to true
+            association.setVariantApproved(true);
             association.setLastUpdateDate(new Date());
             associationRepository.save(association);
         }
@@ -1154,15 +1154,15 @@ public class AssociationController {
     @RequestMapping(value = "associations/{associationId}/unapprove",
                     produces = MediaType.TEXT_HTML_VALUE,
                     method = RequestMethod.GET)
-    public String unapproveSnpAssociation(@PathVariable Long associationId) {
+    public String unapproveVariantAssociation(@PathVariable Long associationId) {
 
         Association association = associationRepository.findOne(associationId);
 
         // Mark errors as unchecked
         associationErrorsUnchecked(association);
 
-        // Set snpChecked attribute to true
-        association.setSnpApproved(false);
+        // Set variantChecked attribute to true
+        association.setVariantApproved(false);
         association.setLastUpdateDate(new Date());
         associationRepository.save(association);
 
@@ -1192,14 +1192,14 @@ public class AssociationController {
         }
 
         else {
-            // For each one set snpChecked attribute to true
+            // For each one set variantChecked attribute to true
             for (String associationId : associationsIds) {
                 Association association = associationRepository.findOne(Long.valueOf(associationId));
 
                 // Mark errors as checked
                 associationErrorsChecked(association);
 
-                association.setSnpApproved(true);
+                association.setVariantApproved(true);
                 association.setLastUpdateDate(new Date());
                 associationRepository.save(association);
                 count++;
@@ -1221,14 +1221,14 @@ public class AssociationController {
         String message = "";
         Integer count = 0;
 
-        // For each one set snpChecked attribute to true
+        // For each one set variantChecked attribute to true
         for (String associationId : associationsIds) {
             Association association = associationRepository.findOne(Long.valueOf(associationId));
 
             // Mark errors as checked
             associationErrorsUnchecked(association);
 
-            association.setSnpApproved(false);
+            association.setVariantApproved(false);
             association.setLastUpdateDate(new Date());
             associationRepository.save(association);
             count++;
@@ -1257,12 +1257,12 @@ public class AssociationController {
         }
 
         else {
-            // For each one set snpChecked attribute to true
+            // For each one set variantChecked attribute to true
             for (Association association : studyAssociations) {
                 // Mark errors as checked
                 associationErrorsChecked(association);
 
-                association.setSnpApproved(true);
+                association.setVariantApproved(true);
                 association.setLastUpdateDate(new Date());
                 associationRepository.save(association);
             }
@@ -1305,7 +1305,7 @@ public class AssociationController {
     @RequestMapping(value = "/studies/{studyId}/associations/download",
                     produces = MediaType.TEXT_HTML_VALUE,
                     method = RequestMethod.GET)
-    public String downloadStudySnps(HttpServletResponse response, Model model, @PathVariable Long studyId)
+    public String downloadStudyVariants(HttpServletResponse response, Model model, @PathVariable Long studyId)
             throws IOException {
 
         Collection<Association> associations = new ArrayList<>();
@@ -1336,7 +1336,7 @@ public class AssociationController {
     @RequestMapping(value = "/studies/{studyId}/associations/applyefotraits",
                     produces = MediaType.TEXT_HTML_VALUE,
                     method = RequestMethod.GET)
-    public String applyStudyEFOtraitToSnps(Model model, @PathVariable Long studyId,
+    public String applyStudyEFOtraitToVariants(Model model, @PathVariable Long studyId,
                                            @RequestParam(value = "e",
                                                          required = false,
                                                          defaultValue = "false") boolean existing,
@@ -1421,12 +1421,12 @@ public class AssociationController {
                         new Sort.Order(Sort.Direction.DESC, "pvalueMantissa"));
     }
 
-    private Sort sortByRsidAsc() {
-        return new Sort(new Sort.Order(Sort.Direction.ASC, "loci.strongestRiskAlleles.snp.rsId"));
+    private Sort sortByExternalIdAsc() {
+        return new Sort(new Sort.Order(Sort.Direction.ASC, "loci.strongestEffectAlleles.variant.externalId"));
     }
 
-    private Sort sortByRsidDesc() {
-        return new Sort(new Sort.Order(Sort.Direction.DESC, "loci.strongestRiskAlleles.snp.rsId"));
+    private Sort sortByExternalIdDesc() {
+        return new Sort(new Sort.Order(Sort.Direction.DESC, "loci.strongestEffectAlleles.variant.externalId"));
     }
 
     /**
@@ -1489,10 +1489,10 @@ public class AssociationController {
      * @param form   The form to validate
      */
 
-    private Boolean checkSnpAssociationFormErrors(BindingResult result,
-                                                  SnpAssociationForm form) {
-        for (SnpFormRow row : form.getSnpFormRows()) {
-            snpFormRowValidator.validate(row, result);
+    private Boolean checkVariantAssociationFormErrors(BindingResult result,
+                                                  VariantAssociationForm form) {
+        for (VariantFormRow row : form.getVariantFormRows()) {
+            variantFormRowValidator.validate(row, result);
         }
 
         return result.hasErrors();
@@ -1504,11 +1504,11 @@ public class AssociationController {
      * @param result Binding result from edit form
      * @param form   The form to validate
      */
-    private Boolean checkSnpAssociationInteractionFormErrors(BindingResult result,
-                                                             SnpAssociationInteractionForm form) {
+    private Boolean checkVariantAssociationInteractionFormErrors(BindingResult result,
+                                                             VariantAssociationInteractionForm form) {
 
-        for (SnpFormColumn column : form.getSnpFormColumns()) {
-            snpFormColumnValidator.validate(column, result);
+        for (VariantFormColumn column : form.getVariantFormColumns()) {
+            variantFormColumnValidator.validate(column, result);
         }
 
         return result.hasErrors();

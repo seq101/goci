@@ -22,7 +22,7 @@
         <ul class="nav nav-tabs">
             <li><a th:href="@{/studies/{studyId}(studyId=*{id})}">Study Details</a></li>
             <li><a th:href="@{/studies/{studyId}/sampledescription(studyId=*{id})}">Sample Information</a></li>
-            <li><a th:href="@{/studies/{studyId}/associations(studyId=*{id})}">SNP Associations</a></li>
+            <li><a th:href="@{/studies/{studyId}/associations(studyId=*{id})}">VARIANT Associations</a></li>
             <li class="active"><a href="#">Curator Information</a></li>
             <li><a th:href="@{/studies/{studyId}/printview(studyId=*{id})}" target="_blank">Print View</a></li>
 
@@ -87,13 +87,13 @@
     </div>
 </div>
 
-<!--Alert if snps not checked-->
-<div class="container-fluid" th:if="${!#strings.isEmpty(snpsNotChecked)}">
+<!--Alert if variants not checked-->
+<div class="container-fluid" th:if="${!#strings.isEmpty(variantsNotChecked)}">
     <div class="row">
         <div class="col-md-8">
             <div class="alert alert-warning">
                 <a href="#" class="close" data-dismiss="alert">&times;</a>
-                <strong th:text="${snpsNotChecked}">Warning!</strong>
+                <strong th:text="${variantsNotChecked}">Warning!</strong>
             </div>
         </div>
     </div>
@@ -167,18 +167,18 @@
 
 
                 <div class="form-group">
-                    <label for="studySnpCheckedLevelOne" th:for="${#ids.next('studySnpCheckedLevelOne')}"
-                           class="control-label col-md-2">Study/SNP checked, first
+                    <label for="studyVariantCheckedLvlOne" th:for="${#ids.next('studyVariantCheckedLvlOne')}"
+                           class="control-label col-md-2">Study/VARIANT checked, first
                                                           level:</label>
-                    <input id="studySnpCheckedLevelOne" type="checkbox" th:field="*{studySnpCheckedLevelOne}"
+                    <input id="studyVariantCheckedLvlOne" type="checkbox" th:field="*{studyVariantCheckedLvlOne}"
                     />
                 </div>
 
                 <div class="form-group">
-                    <label for="studySnpCheckedLevelTwo" th:for="${#ids.next('studySnpCheckedLevelTwo')}"
-                           class="control-label col-md-2">Study/SNP checked, second
+                    <label for="studyVariantCheckedLvlTwo" th:for="${#ids.next('studyVariantCheckedLvlTwo')}"
+                           class="control-label col-md-2">Study/VARIANT checked, second
                                                           level:</label>
-                    <input id="studySnpCheckedLevelTwo" type="checkbox" th:field="*{studySnpCheckedLevelTwo}"
+                    <input id="studyVariantCheckedLvlTwo" type="checkbox" th:field="*{studyVariantCheckedLvlTwo}"
                     />
                 </div>
 
@@ -195,10 +195,10 @@
 
 
                 <div class="form-group">
-                    <label for="snpsRechecked" th:for="${#ids.next('snpsRechecked')}"
-                           class="control-label col-md-2">SNPs rechecked:</label>
-                    <input id="snpsRechecked" type="checkbox" th:field="*{snpsRechecked}" disabled="disabled"/>
-                    <input id="snpsRechecked" type="hidden" th:field="*{snpsRechecked}"/>
+                    <label for="variantsRechecked" th:for="${#ids.next('variantsRechecked')}"
+                           class="control-label col-md-2">VARIANTs rechecked:</label>
+                    <input id="variantsRechecked" type="checkbox" th:field="*{variantsRechecked}" disabled="disabled"/>
+                    <input id="variantsRechecked" type="hidden" th:field="*{variantsRechecked}"/>
                 </div>
 
 

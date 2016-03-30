@@ -37,16 +37,16 @@ public class PublishStudyCheckService {
         Boolean efoTermsAssigned = checkEfoTermAssignment.checkStudyEfoAssignment(study);
 
         // Check all associations approved
-        int snpNotApproved = studyAssociationCheck(associations);
+        int variantNotApproved = studyAssociationCheck(associations);
 
-        if (snpNotApproved == 1 && !efoTermsAssigned) {
-            message = "No EFO trait assigned and some SNP associations have not been approved for study: "
+        if (variantNotApproved == 1 && !efoTermsAssigned) {
+            message = "No EFO trait assigned and some Variant associations have not been approved for study: "
                     + study.getAuthor() + ", "
                     + " pubmed = " + study.getPubmedId()
                     + ", please review before changing the status.";
         }
-        else if (snpNotApproved == 1) {
-            message = "Some SNP associations have not been approved for study: "
+        else if (variantNotApproved == 1) {
+            message = "Some Variant associations have not been approved for study: "
                     + study.getAuthor() + ", "
                     + " pubmed = " + study.getPubmedId()
                     + ", please review before changing the status.";
@@ -70,15 +70,15 @@ public class PublishStudyCheckService {
      * @param associations All associations found for a study
      */
     private int studyAssociationCheck(Collection<Association> associations) {
-        int snpsNotApproved = 0;
+        int variantsNotApproved = 0;
         for (Association association : associations) {
             // If we have one that is not checked set value
-            if (!association.getSnpApproved()) {
-                snpsNotApproved = 1;
+            if (!association.getVariantApproved()) {
+                variantsNotApproved = 1;
             }
         }
 
-        return snpsNotApproved;
+        return variantsNotApproved;
     }
 
 }

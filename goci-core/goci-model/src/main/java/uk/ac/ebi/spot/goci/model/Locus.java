@@ -15,7 +15,7 @@ import java.util.Collection;
  *
  * @author emma
  *         <p>
- *         Locus object holds links to associated risk alleles and author reported genes
+ *         Locus object holds links to associated effect alleles and author reported genes
  */
 @Entity
 public class Locus {
@@ -23,15 +23,15 @@ public class Locus {
     @GeneratedValue
     private Long id;
 
-    private Integer haplotypeSnpCount;
+    private Integer haplotypeVariantCount;
 
     private String description;
 
     @ManyToMany
-    @JoinTable(name = "LOCUS_RISK_ALLELE",
+    @JoinTable(name = "LOCUS_EFFECT_ALLELE",
                joinColumns = @JoinColumn(name = "LOCUS_ID"),
-               inverseJoinColumns = @JoinColumn(name = "RISK_ALLELE_ID"))
-    private Collection<RiskAllele> strongestRiskAlleles = new ArrayList<>();
+               inverseJoinColumns = @JoinColumn(name = "EFFECT_ALLELE_ID"))
+    private Collection<EffectAllele> strongestEffectAlleles = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "AUTHOR_REPORTED_GENE",
@@ -49,13 +49,13 @@ public class Locus {
     public Locus() {
     }
 
-    public Locus(Integer haplotypeSnpCount,
+    public Locus(Integer haplotypeVariantCount,
                  String description,
-                 Collection<RiskAllele> strongestRiskAlleles,
+                 Collection<EffectAllele> strongestEffectAlleles,
                  Collection<Gene> authorReportedGenes) {
-        this.haplotypeSnpCount = haplotypeSnpCount;
+        this.haplotypeVariantCount = haplotypeVariantCount;
         this.description = description;
-        this.strongestRiskAlleles = strongestRiskAlleles;
+        this.strongestEffectAlleles = strongestEffectAlleles;
         this.authorReportedGenes = authorReportedGenes;
     }
 
@@ -67,12 +67,12 @@ public class Locus {
         this.id = id;
     }
 
-    public Integer getHaplotypeSnpCount() {
-        return haplotypeSnpCount;
+    public Integer getHaplotypeVariantCount() {
+        return haplotypeVariantCount;
     }
 
-    public void setHaplotypeSnpCount(Integer haplotypeSnpCount) {
-        this.haplotypeSnpCount = haplotypeSnpCount;
+    public void setHaplotypeVariantCount(Integer haplotypeVariantCount) {
+        this.haplotypeVariantCount = haplotypeVariantCount;
     }
 
     public String getDescription() {
@@ -83,12 +83,12 @@ public class Locus {
         this.description = description;
     }
 
-    public Collection<RiskAllele> getStrongestRiskAlleles() {
-        return strongestRiskAlleles;
+    public Collection<EffectAllele> getStrongestEffectAlleles() {
+        return strongestEffectAlleles;
     }
 
-    public void setStrongestRiskAlleles(Collection<RiskAllele> strongestRiskAlleles) {
-        this.strongestRiskAlleles = strongestRiskAlleles;
+    public void setStrongestEffectAlleles(Collection<EffectAllele> strongestEffectAlleles) {
+        this.strongestEffectAlleles = strongestEffectAlleles;
     }
 
     public Collection<Gene> getAuthorReportedGenes() {
@@ -102,7 +102,7 @@ public class Locus {
     @Override public String toString() {
         return "Locus{" +
                 "id=" + id +
-                ", haplotypeSnpCount=" + haplotypeSnpCount +
+                ", haplotypeVariantCount=" + haplotypeVariantCount +
                 ", description='" + description + '\'' +
                 '}';
     }

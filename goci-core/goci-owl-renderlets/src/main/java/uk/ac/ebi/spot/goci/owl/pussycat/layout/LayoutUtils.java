@@ -75,13 +75,13 @@ public class LayoutUtils {
         //        OWLObjectHasValue isSubjectOfAssociation = factory.getOWLObjectHasValue(is_subject_of, association);
         //        OWLObjectIntersectionOf associatedSNP = factory.getOWLObjectIntersectionOf(isSubjectOfAssociation, snpCls);
         //        Set<OWLNamedIndividual> snps = reasoner.getInstances(associatedSNP, false).getFlattened();
-        Set<OWLNamedIndividual> snps = new HashSet<OWLNamedIndividual>();
+        Set<OWLNamedIndividual> variants = new HashSet<OWLNamedIndividual>();
         for (OWLIndividual i : association.getObjectPropertyValues(has_subject, ontology)) {
-            snps.add(i.asOWLNamedIndividual());
+            variants.add(i.asOWLNamedIndividual());
         }
 
-        if (snps.size() == 0) {
-            throw new DataIntegrityViolationException("No SNPs could be identified for '" + association + "'");
+        if (variants.size() == 0) {
+            throw new DataIntegrityViolationException("No VARIANTs could be identified for '" + association + "'");
         }
         else {
             //            OWLObjectProperty location_of =
@@ -91,7 +91,7 @@ public class LayoutUtils {
                     factory.getOWLObjectProperty(IRI.create(OntologyConstants.LOCATED_IN_PROPERTY_IRI));
 
             // now, for each SNP, get the location
-            for (OWLNamedIndividual snp : snps) {
+            for (OWLNamedIndividual variant : variants) {
                 //                // get all the located_in bands of this snp
                 //                OWLObjectHasValue locationOfSNP = factory.getOWLObjectHasValue(location_of, snp);
                 //                OWLObjectIntersectionOf locationBand = factory.getOWLObjectIntersectionOf(locationOfSNP, bandCls);
@@ -99,7 +99,7 @@ public class LayoutUtils {
                 //                results.addAll(locations);
 
                 // get the asserted location_of individuals for this snp
-                Set<OWLIndividual> locations = snp.getObjectPropertyValues(located_in, reasoner.getRootOntology());
+                Set<OWLIndividual> locations = variant.getObjectPropertyValues(located_in, reasoner.getRootOntology());
                 for (OWLIndividual location : locations) {
                     results.add(location.asOWLNamedIndividual());
                 }
@@ -138,31 +138,31 @@ public class LayoutUtils {
         OWLObjectProperty has_subject = factory.getOWLObjectProperty(IRI.create(OntologyConstants.HAS_SUBJECT_IRI));
         OWLObjectProperty located_in =
                 factory.getOWLObjectProperty(IRI.create(OntologyConstants.LOCATED_IN_PROPERTY_IRI));
-        OWLClass snpCls = factory.getOWLClass(IRI.create(OntologyConstants.SNP_CLASS_IRI));
+        OWLClass variantCls = factory.getOWLClass(IRI.create(OntologyConstants.VARIANT_CLASS_IRI));
         OWLClass associationCls = factory.getOWLClass(IRI.create(OntologyConstants.TRAIT_ASSOCIATION_CLASS_IRI));
 
         // get all the located_in SNPs of this band
-        OWLObjectHasValue snpsLocated = factory.getOWLObjectHasValue(located_in, cytogeneticBand);
-        OWLObjectIntersectionOf associatedSNP = factory.getOWLObjectIntersectionOf(snpsLocated, snpCls);
-        Set<OWLNamedIndividual> snps = reasoner.getInstances(associatedSNP, false).getFlattened();
+        OWLObjectHasValue variantsLocated = factory.getOWLObjectHasValue(located_in, cytogeneticBand);
+        OWLObjectIntersectionOf associatedVariant = factory.getOWLObjectIntersectionOf(variantsLocated, variantCls);
+        Set<OWLNamedIndividual> variants = reasoner.getInstances(associatedVariant, false).getFlattened();
 
-        if (snps.size() == 0) {
+        if (variants.size() == 0) {
             throw new DataIntegrityViolationException(
-                    "No SNP could be found located in band '" + cytogeneticBand + "'");
+                    "No VARIANT could be found located in band '" + cytogeneticBand + "'");
         }
         else {
             // now, for each SNP, get the associations
-            for (OWLNamedIndividual snp : snps) {
+            for (OWLNamedIndividual variant : variants) {
                 // get all the located_in bands of this snp
-                OWLObjectHasValue snpSubjects = factory.getOWLObjectHasValue(has_subject, snp);
-                OWLObjectIntersectionOf snpAssociations =
-                        factory.getOWLObjectIntersectionOf(snpSubjects, associationCls);
-                Set<OWLNamedIndividual> associations = reasoner.getInstances(snpAssociations, false).getFlattened();
+                OWLObjectHasValue variantSubjects = factory.getOWLObjectHasValue(has_subject, variant);
+                OWLObjectIntersectionOf variantAssociations =
+                        factory.getOWLObjectIntersectionOf(variantSubjects, associationCls);
+                Set<OWLNamedIndividual> associations = reasoner.getInstances(variantAssociations, false).getFlattened();
                 results.addAll(associations);
             }
             if (results.size() == 0) {
                 throw new DataIntegrityViolationException(
-                        "No associations could be found about SNPs located in band '" + cytogeneticBand + "'");
+                        "No associations could be found about VARIANTs located in band '" + cytogeneticBand + "'");
             }
             else {
                 return cache(results, "getAssociationsLocatedInCytogeneticBand", reasoner, cytogeneticBand);
@@ -318,7 +318,7 @@ public class LayoutUtils {
         //        Set<OWLNamedIndividual> traits = reasoner.getInstances(traitForAssociation, false).getFlattened();
 
         OWLObjectProperty has_object = dataFactory.getOWLObjectProperty(IRI.create(OntologyConstants.HAS_OBJECT_IRI));
-        OWLClass snpClass = dataFactory.getOWLClass(IRI.create(OntologyConstants.SNP_CLASS_IRI));
+        OWLClass variantClass = dataFactory.getOWLClass(IRI.create(OntologyConstants.VARIANT_CLASS_IRI));
         Set<OWLIndividual> traits = association.getObjectPropertyValues(has_object, ontology);
 
         if (traits.size() != 0) {

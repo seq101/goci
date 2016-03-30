@@ -3,7 +3,7 @@ package uk.ac.ebi.spot.goci.curation.service;
 import org.springframework.stereotype.Service;
 import uk.ac.ebi.spot.goci.model.Association;
 import uk.ac.ebi.spot.goci.model.EfoTrait;
-import uk.ac.ebi.spot.goci.model.SingleNucleotidePolymorphism;
+import uk.ac.ebi.spot.goci.model.Variant;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -40,7 +40,7 @@ public class AssociationDownloadService {
     private String processAssociations(Collection<Association> associations) {
 
         String header =
-                "Gene\tStrongest SNP-Risk Allele\tSNP\tProxy SNP\tIndependent SNP risk allele frequency in controls\tRisk element (allele, haplotype or SNPxSNP interaction) frequency in controls\tP-value mantissa\tP-value exponent\tP-value (Text)\tOR per copy or beta (Num)\tOR entered (reciprocal)\tOR-type? (Y/N)\tMulti-SNP Haplotype?\tSNP:SNP interaction?\tConfidence Interval\tReciprocal confidence interval\tBeta unit and direction\tStandard Error\tSNP type (novel/known)\tSNP Status\tEFO traits\r\n";
+                "Gene\tStrongest Variant-Effect Allele\tVariant\tProxy Variant\tIndependent Variant effect allele frequency in controls\tEffect element (allele, haplotype or VariantxVariant interaction) frequency in controls\tP-value mantissa\tP-value exponent\tP-value (Text)\tOR per copy or beta (Num)\tOR entered (reciprocal)\tOR-type? (Y/N)\tMulti-Variant Haplotype?\tVariant:Variant interaction?\tConfidence Interval\tReciprocal confidence interval\tBeta unit and direction\tStandard Error\tVariant type (novel/known)\tVariant Status\tEFO traits\r\n";
 
 
         StringBuilder output = new StringBuilder();
@@ -52,11 +52,11 @@ public class AssociationDownloadService {
 
             extractGeneticData(association, line);
 
-            if (association.getRiskFrequency() == null) {
+            if (association.getEffectAlleleFrequency() == null) {
                 line.append("");
             }
             else {
-                line.append(association.getRiskFrequency());
+                line.append(association.getEffectAlleleFrequency());
 
             }
             line.append("\t");
@@ -116,11 +116,11 @@ public class AssociationDownloadService {
             }
             line.append("\t");
 
-            if (association.getMultiSnpHaplotype() == null) {
+            if (association.getMultiVariantHaplotype() == null) {
                 line.append("");
             }
             else {
-                if (association.getMultiSnpHaplotype()) {
+                if (association.getMultiVariantHaplotype()) {
                     line.append("Y");
                 }
                 else {
@@ -129,11 +129,11 @@ public class AssociationDownloadService {
             }
             line.append("\t");
 
-            if (association.getSnpInteraction() == null) {
+            if (association.getVariantInteraction() == null) {
                 line.append("");
             }
             else {
-                if (association.getSnpInteraction()) {
+                if (association.getVariantInteraction()) {
                     line.append("Y");
                 }
                 else {
@@ -177,16 +177,16 @@ public class AssociationDownloadService {
 
             line.append("\t");
 
-            if (association.getSnpType() == null) {
+            if (association.getVariantType() == null) {
                 line.append("");
             }
             else {
-                line.append(association.getSnpType());
+                line.append(association.getVariantType());
             }
             line.append("\t");
 
-            // SNP Status
-            extractSNPStatus(association, line);
+            // Variant Status
+            extractVariantStatus(association, line);
 
             if (association.getEfoTraits() == null) {
                 line.append("");
@@ -203,45 +203,45 @@ public class AssociationDownloadService {
         return output.toString();
     }
 
-    private void extractSNPStatus(Association association, StringBuilder line) {
+    private void extractVariantStatus(Association association, StringBuilder line) {
 
-        final StringBuilder snpStatuses = new StringBuilder();
+        final StringBuilder variantStatuses = new StringBuilder();
 
-        // Only applies to SNP interaction studies, delimiter used is 'x'
-        if (association.getSnpInteraction() != null && association.getSnpInteraction()) {
+        // Only applies to Variant interaction studies, delimiter used is 'x'
+        if (association.getVariantInteraction() != null && association.getVariantInteraction()) {
             association.getLoci().forEach(
                     locus -> {
-                        locus.getStrongestRiskAlleles().forEach(
-                                riskAllele -> {
+                        locus.getStrongestEffectAlleles().forEach(
+                                effectAllele -> {
 
                                     // Genome wide Vs Limited List,
                                     // create a comma separated list per
-                                    // risk allele
-                                    Collection<String> snpStatus = new ArrayList<>();
-                                    String commaSeparatedSnpStatus = "";
-                                    if (riskAllele.getLimitedList() != null) {
-                                        if (riskAllele.getLimitedList()) {
-                                            snpStatus.add("LL");
+                                    // effect allele
+                                    Collection<String> variantStatus = new ArrayList<>();
+                                    String commaSeparatedVariantStatus = "";
+                                    if (effectAllele.getLimitedList() != null) {
+                                        if (effectAllele.getLimitedList()) {
+                                            variantStatus.add("LL");
                                         }
                                     }
-                                    if (riskAllele.getGenomeWide() != null) {
-                                        if (riskAllele.getGenomeWide()) {
-                                            snpStatus.add("GW");
+                                    if (effectAllele.getGenomeWide() != null) {
+                                        if (effectAllele.getGenomeWide()) {
+                                            variantStatus.add("GW");
                                         }
                                     }
-                                    if (!snpStatus.isEmpty()) {
-                                        commaSeparatedSnpStatus = String.join(", ", snpStatus);
+                                    if (!variantStatus.isEmpty()) {
+                                        commaSeparatedVariantStatus = String.join(", ", variantStatus);
                                     }
-                                    else { commaSeparatedSnpStatus = "NR";}
+                                    else { commaSeparatedVariantStatus = "NR";}
 
-                                    setOrAppend(snpStatuses, commaSeparatedSnpStatus, " x ");
+                                    setOrAppend(variantStatuses, commaSeparatedVariantStatus, " x ");
                                 }
                         );
                     }
             );
         }
 
-        line.append(snpStatuses.toString());
+        line.append(variantStatuses.toString());
         line.append("\t");
     }
 
@@ -261,13 +261,13 @@ public class AssociationDownloadService {
     private void extractGeneticData(Association association, StringBuilder line) {
         final StringBuilder strongestAllele = new StringBuilder();
         final StringBuilder reportedGenes = new StringBuilder();
-        final StringBuilder rsId = new StringBuilder();
-        final StringBuilder proxySnpsRsIds = new StringBuilder();
-        final StringBuilder riskAlleleFrequency = new StringBuilder();
+        final StringBuilder externalId = new StringBuilder();
+        final StringBuilder proxyVariantsExternalIds = new StringBuilder();
+        final StringBuilder effectAlleleFrequency = new StringBuilder();
 
         // Set our delimiter for download spreadsheet
         final String delimiter;
-        if (association.getSnpInteraction() != null && association.getSnpInteraction()) {
+        if (association.getVariantInteraction() != null && association.getVariantInteraction()) {
             delimiter = " x ";
         }
         else {
@@ -275,27 +275,27 @@ public class AssociationDownloadService {
         }
 
         // Interaction specific values
-        if (association.getSnpInteraction() != null && association.getSnpInteraction()) {
+        if (association.getVariantInteraction() != null && association.getVariantInteraction()) {
 
             association.getLoci().forEach(
                     locus -> {
-                        locus.getStrongestRiskAlleles().forEach(
-                                riskAllele -> {
+                        locus.getStrongestEffectAlleles().forEach(
+                                effectAllele -> {
 
-                                    // Set Risk allele frequency
-                                    if (riskAllele.getRiskFrequency() != null &&
-                                            !riskAllele.getRiskFrequency().isEmpty()) {
-                                        String frequency = riskAllele.getRiskFrequency();
-                                        setOrAppend(riskAlleleFrequency, frequency, delimiter);
+                                    // Set Effect allele frequency
+                                    if (effectAllele.getEffectFrequency() != null &&
+                                            !effectAllele.getEffectFrequency().isEmpty()) {
+                                        String frequency = effectAllele.getEffectFrequency();
+                                        setOrAppend(effectAlleleFrequency, frequency, delimiter);
                                     }
                                     else {
-                                        setOrAppend(riskAlleleFrequency, "NR", delimiter);
+                                        setOrAppend(effectAlleleFrequency, "NR", delimiter);
                                     }
 
                                 }
                         );
 
-                        // Handle locus genes for SNP interaction studies.
+                        // Handle locus genes for Variant interaction studies.
                         // This is so it clear in the download which group
                         // of genes belong to which interaction
                         Collection<String> currentLocusGenes = new ArrayList<>();
@@ -317,12 +317,12 @@ public class AssociationDownloadService {
             // Single study or a haplotype
             association.getLoci().forEach(
                     locus -> {
-                        locus.getStrongestRiskAlleles().forEach(
-                                riskAllele -> {
+                        locus.getStrongestEffectAlleles().forEach(
+                                effectAllele -> {
 
-                                    // Set Risk allele frequency to blank as its not recorded by curators
-                                    // for standard or multi-SNP haplotypes
-                                    setOrAppend(riskAlleleFrequency, "", "");
+                                    // Set Effect allele frequency to blank as its not recorded by curators
+                                    // for standard or multi-Variant haplotypes
+                                    setOrAppend(effectAlleleFrequency, "", "");
 
                                 }
                         );
@@ -337,30 +337,30 @@ public class AssociationDownloadService {
         // Set attributes common to all associations
         association.getLoci().forEach(
                 locus -> {
-                    locus.getStrongestRiskAlleles().forEach(
-                            riskAllele -> {
-                                setOrAppend(strongestAllele, riskAllele.getRiskAlleleName(), delimiter);
+                    locus.getStrongestEffectAlleles().forEach(
+                            effectAllele -> {
+                                setOrAppend(strongestAllele, effectAllele.getEffectAlleleName(), delimiter);
 
-                                SingleNucleotidePolymorphism snp = riskAllele.getSnp();
-                                setOrAppend(rsId, snp.getRsId(), delimiter);
+                                Variant variant = effectAllele.getVariant();
+                                setOrAppend(externalId, variant.getExternalId(), delimiter);
 
                                 // Set proxies or 'NR' if non available
                                 Collection<String> currentLocusProxies = new ArrayList<>();
                                 String colonSeparatedProxies = "";
-                                if (riskAllele.getProxySnps() != null) {
-                                    for (SingleNucleotidePolymorphism proxySnp : riskAllele.getProxySnps()) {
-                                        currentLocusProxies.add(proxySnp.getRsId());
+                                if (effectAllele.getProxyVariants() != null) {
+                                    for (Variant proxyVariant : effectAllele.getProxyVariants()) {
+                                        currentLocusProxies.add(proxyVariant.getExternalId());
                                     }
                                 }
 
                                 // Separate multiple proxies linked by comma
                                 if (!currentLocusProxies.isEmpty()) {
                                     colonSeparatedProxies = String.join(", ", currentLocusProxies);
-                                    setOrAppend(proxySnpsRsIds, colonSeparatedProxies, delimiter);
+                                    setOrAppend(proxyVariantsExternalIds, colonSeparatedProxies, delimiter);
 
                                 }
                                 else {
-                                    setOrAppend(proxySnpsRsIds, "NR", delimiter);
+                                    setOrAppend(proxyVariantsExternalIds, "NR", delimiter);
                                 }
 
 
@@ -375,11 +375,11 @@ public class AssociationDownloadService {
         line.append("\t");
         line.append(strongestAllele.toString());
         line.append("\t");
-        line.append(rsId.toString());
+        line.append(externalId.toString());
         line.append("\t");
-        line.append(proxySnpsRsIds.toString());
+        line.append(proxyVariantsExternalIds.toString());
         line.append("\t");
-        line.append(riskAlleleFrequency.toString());
+        line.append(effectAlleleFrequency.toString());
         line.append("\t");
 
     }

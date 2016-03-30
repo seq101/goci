@@ -12,6 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -31,7 +32,10 @@ public class Association {
     @GeneratedValue
     private Long id;
 
-    private String riskFrequency;
+
+    private String effectAlleleFrequency;
+    private String effectAlleleFrequencyCases;
+    private String effectAlleleFrequencyControls;
 
     private String pvalueText;
 
@@ -39,13 +43,13 @@ public class Association {
 
     private Boolean orType = false;
 
-    private String snpType;
+    private String variantType;
 
-    private Boolean multiSnpHaplotype = false;
+    private Boolean multiVariantHaplotype = false;
 
-    private Boolean snpInteraction = false;
+    private Boolean variantInteraction = false;
 
-    private Boolean snpApproved = false;
+    private Boolean variantApproved = false;
 
     private Integer pvalueMantissa;
 
@@ -61,11 +65,47 @@ public class Association {
 
     private String orPerCopyUnitDescr;
 
+    /**
+     * The variant direction in the different studies of the mega analysis. <br>
+     * eg. : +-? means that the direction of that variant for the first study was +, of the second study was -, and the variant
+     * was not found in the last study. + means that this variant makes the occurence of the trait more likely, - means
+     * it makes the occurence of the trait less likely.
+     */
+    private String metaDirection;
+
+    /**
+     * The heterogeniety score (for Meta analysis) also called sometimes hetlsqt.
+     */
+    private BigDecimal heterogeneityScore;
+
+    /**
+     * The mantissa of the heterogeneity pvalue (for Meta analysis)
+     */
+    private Integer heterogeneityPvalueMantissa;
+
+    /**
+     * The exponent of the heterogeneity pvalue (for Meta analysis)
+     */
+    private Integer heterogeneityPvalueExponent;
+
+    // The variant imputation quality score.
+    private BigDecimal imputationQualityScore;
+
+    private BigDecimal bayesFactorLog10;
+
+    private BigDecimal standardError;
+
+    /**
+     * The association beta. This will be greater then 0 if the variant makes the trait more likely and inferior to 0 if
+     * the variant makes the trait less likely.
+     */
+    private BigDecimal beta;
+
     @ManyToOne
     private Study study;
 
-    // Association can have a number of loci attached depending on whether its a multi-snp haplotype
-    // or SNP:SNP interaction
+    // Association can have a number of loci attached depending on whether its a multi-variant haplotype
+    // or VARIANT:VARIANT interaction
     @OneToMany
     @JoinTable(name = "ASSOCIATION_LOCUS",
                joinColumns = @JoinColumn(name = "ASSOCIATION_ID"),
@@ -87,6 +127,8 @@ public class Association {
 
     private String lastMappingPerformedBy;
 
+
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastUpdateDate;
 
@@ -94,14 +136,16 @@ public class Association {
     public Association() {
     }
 
-    public Association(String riskFrequency,
+    public Association(String effectAlleleFrequency,
+                       String effectAlleleFrequencyCases,
+                       String effectAlleleFrequencyControls,
                        String pvalueText,
                        Float orPerCopyNum,
                        Boolean orType,
-                       String snpType,
-                       Boolean multiSnpHaplotype,
-                       Boolean snpInteraction,
-                       Boolean snpApproved,
+                       String variantType,
+                       Boolean multiVariantHaplotype,
+                       Boolean variantInteraction,
+                       Boolean variantApproved,
                        Integer pvalueMantissa,
                        Integer pvalueExponent,
                        Float orPerCopyRecip,
@@ -114,15 +158,24 @@ public class Association {
                        Collection<EfoTrait> efoTraits,
                        AssociationReport associationReport,
                        Date lastMappingDate,
-                       String lastMappingPerformedBy, Date lastUpdateDate) {
-        this.riskFrequency = riskFrequency;
+                       String lastMappingPerformedBy,
+                       Date lastUpdateDate,
+                       BigDecimal imputationQualityScore,
+                       BigDecimal bayesFactorLog10,
+                       String metaDirection,
+                       BigDecimal heterogeneityScore,
+                       Integer heterogeneityPvalueMantissa,
+                       Integer heterogeneityPvalueExponent,
+                       BigDecimal beta,
+                       BigDecimal standardError) {
+        this.effectAlleleFrequency = effectAlleleFrequency;
         this.pvalueText = pvalueText;
         this.orPerCopyNum = orPerCopyNum;
         this.orType = orType;
-        this.snpType = snpType;
-        this.multiSnpHaplotype = multiSnpHaplotype;
-        this.snpInteraction = snpInteraction;
-        this.snpApproved = snpApproved;
+        this.variantType = variantType;
+        this.multiVariantHaplotype = multiVariantHaplotype;
+        this.variantInteraction = variantInteraction;
+        this.variantApproved = variantApproved;
         this.pvalueMantissa = pvalueMantissa;
         this.pvalueExponent = pvalueExponent;
         this.orPerCopyRecip = orPerCopyRecip;
@@ -137,6 +190,16 @@ public class Association {
         this.lastMappingDate = lastMappingDate;
         this.lastMappingPerformedBy = lastMappingPerformedBy;
         this.lastUpdateDate = lastUpdateDate;
+        this.imputationQualityScore = imputationQualityScore;
+        this.bayesFactorLog10 = bayesFactorLog10;
+        this.metaDirection = metaDirection;
+        this.heterogeneityScore = heterogeneityScore;
+        this.heterogeneityPvalueMantissa = heterogeneityPvalueMantissa;
+        this.heterogeneityPvalueExponent = heterogeneityPvalueExponent;
+        this.beta = beta;
+        this.standardError = standardError;
+        this.effectAlleleFrequencyCases = effectAlleleFrequencyCases;
+        this.effectAlleleFrequencyControls = effectAlleleFrequencyControls;
     }
 
     public Long getId() {
@@ -147,12 +210,12 @@ public class Association {
         this.id = id;
     }
 
-    public String getRiskFrequency() {
-        return riskFrequency;
+    public String getEffectAlleleFrequency() {
+        return effectAlleleFrequency;
     }
 
-    public void setRiskFrequency(String riskFrequency) {
-        this.riskFrequency = riskFrequency;
+    public void setEffectAlleleFrequency(String effectAlleleFrequency) {
+        this.effectAlleleFrequency = effectAlleleFrequency;
     }
 
     public String getPvalueText() {
@@ -179,28 +242,28 @@ public class Association {
         this.orType = orType;
     }
 
-    public String getSnpType() {
-        return snpType;
+    public String getVariantType() {
+        return variantType;
     }
 
-    public void setSnpType(String snpType) {
-        this.snpType = snpType;
+    public void setVariantType(String variantType) {
+        this.variantType = variantType;
     }
 
-    public Boolean getMultiSnpHaplotype() {
-        return multiSnpHaplotype;
+    public Boolean getMultiVariantHaplotype() {
+        return multiVariantHaplotype;
     }
 
-    public void setMultiSnpHaplotype(Boolean multiSnpHaplotype) {
-        this.multiSnpHaplotype = multiSnpHaplotype;
+    public void setMultiVariantHaplotype(Boolean multiVariantHaplotype) {
+        this.multiVariantHaplotype = multiVariantHaplotype;
     }
 
-    public Boolean getSnpInteraction() {
-        return snpInteraction;
+    public Boolean getVariantInteraction() {
+        return variantInteraction;
     }
 
-    public void setSnpInteraction(Boolean snpInteraction) {
-        this.snpInteraction = snpInteraction;
+    public void setVariantInteraction(Boolean variantInteraction) {
+        this.variantInteraction = variantInteraction;
     }
 
     public Integer getPvalueMantissa() {
@@ -287,12 +350,12 @@ public class Association {
         efoTraits.add(efoTrait);
     }
 
-    public Boolean getSnpApproved() {
-        return snpApproved;
+    public Boolean getVariantApproved() {
+        return variantApproved;
     }
 
-    public void setSnpApproved(Boolean snpApproved) {
-        this.snpApproved = snpApproved;
+    public void setVariantApproved(Boolean variantApproved) {
+        this.variantApproved = variantApproved;
     }
 
     public AssociationReport getAssociationReport() {
@@ -329,5 +392,85 @@ public class Association {
 
     public double getPvalue() {
         return (pvalueMantissa * Math.pow(10, pvalueExponent));
+    }
+
+    public BigDecimal getImputationQualityScore() {
+        return imputationQualityScore;
+    }
+
+    public void setImputationQualityScore(BigDecimal imputationQualityScore) {
+        this.imputationQualityScore = imputationQualityScore;
+    }
+
+    public BigDecimal getBayesFactorLog10() {
+        return bayesFactorLog10;
+    }
+
+    public void setBayesFactorLog10(BigDecimal bayesFactorLog10) {
+        this.bayesFactorLog10 = bayesFactorLog10;
+    }
+
+    public String getMetaDirection() {
+        return metaDirection;
+    }
+
+    public void setMetaDirection(String metaDirection) {
+        this.metaDirection = metaDirection;
+    }
+
+    public BigDecimal getHeterogeneityScore() {
+        return heterogeneityScore;
+    }
+
+    public void setHeterogeneityScore(BigDecimal heterogeneityScore) {
+        this.heterogeneityScore = heterogeneityScore;
+    }
+
+    public Integer getHeterogeneityPvalueExponent() {
+        return heterogeneityPvalueExponent;
+    }
+
+    public void setHeterogeneityPvalueExponent(Integer heterogeneityPvalueExponent) {
+        this.heterogeneityPvalueExponent = heterogeneityPvalueExponent;
+    }
+
+    public Integer getHeterogeneityPvalueMantissa() {
+        return heterogeneityPvalueMantissa;
+    }
+
+    public void setHeterogeneityPvalueMantissa(Integer heterogeneityPvalueMantissa) {
+        this.heterogeneityPvalueMantissa = heterogeneityPvalueMantissa;
+    }
+
+    public BigDecimal getStandardError() {
+        return standardError;
+    }
+
+    public void setStandardError(BigDecimal standardError) {
+        this.standardError = standardError;
+    }
+
+    public BigDecimal getBeta() {
+        return beta;
+    }
+
+    public void setBeta(BigDecimal beta) {
+        this.beta = beta;
+    }
+
+    public String getEffectAlleleFrequencyCases() {
+        return effectAlleleFrequencyCases;
+    }
+
+    public void setEffectAlleleFrequencyCases(String effectAlleleFrequencyCases) {
+        this.effectAlleleFrequencyCases = effectAlleleFrequencyCases;
+    }
+
+    public String getEffectAlleleFrequencyControls() {
+        return effectAlleleFrequencyControls;
+    }
+
+    public void setEffectAlleleFrequencyControls(String effectAlleleFrequencyControls) {
+        this.effectAlleleFrequencyControls = effectAlleleFrequencyControls;
     }
 }

@@ -38,7 +38,7 @@ public class StudyDocument extends OntologyEnabledDocument<Study> {
 
     // embedded Association info
     @Field("association_qualifier") private Collection<String> qualifiers;
-    @Field("association_rsId") private Collection<String> rsIds;
+    @Field("association_externalId") private Collection<String> externalIds;
     @Field("association_strongestAllele") private Collection<String> strongestAlleles;
     @Field("association_context") private Collection<String> contexts;
     @Field("association_regions") private Collection<String> regions;
@@ -102,7 +102,7 @@ public class StudyDocument extends OntologyEnabledDocument<Study> {
         embedAncestryData(study);
 
         this.qualifiers = new LinkedHashSet<>();
-        this.rsIds = new LinkedHashSet<>();
+        this.externalIds = new LinkedHashSet<>();
         this.strongestAlleles = new LinkedHashSet<>();
         this.contexts = new LinkedHashSet<>();
         this.regions = new LinkedHashSet<>();
@@ -176,8 +176,8 @@ public class StudyDocument extends OntologyEnabledDocument<Study> {
         this.qualifiers.add(qualifier);
     }
 
-    public void addRsId(String rsId) {
-        this.rsIds.add(rsId);
+    public void addExternalId(String externalId) {
+        this.externalIds.add(externalId);
     }
 
     public void addStrongestAllele(String strongestAllele) {

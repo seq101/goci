@@ -169,7 +169,7 @@ public class SolrSearchController {
     }
 
     @RequestMapping(value = "api/search/singlenucleotidepolymorphism", produces = MediaType.APPLICATION_JSON_VALUE)
-    public void doSnpSolrSearch(
+    public void doVariantSolrSearch(
             @RequestParam("q") String query,
             @RequestParam(value = "jsonp", required = false, defaultValue = "false") boolean useJsonp,
             @RequestParam(value = "callback", required = false) String callbackFunction,
@@ -184,7 +184,7 @@ public class SolrSearchController {
         addRowsAndPage(solrSearchBuilder, maxResults, page);
         addFilterQuery(solrSearchBuilder,
                        searchConfiguration.getDefaultFacet(),
-                       "SingleNucleotidePolymorphism");
+                       "Variant");
         addQuery(solrSearchBuilder, query);
 
         // dispatch search

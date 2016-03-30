@@ -31,9 +31,9 @@ public class StudyAssociationTableView {
 
     private Integer totalNumberOfAssociations;
 
-    private Integer numberOfMultiSnpHaplotypeAssociations;
+    private Integer numberOfMultiEffectHaplotypeAssociations;
 
-    private Integer numberOfSnpInteractiionAssociations;
+    private Integer numberOfVariantInteractiionAssociations;
 
     private String Notes;
 
@@ -56,8 +56,8 @@ public class StudyAssociationTableView {
                                      String studyDiseaseTrait,
                                      String studyEfoTrait,
                                      Integer totalNumberOfAssociations,
-                                     Integer numberOfMultiSnpHaplotypeAssociations,
-                                     Integer numberOfSnpInteractiionAssociations,
+                                     Integer numberOfMultiEffectHaplotypeAssociations,
+                                     Integer numberOfVariantInteractiionAssociations,
                                      String notes,
                                      String curator,
                                      String curationStatus,
@@ -71,8 +71,8 @@ public class StudyAssociationTableView {
         this.studyDiseaseTrait = studyDiseaseTrait;
         this.studyEfoTrait = studyEfoTrait;
         this.totalNumberOfAssociations = totalNumberOfAssociations;
-        this.numberOfMultiSnpHaplotypeAssociations = numberOfMultiSnpHaplotypeAssociations;
-        this.numberOfSnpInteractiionAssociations = numberOfSnpInteractiionAssociations;
+        this.numberOfMultiEffectHaplotypeAssociations = numberOfMultiEffectHaplotypeAssociations;
+        this.numberOfVariantInteractiionAssociations = numberOfVariantInteractiionAssociations;
         Notes = notes;
         this.curator = curator;
         this.curationStatus = curationStatus;
@@ -151,20 +151,20 @@ public class StudyAssociationTableView {
         this.totalNumberOfAssociations = totalNumberOfAssociations;
     }
 
-    public Integer getNumberOfMultiSnpHaplotypeAssociations() {
-        return numberOfMultiSnpHaplotypeAssociations;
+    public Integer getNumberOfMultiEffectHaplotypeAssociations() {
+        return numberOfMultiEffectHaplotypeAssociations;
     }
 
-    public void setNumberOfMultiSnpHaplotypeAssociations(Integer numberOfMultiSnpHaplotypeAssociations) {
-        this.numberOfMultiSnpHaplotypeAssociations = numberOfMultiSnpHaplotypeAssociations;
+    public void setNumberOfMultiEffectHaplotypeAssociations(Integer numberOfMultiEffectHaplotypeAssociations) {
+        this.numberOfMultiEffectHaplotypeAssociations = numberOfMultiEffectHaplotypeAssociations;
     }
 
-    public Integer getNumberOfSnpInteractiionAssociations() {
-        return numberOfSnpInteractiionAssociations;
+    public Integer getNumberOfVariantInteractiionAssociations() {
+        return numberOfVariantInteractiionAssociations;
     }
 
-    public void setNumberOfSnpInteractiionAssociations(Integer numberOfSnpInteractiionAssociations) {
-        this.numberOfSnpInteractiionAssociations = numberOfSnpInteractiionAssociations;
+    public void setNumberOfVariantInteractiionAssociations(Integer numberOfVariantInteractiionAssociations) {
+        this.numberOfVariantInteractiionAssociations = numberOfVariantInteractiionAssociations;
     }
 
     public String getNotes() {

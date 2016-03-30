@@ -6,7 +6,7 @@
 
 === Special Characters
 
-?: A risk allele not reported
+?: A effect allele not reported
 
 
 5-HIAA: 5-hydroxyindoleacetic acid

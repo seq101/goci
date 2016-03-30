@@ -15,7 +15,7 @@
     <bean name="publisher" class="DefaultGWASOWLPublisher">
         <property name="configuration" ref="config" />
         <property name="studiesLimit" value="1" />
-        <property name="singleNucleotidePolymorphismDAO" ref="snpDAO" />
+        <property name="variantDAO" ref="variantDAO" />
         <property name="traitAssociationDAO" ref="traitAssociationDAO" />
         <property name="studyDAO" ref="studyDAO" />
         <property name="converter" ref="converter" />
@@ -27,15 +27,15 @@
         <property name="ontologyDAO" ref="gwasSchemaDAO" />
     </bean>
 
-    <!-- SNP DAO -->
-    <bean name="snpDAO" class="JDBCSingleNucleotidePolymorphismDAO">
+    <!-- Variant DAO -->
+    <bean name="variantDAO" class="JDBCVariantDAO">
         <property name="jdbcTemplate" ref="jdbcTemplate" />
     </bean>
 
     <!-- Trait Association DAO -->
     <bean name="traitAssociationDAO" class="JDBCTraitAssociationDAO" init-method="init">
         <property name="jdbcTemplate" ref="jdbcTemplate" />
-        <property name="SNPDAO" ref="snpDAO" />
+        <property name="VARIANTDAO" ref="variantDAO" />
         <property name="ontologyDAO" ref="efoDAO" />
     </bean>
 

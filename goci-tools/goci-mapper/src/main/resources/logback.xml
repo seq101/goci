@@ -31,7 +31,7 @@
         <appender-ref ref="FILE" />
     </logger>
 
-    <logger name="uk.ac.ebi.spot.goci.service.SnpGenomicContextMappingService" level="DEBUG" additivity="false">
+    <logger name="uk.ac.ebi.spot.goci.service.VariantGenomicContextMappingService" level="DEBUG" additivity="false">
         <appender-ref ref="FILE" />
     </logger>
 

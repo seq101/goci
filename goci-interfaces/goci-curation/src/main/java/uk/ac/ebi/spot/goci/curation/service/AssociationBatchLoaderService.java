@@ -44,7 +44,7 @@ public class AssociationBatchLoaderService {
         XSSFWorkbook current = new XSSFWorkbook(pkg);
         sheet = current.getSheetAt(0);
         try {
-            Collection<Association> associations = associationSheetProcessor.readSnpAssociations(sheet);
+            Collection<Association> associations = associationSheetProcessor.readVariantAssociations(sheet);
             pkg.close();
             return associations;
         }

@@ -2,7 +2,7 @@
 
 == Curation process
 
-The GWAS Catalog data is extracted from the literature. Extracted information includes publication information, study cohort information such as cohort size, country of recruitment and subject ethnicity, and SNP-disease association information including SNP identifier (i.e. RSID), p-value, gene and risk allele.
+The GWAS Catalog data is extracted from the literature. Extracted information includes publication information, study cohort information such as cohort size, country of recruitment and subject ethnicity, and SNP-disease association information including SNP identifier (i.e. VARIANTID), p-value, gene and effect allele.
 Each study is also assigned a trait that best represents the phenotype under investigation.
 When multiple traits are analysed in the same study either multiple entries are created, or individual SNPs are annotated with their specific traits.
 Traits are used both to query and visualise the data in the Catalog's web form and diagram-based query interfaces.
@@ -71,13 +71,13 @@ Information on the following study-level fields is extracted. Capitalised titles
 For each identified SNP, we extract:
 
 * REPORTED GENE: Gene(s) reported by the author; "intergenic" is used to denote a reported intergenic location (or lack of gene if it appeared that gene information was sought); “NR” is used to denote that no gene location information was reported.
-* STRONGEST SNP-RISK ALLELE: SNP(s) most strongly associated with trait + risk/effect allele (? for unknown risk allele). May also refer to a haplotype.
-* SNPS: Strongest SNP; If a haplotype is reported above, this field may include more than one rs number (multiple SNPs comprising the haplotype). Multiple SNPs may also be included if proxy SNPs are reported.
-* RISK ALLELE FREQUENCY: Reported risk/effect allele frequency associated with strongest SNP in controls (if not available among all controls, among the control group with the largest sample size). If the associated locus is a haplotype the haplotype frequency will be extracted.
-* P-VALUE: Reported p-value for strongest SNP risk allele. Note that p-values are rounded to 1 significant digit (for example, a published p-value of 4.8 x 10-7 is rounded to 5 x 10-7).
+* STRONGEST SNP-EFFECT ALLELE: VARIANT(s) most strongly associated with trait + effect/effect allele (? for unknown effect allele). May also refer to a haplotype.
+* SNPS: Strongest SNP; If a haplotype is reported above, this field may include more than one rs number (multiple VARIANTs comprising the haplotype). Multiple VARIANTs may also be included if proxy SNPs are reported.
+* EFFECT ALLELE FREQUENCY: Reported effect/effect allele frequency associated with strongest VARIANT in controls (if not available among all controls, among the control group with the largest sample size). If the associated locus is a haplotype the haplotype frequency will be extracted.
+* P-VALUE: Reported p-value for strongest VARIANT effect allele. Note that p-values are rounded to 1 significant digit (for example, a published p-value of 4.8 x 10-7 is rounded to 5 x 10-7).
 * P-VALUE (TEXT): Information describing context of p-value (e.g. females, smokers).
-* OR or BETA: Reported odds ratio or beta-coefficient associated with strongest SNP risk allele. Note that if an OR <1 is reported this is inverted, along with the reported allele, so that all ORs included in the Catalog are >1. Appropriate unit and increase/decrease are included for beta coefficients.
-* 95% CI (TEXT): Reported 95% confidence interval associated with strongest SNP risk allele, along with unit in the case of beta-coefficients. If 95% CIs are not published, we estimate these using the standard error, where available.
+* OR or BETA: Reported odds ratio or beta-coefficient associated with strongest VARIANT effect allele. Note that if an OR <1 is reported this is inverted, along with the reported allele, so that all ORs included in the Catalog are >1. Appropriate unit and increase/decrease are included for beta coefficients.
+* 95% CI (TEXT): Reported 95% confidence interval associated with strongest VARIANT effect allele, along with unit in the case of beta-coefficients. If 95% CIs are not published, we estimate these using the standard error, where available.
 
 ==== Ancestry data extraction
 
@@ -85,9 +85,9 @@ Sample ancestry information is available in two distinct forms; a free text samp
 
 The ancestry is derived from the ancestry descriptors used in the publication. Country of recruitment is extracted if an author states the country of recruitment of the samples. It is not assumed from an ancestry identifier or from a cohort name. Where a country of recruitment but no ancestry is provided, published population demographic information, such as the https://www.cia.gov/library/publications/the-world-factbook/[CIA World Factbook] is consulted.
 
-==== [[mapping]]Quality control and SNP mapping
+==== [[mapping]]Quality control and VARIANT mapping
 
-An automated pipeline adds additional SNP specific information associated with the rsID extracted. This information includes the SNP's base pair and cytogenetic location(s) in the current human genome reference assembly, mapped genes, mapped gene's distance and positioning, and SNP function. This information is then used for queries of the search interface and in the production of the diagram. The pipeline also performs checks for consistency and missing information, such as SNP identifiers, existence of SNPs in dbSNP, validation of gene names and confirmation that the reported SNP and gene are in the same chromosomal region. This information is retrieved using the link:http://rest.ensembl.org/[Ensembl API] and the source of the data is both Ensembl and NCBI.
+An automated pipeline adds additional VARIANT specific information associated with the externalId extracted. This information includes the VARIANT's base pair and cytogenetic location(s) in the current human genome reference assembly, mapped genes, mapped gene's distance and positioning, and SNP function. This information is then used for queries of the search interface and in the production of the diagram. The pipeline also performs checks for consistency and missing information, such as SNP identifiers, existence of SNPs in dbSNP, validation of gene names and confirmation that the reported SNP and gene are in the same chromosomal region. This information is retrieved using the link:http://rest.ensembl.org/[Ensembl API] and the source of the data is both Ensembl and NCBI.
 
 Additional information added by this pipeline. Capitalised titles correspond to column headings in tab delimited file:
 

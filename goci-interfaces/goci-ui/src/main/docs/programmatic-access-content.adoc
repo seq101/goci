@@ -33,7 +33,7 @@ Link to a trait using an ontology ID:
 
 ==== SNPs
 
-Link to a SNP using an rsID:
+Link to a SNP using an externalId:
 
  GET search?query=rs7329174
 

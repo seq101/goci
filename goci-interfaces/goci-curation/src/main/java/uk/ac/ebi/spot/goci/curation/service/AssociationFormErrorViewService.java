@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import uk.ac.ebi.spot.goci.curation.model.AssociationFormErrorView;
 import uk.ac.ebi.spot.goci.model.Association;
 import uk.ac.ebi.spot.goci.model.Locus;
-import uk.ac.ebi.spot.goci.model.RiskAllele;
-import uk.ac.ebi.spot.goci.model.SingleNucleotidePolymorphism;
+import uk.ac.ebi.spot.goci.model.EffectAllele;
+import uk.ac.ebi.spot.goci.model.Variant;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,29 +41,29 @@ public class AssociationFormErrorViewService {
     public AssociationFormErrorView checkAssociationForErrors(Association association) {
 
         AssociationFormErrorView associationErrorView = new AssociationFormErrorView();
-        Collection<String> associationRiskAlleles = new ArrayList<String>();
-        Collection<String> associationSnps = new ArrayList<String>();
+        Collection<String> associationEffectAlleles = new ArrayList<String>();
+        Collection<String> associationVariants = new ArrayList<String>();
         Collection<String> associationProxies = new ArrayList<String>();
 
-        Collection<String> riskAlleleErrors = new ArrayList<String>();
-        Collection<String> snpErrors = new ArrayList<String>();
+        Collection<String> effectAlleleErrors = new ArrayList<String>();
+        Collection<String> variantErrors = new ArrayList<String>();
         Collection<String> proxyErrors = new ArrayList<String>();
 
         // Store attributes of each loci
         for (Locus locus : association.getLoci()) {
 
             if (locus != null) {
-                for (RiskAllele riskAllele : locus.getStrongestRiskAlleles()) {
+                for (EffectAllele effectAllele : locus.getStrongestEffectAlleles()) {
 
-                    if (riskAllele.getRiskAlleleName() != null) {
-                        associationRiskAlleles.add(riskAllele.getRiskAlleleName());
+                    if (effectAllele.getEffectAlleleName() != null) {
+                        associationEffectAlleles.add(effectAllele.getEffectAlleleName());
                     }
-                    if (riskAllele.getSnp().getRsId() != null) {
-                        associationSnps.add(riskAllele.getSnp().getRsId());
+                    if (effectAllele.getVariant().getExternalId() != null) {
+                        associationVariants.add(effectAllele.getVariant().getExternalId());
                     }
-                    if (riskAllele.getProxySnps() != null) {
-                        for (SingleNucleotidePolymorphism proxySnp : riskAllele.getProxySnps()) {
-                            associationProxies.add(proxySnp.getRsId());
+                    if (effectAllele.getProxyVariants() != null) {
+                        for (Variant proxyVariant : effectAllele.getProxyVariants()) {
+                            associationProxies.add(proxyVariant.getExternalId());
                         }
                     }
                 }
@@ -73,18 +73,18 @@ public class AssociationFormErrorViewService {
         String error = "";
 
         // Risk allele errors
-        for (String riskAlleleName : associationRiskAlleles) {
-            error = associationComponentsSyntaxChecks.checkRiskAllele(riskAlleleName);
+        for (String effectAlleleName : associationEffectAlleles) {
+            error = associationComponentsSyntaxChecks.checkEffectAllele(effectAlleleName);
             if (!error.isEmpty()) {
-                riskAlleleErrors.add(error);
+                effectAlleleErrors.add(error);
             }
         }
 
         // SNP errors
-        for (String snpName : associationSnps) {
-            error = associationComponentsSyntaxChecks.checkSnp(snpName);
+        for (String variantName : associationVariants) {
+            error = associationComponentsSyntaxChecks.checkVariant(variantName);
             if (!error.isEmpty()) {
-                snpErrors.add(error);
+                variantErrors.add(error);
             }
         }
 
@@ -101,8 +101,8 @@ public class AssociationFormErrorViewService {
                 associationMappingErrorService.createAssociationErrorMap(association.getAssociationReport());
 
         // Set model attributes
-        associationErrorView.setRiskAlleleErrors(formatErrors(riskAlleleErrors));
-        associationErrorView.setSnpErrors(formatErrors(snpErrors));
+        associationErrorView.setEffectAlleleErrors(formatErrors(effectAlleleErrors));
+        associationErrorView.setVariantErrors(formatErrors(variantErrors));
         associationErrorView.setProxyErrors(formatErrors(proxyErrors));
         associationErrorView.setAssociationErrorMap(associationErrorMap);
         return associationErrorView;

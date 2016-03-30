@@ -60,9 +60,9 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
                                                                                     Long status,
                                                                                     Pageable pageable);
 
-    List<Study> findStudyDistinctByAssociationsMultiSnpHaplotypeTrue(Sort sort);
+    List<Study> findStudyDistinctByAssociationsMultiVariantHaplotypeTrue(Sort sort);
 
-    List<Study> findStudyDistinctByAssociationsSnpInteractionTrue(Sort sort);
+    List<Study> findStudyDistinctByAssociationsVariantInteractionTrue(Sort sort);
 
     // EFO trait query
     Page<Study> findByEfoTraitsId(Long efoTraitId, Pageable pageable);
@@ -81,8 +81,8 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
 
     Page<Study> findByHousekeepingCatalogPublishDateIsNotNullAndHousekeepingCatalogUnpublishDateIsNull(Pageable pageable);
 
-    List<Study> findByAssociationsLociStrongestRiskAllelesSnpIdAndHousekeepingCatalogPublishDateIsNotNullAndHousekeepingCatalogUnpublishDateIsNull(
-            Long snpId);
+    List<Study> findByAssociationsLociStrongestEffectAllelesVariantIdAndHousekeepingCatalogPublishDateIsNotNullAndHousekeepingCatalogUnpublishDateIsNull(
+            Long variantId);
 
     List<Study> findByAssociationsIdAndHousekeepingCatalogPublishDateIsNotNullAndHousekeepingCatalogUnpublishDateIsNull(
             Long associationId);

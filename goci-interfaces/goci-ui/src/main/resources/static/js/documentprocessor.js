@@ -225,7 +225,7 @@ function processStudy(study, table) {
 
     }
 
-    innerTable.append($("<tr>").append($("<th>").attr('style', 'width: 30%').html("Platform [SNPs passing QC]")).append(
+    innerTable.append($("<tr>").append($("<th>").attr('style', 'width: 30%').html("Platform [Variants passing QC]")).append(
             $("<td>").html(study.platform)));
 
     hiddenrow.append($('<td>').attr('colspan', 7).attr('style', 'border-top: none').append(innerTable));
@@ -241,25 +241,25 @@ function processAssociation(association, table) {
     //    row.addClass('hidden-resource');
     //}
 
-    if (association.rsId != null && association.strongestAllele != null) {
-        if ((association.rsId[0].indexOf(',') == -1) && (association.rsId[0].indexOf(' x ') == -1)) {
-            var rsidsearch = "<span><a href='search?query=".concat(association.rsId[0]).concat("'>").concat(association.strongestAllele[0]).concat(
+    if (association.externalId != null && association.strongestAllele != null) {
+        if ((association.externalId[0].indexOf(',') == -1) && (association.externalId[0].indexOf(' x ') == -1)) {
+            var externalidsearch = "<span><a href='search?query=".concat(association.externalId[0]).concat("'>").concat(association.strongestAllele[0]).concat(
                     "</a></span>");
-            var dbsnp = "<span><a href='http://www.ensembl.org/Homo_sapiens/Variation/Summary?v=".concat(association.rsId[0]).concat(
+            var dbsnp = "<span><a href='http://www.ensembl.org/Homo_sapiens/Variation/Summary?v=".concat(association.externalId[0]).concat(
                     "'  target='_blank'>").concat(
                     "<img alt='externalLink' class='link-icon' src='icons/external1.png' th:src='@{icons/external1.png}'/></a></span>");
-            row.append($("<td>").html(rsidsearch.concat('&nbsp;&nbsp;').concat(dbsnp)));
+            row.append($("<td>").html(externalidsearch.concat('&nbsp;&nbsp;').concat(dbsnp)));
         }
         else {
             var content = '';
-            var rsIds = '';
+            var externalIds = '';
             var alleles = '';
             var type = '';
             var description = '';
 
             //this is for a multi-SNP haplotype
-            if (association.rsId[0].indexOf(',') != -1) {
-                rsIds = association.rsId[0].split(',');
+            if (association.externalId[0].indexOf(',') != -1) {
+                externalIds = association.externalId[0].split(',');
                 alleles = association.strongestAllele[0].split(',');
                 type = ',';
 
@@ -268,31 +268,31 @@ function processAssociation(association, table) {
                 }
             }
             //this is for an interaction
-            else if (association.rsId[0].indexOf(' x ') != -1) {
-                rsIds = association.rsId[0].split(' x ');
+            else if (association.variantId[0].indexOf(' x ') != -1) {
+                externalIds = association.externalId[0].split(' x ');
                 alleles = association.strongestAllele[0].split(' x ');
                 type = 'x';
             }
 
             for (var i = 0; i < alleles.length; i++) {
-                for (var j = 0; j < rsIds.length; j++) {
-                    if (alleles[i].trim().indexOf(rsIds[j].trim()) != -1) {
-                        var rsidsearch = "<span><a href='search?query=".concat(rsIds[j].trim()).concat("'>").concat(
+                for (var j = 0; j < externalIds.length; j++) {
+                    if (alleles[i].trim().indexOf(externalIds[j].trim()) != -1) {
+                        var externalidsearch = "<span><a href='search?query=".concat(externalIds[j].trim()).concat("'>").concat(
                                 alleles[i].trim()).concat("</a></span>");
                         var ensembl = "<span><a href='http://www.ensembl.org/Homo_sapiens/Variation/Summary?v=".concat(
-                                rsIds[j].trim()).concat("'  target='_blank'>").concat(
+                                externalIds[j].trim()).concat("'  target='_blank'>").concat(
                                 "<img alt='externalLink' class='link-icon' src='icons/external1.png' th:src='@{icons/external1.png}'/></a></span>");
                         if (content == '') {
-                            content = content.concat(rsidsearch.concat('&nbsp;&nbsp;').concat(ensembl));
+                            content = content.concat(externalidsearch.concat('&nbsp;&nbsp;').concat(ensembl));
                         }
                         else {
                             if (type == 'x') {
                                 content =
-                                        content.concat(' x ').concat(rsidsearch.concat('&nbsp;&nbsp;').concat(ensembl));
+                                        content.concat(' x ').concat(externalidsearch.concat('&nbsp;&nbsp;').concat(ensembl));
                             }
                             else {
                                 content =
-                                        content.concat(', <br>').concat(rsidsearch.concat('&nbsp;&nbsp;').concat(ensembl));
+                                        content.concat(', <br>').concat(externalidsearch.concat('&nbsp;&nbsp;').concat(ensembl));
                             }
                         }
                     }
@@ -305,13 +305,13 @@ function processAssociation(association, table) {
 
         }
     }
-    else if (association.rsId != null && association.strongestAllele == null) {
-        row.append($("<td>").html(association.rsId));
+    else if (association.externalId != null && association.strongestAllele == null) {
+        row.append($("<td>").html(association.externalId));
     }
     else {
         row.append($("<td>"));
     }
-    row.append($("<td>").html(association.riskFrequency));
+    row.append($("<td>").html(association.effectFrequency));
 
     var mantissa = association.pValueMantissa;
     var exponent = association.pValueExponent;

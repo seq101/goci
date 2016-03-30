@@ -127,7 +127,7 @@ Data in the GWAS Catalog is currently mapped to genome assembly <span id="genome
 
 ==== [[faq-6]]6. How can I access the GWAS Catalog data on alternative genome builds?
 
-You can use the link:http://rest.ensembl.org/[Ensembl API] to map the SNP rsIDs in the GWAS Catalog to previous genome builds. For GRCh37 this is available at http://grch37.rest.ensembl.org/. The variation call http://grch37.rest.ensembl.org/documentation/info/variation_id can be used to retrieve the dbSNP mapping of all SNPs on GRCh37.
+You can use the link:http://rest.ensembl.org/[Ensembl API] to map the SNP variantIds in the GWAS Catalog to previous genome builds. For GRCh37 this is available at http://grch37.rest.ensembl.org/. The variation call http://grch37.rest.ensembl.org/documentation/info/variation_id can be used to retrieve the dbSNP mapping of all SNPs on GRCh37.
 
 ==== [[faq-7]]7. How often are the GWAS Catalog and diagram updated?
 
@@ -167,7 +167,7 @@ At the moment, the main search only supports searching across all fields, so if 
 For now, if you would like to search for a specific study, you can search by Pubmed ID. To limit your search to a specific trait or set of traits, we would suggest doing a general search for that trait first, then filtering your results using the trait filter dropdown to the left of the search results. For example, following a search for "lupus", you can limit your search results to "Systemic lupus erythematosus" via the dropdown.
 
 ==== [[faq-16]]16. What is the difference between the blue links and link-out icons?
-Clicking on a term highlighted in blue (e.g. author, trait or rsID) performs a full new search for this term. Clicking on a little link-out icon next to a term takes you to an external page related to this term, e.g. Pubmed Central for studies or Ensembl for SNPs or genes.
+Clicking on a term highlighted in blue (e.g. author, trait or variantIds) performs a full new search for this term. Clicking on a little link-out icon next to a term takes you to an external page related to this term, e.g. Pubmed Central for studies or Ensembl for SNPs or genes.
 
 ==== [[faq-17]]17. When I search for a certain trait why are other traits returned?
 The search algorithm searches across a number of fields including study titles, sample descriptions, reported traits, mapped (ontology) traits, mapped traits' synonyms and mapped traits' parents. If your search term is a match to any of these categories, that result will be returned. If you search for "metabolic disease" for example, you will see a number of reported traits mapped to ontology traits such as "type II diabetes mellitus" because metabolic disease is a parent of diabetes in the ontology. Equally, searching for "diabetes" will return some potentially unexpected results as the search returns studies that were carried out in a sample population of diabetics, so the term "diabetes" is matched in the sample description. Filtering via the trait dropdown allows you to exclude unwanted traits for now and a more refined "advanced search" mode is under development.

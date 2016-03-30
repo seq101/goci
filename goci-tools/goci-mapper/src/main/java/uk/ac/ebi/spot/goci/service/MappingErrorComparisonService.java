@@ -85,20 +85,20 @@ public class MappingErrorComparisonService {
             // Compare errors
             AssociationReport newErrorReport = associationIdToNewAssociationReportMap.get(associationId);
 
-            String oldSnpError = oldErrorReport.getSnpError();
-            String newSnpError = newErrorReport.getSnpError();
-            Boolean differenceInSnpErrors = compareDifferences(oldSnpError, newSnpError);
-            if (differenceInSnpErrors) {
-                mappingErrorComparisonReport.setOldSnpError(oldSnpError);
-                mappingErrorComparisonReport.setNewSnpError(newSnpError);
+            String oldVariantError = oldErrorReport.getVariantError();
+            String newVariantError = newErrorReport.getVariantError();
+            Boolean differenceInVariantErrors = compareDifferences(oldVariantError, newVariantError);
+            if (differenceInVariantErrors) {
+                mappingErrorComparisonReport.setOldVariantError(oldVariantError);
+                mappingErrorComparisonReport.setNewVariantError(newVariantError);
             }
 
-            String oldSnpGeneOnDiffChr = oldErrorReport.getSnpGeneOnDiffChr();
-            String newSnpGeneOnDiffChr = newErrorReport.getSnpGeneOnDiffChr();
-            Boolean differenceInSnpGeneOnDiffChr = compareDifferences(oldSnpGeneOnDiffChr, newSnpGeneOnDiffChr);
-            if (differenceInSnpGeneOnDiffChr) {
-                mappingErrorComparisonReport.setOldSnpGeneOnDiffChr(oldSnpGeneOnDiffChr);
-                mappingErrorComparisonReport.setNewSnpGeneOnDiffChr(newSnpGeneOnDiffChr);
+            String oldVariantGeneOnDiffChr = oldErrorReport.getVariantGeneOnDiffChr();
+            String newVariantGeneOnDiffChr = newErrorReport.getVariantGeneOnDiffChr();
+            Boolean differenceInVariantGeneOnDiffChr = compareDifferences(oldVariantGeneOnDiffChr, newVariantGeneOnDiffChr);
+            if (differenceInVariantGeneOnDiffChr) {
+                mappingErrorComparisonReport.setOldVariantGeneOnDiffChr(oldVariantGeneOnDiffChr);
+                mappingErrorComparisonReport.setNewVariantGeneOnDiffChr(newVariantGeneOnDiffChr);
             }
 
             String oldNoGeneForSymbol = oldErrorReport.getNoGeneForSymbol();
@@ -135,7 +135,7 @@ public class MappingErrorComparisonService {
             }
 
             // Only add reports if a significant difference has been found
-            if (differenceInSnpErrors || differenceInSnpGeneOnDiffChr || differenceNoGeneForSymbol ||
+            if (differenceInVariantErrors || differenceInVariantGeneOnDiffChr || differenceNoGeneForSymbol ||
                     differenceGeneError || differenceRestServiceError || differenceSuspectVariationError) {
                 comparisonReports.add(mappingErrorComparisonReport);
             }
@@ -156,7 +156,7 @@ public class MappingErrorComparisonService {
         if (comparisonReports.size() > 0) {
 
             String header =
-                    "Study ID\tAssociation ID\tPubmed ID\tOld SNP Error\tNew SNP Error\tOld Snp Gene On Diff Chr Error\tNew Snp Gene On Diff Chr Error\tOld No Gene For Symbol Error\tNew No Gene For Symbol\tOld Gene Error\tNew Gene Error\tOld Suspect Variation Error\tNew Suspect Variation Error\tOld Rest Service Error\tNew Rest Service Error\n";
+                    "Study ID\tAssociation ID\tPubmed ID\tOld Variant Error\tNew Variant Error\tOld Variant Gene On Diff Chr Error\tNew Variant Gene On Diff Chr Error\tOld No Gene For Symbol Error\tNew No Gene For Symbol\tOld Gene Error\tNew Gene Error\tOld Suspect Variation Error\tNew Suspect Variation Error\tOld Rest Service Error\tNew Rest Service Error\n";
 
             output.append(header);
 
@@ -191,37 +191,37 @@ public class MappingErrorComparisonService {
                 line.append("\t");
 
 
-                // SNP_ERROR
-                if (comparisonReport.getOldSnpError() == null) {
+                // VARIANT_ERROR
+                if (comparisonReport.getOldVariantError() == null) {
                     line.append("");
                 }
                 else {
-                    line.append(comparisonReport.getOldSnpError());
+                    line.append(comparisonReport.getOldVariantError());
                 }
                 line.append("\t");
 
-                if (comparisonReport.getNewSnpError() == null) {
+                if (comparisonReport.getNewVariantError() == null) {
                     line.append("");
                 }
                 else {
-                    line.append(comparisonReport.getNewSnpError());
+                    line.append(comparisonReport.getNewVariantError());
                 }
                 line.append("\t");
 
-                // SNP_GENE_ON_DIFF_CHR
-                if (comparisonReport.getOldSnpGeneOnDiffChr() == null) {
+                // VARIANT_GENE_ON_DIFF_CHR
+                if (comparisonReport.getOldVariantGeneOnDiffChr() == null) {
                     line.append("");
                 }
                 else {
-                    line.append(comparisonReport.getOldSnpGeneOnDiffChr());
+                    line.append(comparisonReport.getOldVariantGeneOnDiffChr());
                 }
                 line.append("\t");
 
-                if (comparisonReport.getNewSnpGeneOnDiffChr() == null) {
+                if (comparisonReport.getNewVariantGeneOnDiffChr() == null) {
                     line.append("");
                 }
                 else {
-                    line.append(comparisonReport.getNewSnpGeneOnDiffChr());
+                    line.append(comparisonReport.getNewVariantGeneOnDiffChr());
                 }
                 line.append("\t");
 

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import uk.ac.ebi.spot.goci.model.Gene;
 import uk.ac.ebi.spot.goci.model.GenomicContext;
 import uk.ac.ebi.spot.goci.model.Location;
-import uk.ac.ebi.spot.goci.model.SingleNucleotidePolymorphism;
+import uk.ac.ebi.spot.goci.model.Variant;
 import uk.ac.ebi.spot.goci.repository.GeneRepository;
 import uk.ac.ebi.spot.goci.repository.GenomicContextRepository;
 
@@ -39,7 +39,7 @@ public class GenomicContextCreationService {
      * @param source
      * @param mappingMethod
      * @param geneName
-     * @param snpIdInDatabase
+     * @param variantIdInDatabase
      * @param isClosestGene
      * @param location
      */
@@ -50,7 +50,7 @@ public class GenomicContextCreationService {
                                                String source,
                                                String mappingMethod,
                                                String geneName,
-                                               SingleNucleotidePolymorphism snpIdInDatabase,
+                                               Variant variantIdInDatabase,
                                                Boolean isClosestGene, Location location) {
 
         GenomicContext genomicContext = new GenomicContext();
@@ -67,7 +67,7 @@ public class GenomicContextCreationService {
         genomicContext.setDistance(distance);
         genomicContext.setSource(source);
         genomicContext.setMappingMethod(mappingMethod);
-        genomicContext.setSnp(snpIdInDatabase);
+        genomicContext.setVariant(variantIdInDatabase);
         genomicContext.setIsClosestGene(isClosestGene);
         genomicContext.setLocation(location);
 
