@@ -35,7 +35,7 @@ public class Association {
 
     private String effectAlleleFrequency;
     private String effectAlleleFrequencyCases;
-    private String effectAlleleFrequencyControls;
+    private String effectAlleleFreqControls;
 
     private String pvalueText;
 
@@ -87,6 +87,7 @@ public class Association {
      * The exponent of the heterogeneity pvalue (for Meta analysis)
      */
     private Integer heterogeneityPvalueExponent;
+    private String heterogeneityPvalueText;
 
     // The variant imputation quality score.
     private BigDecimal imputationQualityScore;
@@ -138,7 +139,7 @@ public class Association {
 
     public Association(String effectAlleleFrequency,
                        String effectAlleleFrequencyCases,
-                       String effectAlleleFrequencyControls,
+                       String effectAlleleFreqControls,
                        String pvalueText,
                        Float orPerCopyNum,
                        Boolean orType,
@@ -199,7 +200,7 @@ public class Association {
         this.beta = beta;
         this.standardError = standardError;
         this.effectAlleleFrequencyCases = effectAlleleFrequencyCases;
-        this.effectAlleleFrequencyControls = effectAlleleFrequencyControls;
+        this.effectAlleleFreqControls = effectAlleleFreqControls;
     }
 
     public Long getId() {
@@ -466,11 +467,19 @@ public class Association {
         this.effectAlleleFrequencyCases = effectAlleleFrequencyCases;
     }
 
-    public String getEffectAlleleFrequencyControls() {
-        return effectAlleleFrequencyControls;
+    public String getEffectAlleleFreqControls() {
+        return effectAlleleFreqControls;
     }
 
-    public void setEffectAlleleFrequencyControls(String effectAlleleFrequencyControls) {
-        this.effectAlleleFrequencyControls = effectAlleleFrequencyControls;
+    public void setEffectAlleleFreqControls(String effectAlleleFrequencyControls) {
+        this.effectAlleleFreqControls = effectAlleleFrequencyControls;
+    }
+
+    public String getHeterogeneityPvalueText() {
+        return heterogeneityPvalueText;
+    }
+
+    public void setHeterogeneityPvalueText(String heterogeneityPvalueText) {
+        this.heterogeneityPvalueText = heterogeneityPvalueText;
     }
 }

@@ -25,6 +25,10 @@ public class Locus {
 
     private Integer haplotypeVariantCount;
 
+//    private String chromosomeName;
+//
+//    private String chromosomePosition;
+
     private String description;
 
     @ManyToMany
@@ -98,6 +102,22 @@ public class Locus {
     public void setAuthorReportedGenes(Collection<Gene> authorReportedGenes) {
         this.authorReportedGenes = authorReportedGenes;
     }
+
+//    public String getChromosomeName() {
+//        return chromosomeName;
+//    }
+//
+//    public void setChromosomeName(String chromosomeName) {
+//        this.chromosomeName = chromosomeName;
+//    }
+//
+//    public String getChromosomePosition() {
+//        return chromosomePosition;
+//    }
+//
+//    public void setChromosomePosition(String chromosomePosition) {
+//        this.chromosomePosition = chromosomePosition;
+//    }
 
     @Override public String toString() {
         return "Locus{" +

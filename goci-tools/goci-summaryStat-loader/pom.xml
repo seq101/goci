@@ -30,6 +30,17 @@
     </build>
 
     <dependencies>
+
+        <dependency>
+            <groupId>uk.ac.ebi.spot</groupId>
+            <artifactId>goci-utils</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>uk.ac.ebi.spot</groupId>
+            <artifactId>goci-mapper</artifactId>
+        </dependency>
+
         <!-- goci ontology utils -->
         <dependency>
             <groupId>uk.ac.ebi.spot</groupId>

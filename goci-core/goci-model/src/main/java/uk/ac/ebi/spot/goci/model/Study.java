@@ -77,7 +77,7 @@ public class Study {
 
     @ManyToMany
     @JoinTable(name = "STUDY_2_STUDY",
-               joinColumns = @JoinColumn(name = "STUDY_ID",referencedColumnName = "ID"),
+               joinColumns = @JoinColumn(name = "META_STUDY_ID"),
                inverseJoinColumns = @JoinColumn(name = "SUB_STUDY_ID"))
     private Collection<Study> subStudies;
 

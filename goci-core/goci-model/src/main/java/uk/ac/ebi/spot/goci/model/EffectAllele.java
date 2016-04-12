@@ -20,6 +20,7 @@ public class EffectAllele {
     private Long id;
 
     private String effectAlleleName;
+    private String otherAlleleName;
 
     // Values required for SNP Interaction associations
     private String effectFrequency;
@@ -50,6 +51,7 @@ public class EffectAllele {
     }
 
     public EffectAllele(String effectAlleleName,
+                        String otherAlleleName,
                         String effectFrequency,
                         Boolean genomeWide,
                         Boolean limitedList,
@@ -62,6 +64,7 @@ public class EffectAllele {
         this.limitedList = limitedList;
         this.variant = variant;
         this.proxyVariants = proxyVariants;
+        this.otherAlleleName = otherAlleleName;
         this.loci = loci;
     }
 
@@ -79,6 +82,14 @@ public class EffectAllele {
 
     public void setEffectAlleleName(String effectAlleleName) {
         this.effectAlleleName = effectAlleleName;
+    }
+
+    public String getOtherAlleleName() {
+        return otherAlleleName;
+    }
+
+    public void setOtherAlleleName(String otherAlleleName) {
+        this.otherAlleleName = otherAlleleName;
     }
 
     public Variant getVariant() {

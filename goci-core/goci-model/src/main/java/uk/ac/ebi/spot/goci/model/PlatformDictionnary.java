@@ -15,7 +15,7 @@ public class PlatformDictionnary {
     @GeneratedValue
     private Long id;
 
-    private String plaformName;
+    private String platformName;
 
     @OneToMany(mappedBy = "platformDictionnary")
     private Collection<ArrayDictionnary> arrayDictionnaries;
@@ -23,9 +23,9 @@ public class PlatformDictionnary {
     public PlatformDictionnary(){
     }
 
-    public PlatformDictionnary(Collection<ArrayDictionnary> arrayDictionnaries, String plaformName){
+    public PlatformDictionnary(Collection<ArrayDictionnary> arrayDictionnaries, String platformName){
         this.arrayDictionnaries = arrayDictionnaries;
-        this.plaformName = plaformName;
+        this.platformName = platformName;
     }
 
     public Long getId() {
@@ -36,12 +36,12 @@ public class PlatformDictionnary {
         this.id = id;
     }
 
-    public String getPlaformName() {
-        return plaformName;
+    public String getPlatformName() {
+        return platformName;
     }
 
-    public void setPlaformName(String plaformName) {
-        this.plaformName = plaformName;
+    public void setPlatformName(String platformName) {
+        this.platformName = platformName;
     }
 
     public Collection<ArrayDictionnary> getArrayDictionnaries() {

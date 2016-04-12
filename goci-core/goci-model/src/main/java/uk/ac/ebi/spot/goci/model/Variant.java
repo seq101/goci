@@ -33,6 +33,10 @@ public class Variant {
 
     private Date lastUpdateDate;
 
+    private String chromosomeName;
+
+    private String chromosomePosition;
+
     @ManyToMany
     @JoinTable(name = "VARIANT_LOCATION",
                joinColumns = @JoinColumn(name = "VARIANT_ID"),
@@ -52,6 +56,8 @@ public class Variant {
     public Variant(String externalId,
                    Long merged,
                    String functionalClass,
+                   String chromosomeName,
+                   String chromosomePosition,
                    Date lastUpdateDate,
                    Collection<Location> locations,
                    Collection<GenomicContext> genomicContexts,
@@ -63,6 +69,8 @@ public class Variant {
         this.locations = locations;
         this.genomicContexts = genomicContexts;
         this.effectAlleles = effectAlleles;
+        this.chromosomeName = chromosomeName;
+        this.chromosomePosition = chromosomePosition;
     }
 
     public Long getId() {
@@ -75,6 +83,22 @@ public class Variant {
 
     public String getExternalId() {
         return externalId;
+    }
+
+    public String getChromosomeName() {
+        return chromosomeName;
+    }
+
+    public void setChromosomeName(String chromosomeName) {
+        this.chromosomeName = chromosomeName;
+    }
+
+    public String getChromosomePosition() {
+        return chromosomePosition;
+    }
+
+    public void setChromosomePosition(String chromosomePosition) {
+        this.chromosomePosition = chromosomePosition;
     }
 
     public void setExternalId(String externalId) {
@@ -128,4 +152,6 @@ public class Variant {
     public void setEffectAlleles(Collection<EffectAllele> effectAlleles) {
         this.effectAlleles = effectAlleles;
     }
+
+
 }

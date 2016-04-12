@@ -1,20 +1,22 @@
-package uk.ac.ebi.spot.goci.curation.service;
+package uk.ac.ebi.spot.goci.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uk.ac.ebi.spot.goci.model.EffectAllele;
 import uk.ac.ebi.spot.goci.model.Gene;
 import uk.ac.ebi.spot.goci.model.Locus;
-import uk.ac.ebi.spot.goci.model.EffectAllele;
 import uk.ac.ebi.spot.goci.model.Variant;
+import uk.ac.ebi.spot.goci.repository.EffectAlleleRepository;
 import uk.ac.ebi.spot.goci.repository.GeneRepository;
 import uk.ac.ebi.spot.goci.repository.LocusRepository;
-import uk.ac.ebi.spot.goci.repository.EffectAlleleRepository;
 import uk.ac.ebi.spot.goci.repository.VariantRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+
 
 /**
  * Created by emma on 13/04/2015.

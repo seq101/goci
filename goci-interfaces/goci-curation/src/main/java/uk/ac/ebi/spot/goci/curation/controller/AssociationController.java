@@ -377,6 +377,7 @@ public class AssociationController {
 
                     // Save our association information
                     newAssociation.setLastUpdateDate(new Date());
+                    getLog().error("newAssociation.getEffectAlleleFreqControls()" + newAssociation.getEffectAlleleFreqControls());
                     associationRepository.save(newAssociation);
 
                     // Map RS_ID in association
