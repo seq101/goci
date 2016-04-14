@@ -85,7 +85,7 @@ public class AssociationSheetProcessor {
         startChrono();
         while ((line = br.readLine()) != null) {
 
-            if((rowNum % 100) == 0){
+            if((rowNum % 1000) == 0){
                 stopChrono();
                 System.out.println(rowNum);
                 startChrono();
