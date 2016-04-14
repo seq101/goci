@@ -154,45 +154,49 @@ public class AssociationImporter {
     public void getAndSave(String inputFilePath) throws IOException, InvalidFormatException {
 
 
-        // Open and parse our spreadsheet file
-        XSSFSheet sheet;
-        OPCPackage pkg = OPCPackage.open(inputFilePath);
-        XSSFWorkbook current = new XSSFWorkbook(pkg);
-        sheet = current.getSheetAt(0);
-        Collection<Association> associations = associationSheetProcessor.readVariantAssociations(sheet);
-        pkg.close();
+//        // Open and parse our spreadsheet file
+//        XSSFSheet sheet;
+//        OPCPackage pkg = OPCPackage.open(inputFilePath);
+//        XSSFWorkbook current = new XSSFWorkbook(pkg);
+//        sheet = current.getSheetAt(0);
+
+
+//        Collection<Association> associations = associationSheetProcessor.readVariantAssociations(inputFilePath, studyId);
+        associationSheetProcessor.readVariantAssociations(inputFilePath, studyId);
+
+//        pkg.close();
 
 
 
 
-        Study study = studyRepository.findOne(Long.parseLong(studyId));
-
-        // Create our associations
-        if (!associations.isEmpty()) {
-            Collection<Association> associationsToMap = new ArrayList<>();
-            for (Association newAssociation : associations) {
-
-                // Set the study ID for our association
-                newAssociation.setStudy(study);
-
-                // Save our association information
-                newAssociation.setLastUpdateDate(new Date());
-                associationRepository.save(newAssociation);
-
-                // Map RS_ID in association
-                associationsToMap.add(newAssociation);
-            }
-
-            //            Curator curator = study.getHousekeeping().getCurator();
-            //            String mappedBy = curator.getLastName();
-            //            try {
-            //                mappingService.validateAndMapAssociations(associationsToMap, mappedBy);
-            //            }
-            //            catch (EnsemblMappingException e) {
-            //                model.addAttribute("study", study);
-            //                return "ensembl_mapping_failure";
-            //            }
-        }
+//        Study study = studyRepository.findOne(Long.parseLong(studyId));
+//
+//        // Create our associations
+//        if (!associations.isEmpty()) {
+//            Collection<Association> associationsToMap = new ArrayList<>();
+//            for (Association newAssociation : associations) {
+//
+//                // Set the study ID for our association
+//                newAssociation.setStudy(study);
+//
+//                // Save our association information
+//                newAssociation.setLastUpdateDate(new Date());
+//                associationRepository.save(newAssociation);
+//
+//                // Map RS_ID in association
+//                associationsToMap.add(newAssociation);
+//            }
+//
+//            //            Curator curator = study.getHousekeeping().getCurator();
+//            //            String mappedBy = curator.getLastName();
+//            //            try {
+//            //                mappingService.validateAndMapAssociations(associationsToMap, mappedBy);
+//            //            }
+//            //            catch (EnsemblMappingException e) {
+//            //                model.addAttribute("study", study);
+//            //                return "ensembl_mapping_failure";
+//            //            }
+//        }
 
     }
 
