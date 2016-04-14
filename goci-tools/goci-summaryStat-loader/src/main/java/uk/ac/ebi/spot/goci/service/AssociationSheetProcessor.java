@@ -71,6 +71,9 @@ public class AssociationSheetProcessor {
     // Read and parse uploaded spreadsheet
     public void readVariantAssociations(String file, String studyId) throws IOException {
 
+        Study study = studyRepository.findOne(Long.parseLong(studyId));
+
+
         // Create collection to store all newly created associations
         Collection<Association> newAssociations = new ArrayList<>();
 
@@ -490,6 +493,8 @@ public class AssociationSheetProcessor {
             newAssociation.setLoci(loci);
 
 
+            newAssociation.setStudy(study);
+
             newAssociations.add(newAssociation);
 
             if(newAssociations.size() == 100) {
@@ -511,29 +516,31 @@ public class AssociationSheetProcessor {
 
 
     public void saveAssociation(Collection<Association> associations, String studyId){
-        Study study = studyRepository.findOne(Long.parseLong(studyId));
+//        Study study = studyRepository.findOne(Long.parseLong(studyId));
+        Study study = new Study();
+        study.setId(Long.parseLong(studyId));
 
-
-        for(Association association : associations) {
-            // Set the study ID for our association
-            association.setStudy(study);
-
-            // Save our association information
-            association.setLastUpdateDate(new Date());
-            associationRepository.save(association);
-
-            // Map RS_ID in association
-
-            //            Curator curator = study.getHousekeeping().getCurator();
-            //            String mappedBy = curator.getLastName();
-            //            try {
-            //                mappingService.validateAndMapAssociations(associationsToMap, mappedBy);
-            //            }
-            //            catch (EnsemblMappingException e) {
-            //                model.addAttribute("study", study);
-            //                return "ensembl_mapping_failure";
-            //            }
-        }
+        associationRepository.save(associations);
+//        for(Association association : associations) {
+//            // Set the study ID for our association
+//            association.setStudy(study);
+//
+//            // Save our association information
+//            association.setLastUpdateDate(new Date());
+//            associationRepository.save(association);
+//
+//            // Map RS_ID in association
+//
+//            //            Curator curator = study.getHousekeeping().getCurator();
+//            //            String mappedBy = curator.getLastName();
+//            //            try {
+//            //                mappingService.validateAndMapAssociations(associationsToMap, mappedBy);
+//            //            }
+//            //            catch (EnsemblMappingException e) {
+//            //                model.addAttribute("study", study);
+//            //                return "ensembl_mapping_failure";
+//            //            }
+//        }
 
 
     }
