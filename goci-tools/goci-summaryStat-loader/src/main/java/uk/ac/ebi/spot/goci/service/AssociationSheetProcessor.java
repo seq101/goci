@@ -81,11 +81,14 @@ public class AssociationSheetProcessor {
 
         BufferedReader br = new BufferedReader(new FileReader(file));
 
+
+        int batchSize = 1000;
+
         int rowNum = 0;
         startChrono();
         while ((line = br.readLine()) != null) {
 
-            if((rowNum % 1000) == 0){
+            if((rowNum % batchSize) == 0){
                 stopChrono();
                 System.out.println(rowNum);
                 startChrono();
@@ -497,7 +500,7 @@ public class AssociationSheetProcessor {
 
             newAssociations.add(newAssociation);
 
-            if(newAssociations.size() == 100) {
+            if(newAssociations.size() == batchSize) {
                 saveAssociation(newAssociations, studyId);
                 newAssociations = new ArrayList<>();
             }
