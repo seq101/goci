@@ -82,7 +82,12 @@ public class MappingApplication {
     private void doMapping() {
         getLog().info("Starting mapping of all associations with performer: " + this.performer);
         try {
-            mapCatalogService.mapCatalogContents(this.performer);
+            if (this.performer.equals("automatic_mapping_farm_process")) {
+                mapCatalogService.mapCatalogContentsLSF(this.performer, 1, 1500);
+            }
+            else {
+                mapCatalogService.mapCatalogContents(this.performer);
+            }
             getLog().info("Finished mapping by performer:  " + this.performer);
         }
         catch (EnsemblMappingException e) {

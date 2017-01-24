@@ -66,4 +66,19 @@ public class MapCatalogService {
         }
         mappingErrorComparisonService.compareOldVersusNewErrors(oldAssociationReports);
     }
+
+    public void mapCatalogContentsLSF(String performer, Integer numJob, Integer lenghtInterval) throws EnsemblMappingException {
+
+        // Get all associations via service
+        Collection<Association> associations = associationService.findLSFAssociations(numJob,lenghtInterval);
+        getLog().info("Mapping all associations in database, total number: " + associations.size());
+        try {
+            mappingService.validateAndMapAllAssociations(associations, performer);
+        }
+        catch (EnsemblMappingException e) {
+            throw new EnsemblMappingException("Attempt to map all associations failed", e);
+        }
+
+    }
+
 }
