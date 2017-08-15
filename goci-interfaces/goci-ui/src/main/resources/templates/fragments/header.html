@@ -5,7 +5,7 @@
 <body>
 
 <div th:fragment="navbar">
-    <nav class="navbar navbar-inverse navbar-fixed-top" >
+    <nav class="navbar navbar-inverse navbar-fixed-top">
 
         <div class="container">
             <div id="beta-icon" style="display: none">
@@ -28,14 +28,22 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li th:classappend="${#httpServletRequest.getServletPath() == '/' ? 'active':''}"><a href="index.html" th:href="@{/}">Home
-                        <span class="sr-only">(current)</span>
-                    </a></li>
-                    <li th:classappend="${#httpServletRequest.getServletPath() == '/search' ? 'active':''}"><a th:href="@{/search}">Search</a></li>
-                    <li th:classappend="${#httpServletRequest.getServletPath() == '/diagram' ? 'active':''}"><a th:href="@{/diagram}">Diagram</a></li>
-                    <li id="downloads-item" th:classappend="${#httpServletRequest.getServletPath() == '/downloads' ? 'active':''}" class="hidden-sm"><a th:href="@{/downloads}">Download</a></li>
-                    <li id="documentation-item" th:classappend="${#httpServletRequest.getServletPath() == '/docs' ? 'active':''}"><a th:href="@{/docs}">Documentation</a></li>
-                    <li th:classappend="${#httpServletRequest.getServletPath() == '/docs/about' ? 'active':''}" class="hidden-sm"><a th:href="@{/docs/about}">About</a></li>
+                    <li th:classappend="${#httpServletRequest.getServletPath() == '/' ? 'active':''}">
+                        <a href="index.html" th:href="@{/}">Home
+                            <span class="sr-only">(current)</span>
+                        </a></li>
+                    <li th:classappend="${#httpServletRequest.getServletPath() == '/search' ? 'active':''}">
+                        <a th:href="@{/search}">Search</a></li>
+                    <li th:classappend="${#httpServletRequest.getServletPath() == '/diagram' ? 'active':''}">
+                        <a th:href="@{/diagram}">Diagram</a></li>
+                    <li id="downloads-item"
+                        th:classappend="${#httpServletRequest.getServletPath() == '/downloads' ? 'active':''}"
+                        class="hidden-sm"><a th:href="@{/downloads}">Download</a></li>
+                    <li id="documentation-item"
+                        th:classappend="${#httpServletRequest.getServletPath() == '/docs' ? 'active':''}">
+                        <a th:href="@{/docs}">Documentation</a></li>
+                    <li th:classappend="${#httpServletRequest.getServletPath() == '/docs/about' ? 'active':''}"
+                        class="hidden-sm"><a th:href="@{/docs/about}">About</a></li>
 
                     <li>
                         <a class="icon" id="ebi-logo" href="http://www.ebi.ac.uk">
@@ -65,7 +73,7 @@
 
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div th:fragment="jumbotron">
-    <div class="jumbotron background-color-primary-accent"  th:fragment="jumbotron">
+    <div class="jumbotron background-color-primary-accent" th:fragment="jumbotron">
         <div class="container">
             <div class="gwas-circle">
                 <img
@@ -106,12 +114,16 @@
                 <div class="mypanel">
                     <div style="width: 100%; min-height: 40px; margin-top: 40px; margin-bottom: 40px;">
                         <div class="Top"></div>
-                        <div class="pull-left Tabselected"> <i class="fa fa-bullhorn" aria-hidden="true"></i> Latest News</div>
+                        <div class="pull-left Tabselected"><i class="fa fa-bullhorn" aria-hidden="true"></i> Latest News
+                        </div>
                         <div class="pull-left Cells">
                             <ul class="demo2" style="overflow-y: hidden; height: 280px;">
-                                <p style="" class="news-item">Trait page: short description <a href="#">   Read more...</a></p>
-                                <p style="display: none;" class="news-item">Variant page: short description  <a href="#">   Read more...</a></p>
-                                <p style="display: none;" class="news-item">GWAS Catolog REST API: short description  <a href="#">   Read more...</a></p>
+                                <p style="" class="news-item">Trait page: short description <a href="#"> Read
+                                                                                                         more...</a></p>
+                                <p style="display: none;" class="news-item">Variant page: short description <a href="#">
+                                    Read more...</a></p>
+                                <p style="display: none;" class="news-item">GWAS Catolog REST API: short description <a
+                                        href="#"> Read more...</a></p>
                             </ul>
                         </div>
                     </div>
@@ -126,12 +138,16 @@
             <div class="mypanel">
                 <div style="width: 100%; min-height: 40px; margin-top: 40px; margin-bottom: 40px;">
                     <div class="Top"></div>
-                    <div class="pull-left Tabselected"> <i class="fa fa-bullhorn" aria-hidden="true"></i> Latest News</div>
+                    <div class="pull-left Tabselected"><i class="fa fa-bullhorn" aria-hidden="true"></i> Latest News
+                    </div>
                     <div class="pull-left Cells">
                         <ul class="demo2" style="overflow-y: hidden; height: 280px;">
-                            <p style="" class="news-item">Trait page: short description <a href="#">   Read more...</a></p>
-                            <p style="display: none;" class="news-item">Variant page: short description  <a href="#">   Read more...</a></p>
-                            <p style="display: none;" class="news-item">GWAS Catolog REST API: short description  <a href="#">   Read more...</a></p>
+                            <p style="" class="news-item">Trait page: short description <a href="#"> Read more...</a>
+                            </p>
+                            <p style="display: none;" class="news-item">Variant page: short description <a href="#">
+                                Read more...</a></p>
+                            <p style="display: none;" class="news-item">GWAS Catolog REST API: short description
+                                <a href="#"> Read more...</a></p>
                         </ul>
                     </div>
                 </div>
@@ -140,21 +156,28 @@
         </div>
     </div>
     <div th:if="${testVersion == '3'}">
-
+        <div class='container'>
             <div class='row'>
-                <div class='col-md-8'>
+                <div class='col-md-12å'>
                     <div class="carousel slide gwas media-carousel" id="media">
                         <div class="carousel-inner">
                             <div class="item  active">
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/150x150"/></a>
+
+                                        <a class="thumbnail" href="#">
+                                            <img alt="EFO Trait page"
+                                                 th:src="@{/images/carousel/efo-trait-carousel.png}"/>
+                                        </a>
                                     </div>
                                     <div class="col-md-4">
-                                        <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/150x150"/></a>
+                                        <a class="thumbnail" href="#">
+                                            <img alt="EFO Trait page"
+                                                 th:src="@{/images/carousel/variant-page.png}"/></a>
                                     </div>
                                     <div class="col-md-4">
-                                        <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/150x150"/></a>
+                                        <a class="thumbnail" href="#"> <img alt="GWAS Catalog REST API"
+                                                                            th:src="@{/images/carousel/rest-carousel.png}"/></a>
                                     </div>
                                 </div>
                             </div>
@@ -163,6 +186,48 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div th:if="${testVersion == '6'}">
+        <div class="container">
+
+            <div class="row">
+                <div id="breakingNews" class="breaking-news mocked">
+                    <div class="col-lg-3 text-right breaking-left">
+                        <h2 class="responsive">
+                            <span class="breaking-small">Latest</span><br/>
+                            <span class="breaking-large">News</span>
+                        </h2>
+                    </div>
+                    <div class="col-lg-9 breaking-right">
+                        <h3>Trait Page</h3><img src="" />
+                        <p>This page allow you to discover ....</p>
+                        <button type="button" class="btn btn-default btn-xs">Read More
+            <i class="glyphicon glyphicon-arrow-right"></i>
+          </button>
+                    </div>
+                </div>
+            </div><!-- /row -->
+        </div>
+    </div>
+    <div th:if="${testVersion == '4'}">
+        <div class="modal fade" id="slide-bottom-popup" data-keyboard="false" data-backdrop="false">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <p>I'm a pop sliding from the bottom that's suppose to stick.</p>
+            </div><!-- /.modal-body -->
+        </div><!-- /.modal -->
+    </div>
+    <div th:if="${testVersion == '5'}">
+        <div id="confirm" class="modal show fade">
+            <div class="modal-body">
+                Do you want to continue?
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary" data-value="1">Continue</button>
+                <button type="button" data-dismiss="modal" class="btn" data-value="0">Cancel</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -177,7 +242,6 @@
 <!--style="width: 100%">-->
 <!--</input>-->
 <!--</label>-->
-
 
 </body>
 </html>

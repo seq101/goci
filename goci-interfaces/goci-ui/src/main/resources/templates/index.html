@@ -24,6 +24,8 @@
 
     <!-- Custom styles for this template -->
     <link href="../static/css/jumbotron.css" th:href="@{css/jumbotron.css}" rel="stylesheet"/>
+    <link href="../static/css/beta-news.css" th:href="@{css/beta-news.css}" rel="stylesheet"/>
+
     <link href="../static/css/sticky-footer-navbar.css" th:href="@{css/sticky-footer-navbar.css}" rel="stylesheet"/>
 
     <!-- Additional styling on top of bootstrap -->
@@ -201,6 +203,21 @@
                                       }
                                   });
 
+    });
+</script>
+
+    <script th:if="${testVersion == '4'}" type="text/javascript">
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('#slide-bottom-popup').modal('show');
+            }, 1000); // milliseconds
+        });
+    </script>
+<script th:if="${testVersion == '5'}" type="text/javascript">
+    $(document).ready(function() {
+        setTimeout(function() {
+            $('#confirm').modal('show');
+        }, 1000); // milliseconds
     });
 </script>
 </body>

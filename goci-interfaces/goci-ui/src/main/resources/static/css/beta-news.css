@@ -1,0 +1,165 @@
+
+
+.Tabselected {
+    background-color: #398A96;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding: 6px;
+    top: -2px;
+    position: relative;
+    line-height: 30px;
+    color: white;
+}
+
+.Top {
+    width: 100%;
+    height: 2px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    background-color: #398A96;
+}
+
+.Cells {
+    padding: 5px;
+    color: #666666;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    margin-bottom: auto;
+    margin-top: auto;
+}
+
+.mypanel ul
+{
+    padding:0px;
+    margin:0px;
+    list-style:none;
+}
+
+.news-item
+{
+    padding:4px 4px;
+    margin:0px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px !important; /*override*/
+}
+
+/* carousel */
+.gwas.media-carousel
+{
+    margin-bottom: 0;
+    /*padding: 0 40px 30px 40px;
+    margin-top: 30px; */
+    padding: 0 0px 0px 0px;
+    margin-top: 0px;
+}
+
+/* Previous button  */
+.gwas.media-carousel img
+{
+    /*width: 250px;
+    height: 100px */
+    width: 150px;
+    height: 150px;
+
+}
+/* End carousel */
+
+
+/*version 4 */
+
+.modal.fade.in .modal-body {
+    bottom: 0;
+    opacity: 1;
+}
+
+.modal-body {
+    position: absolute;
+    bottom: -150px;
+    right: 0.5%;
+    padding: 30px 15px 15px;
+    width: 375px;
+    height: 150px;
+    background-color: #BFE2E7;
+    border-radius: 6px 6px 0 0;
+    opacity: 0;
+    -webkit-transition: opacity 0.3s ease-out, bottom 0.3s ease-out;
+    -moz-transition: opacity 0.3s ease-out, bottom 0.3s ease-out;
+    -o-transition: opacity 0.3s ease-out, bottom 0.3s ease-out;
+    transition: opacity 0.3s ease-out, bottom 0.3s ease-out;
+}
+
+.close {
+    margin-top: -20px;
+    text-shadow: 0 1px 0 #ffffff;
+}
+
+.popup-button {
+    margin-left: 140px;
+    margin-top: 77px;
+    font-weight: bold;
+}
+
+#confirm {
+    width: 120px;
+    position: fixed;
+    left: auto; /* <-- Reset the default left value */
+    right: 10px;
+}
+
+body,
+.modal-open .page-container,
+.modal-open .page-container .navbar-fixed-top,
+.modal-open .modal-container {
+    overflow-y: scroll;
+}
+
+@media (max-width: 979px) {
+    .modal-open .page-container .navbar-fixed-top{
+        overflow-y: visible;
+    }
+}
+
+
+#breakingNews {
+    margin: 0 0 25px 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#breakingNews .breaking-right {
+    padding: 0 0 0 25px;
+    border-left: 5px solid rgba(57,138,150,.5);
+}
+
+#breakingNews h2 {
+    text-transform: uppercase;
+    display: inline-block;
+    margin: 0; padding: 0;
+    line-height: 1;
+}
+
+#breakingNews h3 {
+    display: inline-block;
+    margin: 0; padding: 0;
+    line-height: 1;
+}
+
+#breakingNews span.breaking-small {
+    display: inline-block;
+    font-size: 70%;
+    letter-spacing: .06em;
+    color: #398A96;
+    line-height: 0;
+}
+
+#breakingNews span.breaking-large {
+    font-size: 124%;
+    letter-spacing: .06em;
+}
+
+#breakingNews p {
+    font-size: 120%;
+    line-height: 1.2;
+}
+
+/*BFE2E7*/
