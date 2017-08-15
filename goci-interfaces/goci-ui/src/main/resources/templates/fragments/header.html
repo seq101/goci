@@ -188,7 +188,7 @@
             </div>
         </div>
     </div>
-    <div th:if="${testVersion == '6'}">
+    <div th:if="${testVersion == '5'}">
         <div class="container">
 
             <div class="row">
@@ -200,8 +200,11 @@
                         </h2>
                     </div>
                     <div class="col-lg-9 breaking-right">
-                        <h3>Trait Page</h3><img src="" />
-                        <p>This page allow you to discover ....</p>
+                        <h2 class="responsive">
+                        <img id="news_image" th:src="@{/icons/trait_icon.png}" style="vertical-align:middle" th:width="16" th:height="16"/>
+                            <span id="news_text" class="breaking-small-black">Trait Page</span><br/>
+                        </h2>
+                        <p id="news_description">This page allows you to discover</p>
                         <button type="button" class="btn btn-default btn-xs">Read More
             <i class="glyphicon glyphicon-arrow-right"></i>
           </button>
@@ -217,17 +220,6 @@
                 <p>I'm a pop sliding from the bottom that's suppose to stick.</p>
             </div><!-- /.modal-body -->
         </div><!-- /.modal -->
-    </div>
-    <div th:if="${testVersion == '5'}">
-        <div id="confirm" class="modal show fade">
-            <div class="modal-body">
-                Do you want to continue?
-            </div>
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-primary" data-value="1">Continue</button>
-                <button type="button" data-dismiss="modal" class="btn" data-value="0">Cancel</button>
-            </div>
-        </div>
     </div>
 </div>
 

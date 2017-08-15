@@ -124,11 +124,13 @@ body,
     margin: 0 0 25px 0;
     padding: 0;
     overflow: hidden;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #breakingNews .breaking-right {
     padding: 0 0 0 25px;
     border-left: 5px solid rgba(57,138,150,.5);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #breakingNews h2 {
@@ -136,11 +138,14 @@ body,
     display: inline-block;
     margin: 0; padding: 0;
     line-height: 1;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #breakingNews h3 {
     display: inline-block;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin: 0; padding: 0;
+
     line-height: 1;
 }
 
@@ -150,16 +155,27 @@ body,
     letter-spacing: .06em;
     color: #398A96;
     line-height: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #breakingNews span.breaking-large {
     font-size: 124%;
     letter-spacing: .06em;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #breakingNews p {
     font-size: 120%;
     line-height: 1.2;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#breakingNews span.breaking-small-black {
+    display: inline-block;
+    font-size: 75%;
+    letter-spacing: .07em;
+    line-height: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 /*BFE2E7*/

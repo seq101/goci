@@ -213,12 +213,44 @@
             }, 1000); // milliseconds
         });
     </script>
+
 <script th:if="${testVersion == '5'}" type="text/javascript">
-    $(document).ready(function() {
-        setTimeout(function() {
-            $('#confirm').modal('show');
-        }, 1000); // milliseconds
-    });
+var rotate = 0;
+function setbackground(){ console.log("ciao");
+window.setTimeout( "setbackground()", 5000); rotate = rotate+1;
+if (rotate == 1)
+{
+$("#news_image").attr({
+"src": "/gwas/beta/icons/trait_icon.png",
+"width" : "16",
+"height" :"16"
+});
+$("#news_text").text("Trait Page");
+$("#news_description").text("The trait page allows you to find...");
+}
+else if (rotate == 2) {
+$("#news_image").attr({
+"src": "/gwas/beta/icons/variant_icon_4.png",
+"width" : "24",
+"height" :"24"
+});
+$("#news_text").text("Variant Page");
+$("#news_description").text("Discover the variant page ");
+}
+else
+{
+$("#news_image").attr({
+"src": "/gwas/beta/icons/api_icon_2.png",
+"width" : "24",
+"height" :"24"
+});
+$("#news_text").text("REST API");
+$("#news_description").text("Access to GWAS Catalog throught the REST API");
+
+}
+if (rotate == 3) { rotate =0;}
+}
+setbackground();
 </script>
 </body>
 </html>
