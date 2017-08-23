@@ -43,6 +43,7 @@
     <![endif]-->
 
     <script src="../static/js/console-plugin.js" th:src="@{js/console-plugin.js}"></script>
+
 </head>
 
 <body>
@@ -216,12 +217,14 @@
 
 <script th:if="${testVersion == '5'}" type="text/javascript">
 var rotate = 0;
-function setbackground(){ console.log("ciao");
-window.setTimeout( "setbackground()", 5000); rotate = rotate+1;
+function setbackground(){
+
+    window.setTimeout( "setbackground()", 5000); rotate = rotate+1;
+
 if (rotate == 1)
 {
 $("#news_image").attr({
-"src": "/gwas/beta/icons/trait_icon.png",
+"src": contextPath+"icons/trait_icon.png",
 "width" : "16",
 "height" :"16"
 });
@@ -230,7 +233,7 @@ $("#news_description").text("The trait page allows you to find...");
 }
 else if (rotate == 2) {
 $("#news_image").attr({
-"src": "/gwas/beta/icons/variant_icon_4.png",
+"src": contextPath+"icons/variant_icon_4.png",
 "width" : "24",
 "height" :"24"
 });
@@ -240,7 +243,7 @@ $("#news_description").text("Discover the variant page ");
 else
 {
 $("#news_image").attr({
-"src": "/gwas/beta/icons/api_icon_2.png",
+"src": contextPath+"icons/api_icon_2.png",
 "width" : "24",
 "height" :"24"
 });

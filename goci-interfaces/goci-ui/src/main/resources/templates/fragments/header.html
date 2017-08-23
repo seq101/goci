@@ -3,8 +3,10 @@
       xmlns="http://www.w3.org/1999/xhtml">
 
 <body>
-
 <div th:fragment="navbar">
+
+    <div th:remove="tag" th:replace="fragments/scripts :: contextPath"></div>
+
     <nav class="navbar navbar-inverse navbar-fixed-top">
 
         <div class="container">
