@@ -3,6 +3,7 @@
     padding: 0;
     overflow: hidden;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 3;
 }
 
 #breakingNews .breaking-right {
@@ -44,11 +45,8 @@
 
 #breakingNews p {
     font-size: 100%;
-    line-height: 1.7;
+    line-height: 1.2;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    margin-left: 0px;
-    margin-bottom: 3px;
-    margin-top:3px;
 }
 
 #breakingNews span.breaking-small-black {
