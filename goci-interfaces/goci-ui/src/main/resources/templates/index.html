@@ -26,7 +26,9 @@
     <link href="../static/css/jumbotron.css" th:href="@{css/jumbotron.css}" rel="stylesheet"/>
     <link th:if="${testVersion == '1'}" href="../static/css/beta-news.css" th:href="@{css/beta-news.css}" rel="stylesheet"/>
     <link th:if="${testVersion == '2'}" href="../static/css/beta-news-v2.css" th:href="@{css/beta-news-v2.css}" rel="stylesheet"/>
-    <link th:if="${testVersion == '3'}" href="../static/css/beta-news-v2.css" th:href="@{css/beta-news-v3.css}" rel="stylesheet"/>
+    <link th:if="${testVersion == '3'}" href="../static/css/beta-news-v3.css" th:href="@{css/beta-news-v3.css}" rel="stylesheet"/>
+    <link th:if="${testVersion == '4'}" href="../static/css/beta-news-v2.css" th:href="@{css/beta-news-v2.css}" rel="stylesheet"/>
+    <link th:if="${testVersion == '5'}" href="../static/css/beta-news-v6.css" th:href="@{css/beta-news-v6.css}" rel="stylesheet"/>
 
     <link href="../static/css/sticky-footer-navbar.css" th:href="@{css/sticky-footer-navbar.css}" rel="stylesheet"/>
 
@@ -286,6 +288,94 @@
     setbackground();
 </script>
 <script th:if="${testVersion == '3'}" type="text/javascript">
+    var rotate = 0;
+
+    function setbackground() {
+        window.setTimeout("setbackground()", 5000);
+        rotate = rotate + 1;
+
+        if (rotate == 1) {
+            $("#news_image").attr({
+                "src": contextPath + "icons/trait_original.png",
+                "width": "24",
+                "height": "24"
+            });
+            $("#titleNews").html('<h3><span id="item" class="breaking-small-black">Trait</span> page</h3>');
+            $("#news_description").html('The trait page allows you to find...');
+            $("#readmorebutton").attr('onclick', 'changeReadmeButtonLink("efotraits")');
+        } else if (rotate == 2) {
+            $("#news_image").attr({
+                "src": contextPath + "icons/variant_original.png",
+                "width": "24",
+                "height": "24"
+            });
+            $("#titleNews").html('<h3><span id="item" class="breaking-small-black">Variant</span> page</h3>');
+            $("#news_description").html('Discover the variant page ...');
+            $("#readmorebutton").attr('onclick', 'changeReadmeButtonLink("variants")');
+
+        } else {
+            $("#news_image").attr({
+                "src": contextPath + "icons/api_original.png",
+                "width": "24",
+                "height": "24"
+            });
+            $("#titleNews").html('<h3><span id="item" class="breaking-small-black">REST API</span> page</h3>');
+            $("#news_description").html('Access GWAS Catalog data using your favourite programming language');
+            $("#readmorebutton").attr('onclick', 'changeReadmeButtonLink("rest")');
+
+        }
+        if (rotate == 3) {
+            rotate = 0;
+        }
+    }
+
+    setbackground();
+</script>
+<script th:if="${testVersion == '4'}" type="text/javascript">
+    var rotate = 0;
+
+    function setbackground() {
+        window.setTimeout("setbackground()", 5000);
+        rotate = rotate + 1;
+
+        if (rotate == 1) {
+            $("#news_image").attr({
+                "src": contextPath + "icons/trait_original.png",
+                "width": "24",
+                "height": "24"
+            });
+            $("#titleNews").html('<h3><span id="item" class="breaking-small-black">Trait</span> page</h3>');
+            $("#news_description").html('The trait page allows you to find...');
+            $("#readmorebutton").attr('onclick', 'changeReadmeButtonLink("efotraits")');
+        } else if (rotate == 2) {
+            $("#news_image").attr({
+                "src": contextPath + "icons/variant_original.png",
+                "width": "24",
+                "height": "24"
+            });
+            $("#titleNews").html('<h3><span id="item" class="breaking-small-black">Variant</span> page</h3>');
+            $("#news_description").html('Discover the variant page ...');
+            $("#readmorebutton").attr('onclick', 'changeReadmeButtonLink("variants")');
+
+        } else {
+            $("#news_image").attr({
+                "src": contextPath + "icons/api_original.png",
+                "width": "24",
+                "height": "24"
+            });
+            $("#titleNews").html('<h3><span id="item" class="breaking-small-black">REST API</span> page</h3>');
+            $("#news_description").html('Access GWAS Catalog data using your favourite programming language');
+            $("#readmorebutton").attr('onclick', 'changeReadmeButtonLink("rest")');
+
+        }
+        if (rotate == 3) {
+            rotate = 0;
+        }
+    }
+
+    setbackground();
+</script>
+<script th:if="${testVersion == '5'}" type="text/javascript">
     var rotate = 0;
 
     function setbackground() {
