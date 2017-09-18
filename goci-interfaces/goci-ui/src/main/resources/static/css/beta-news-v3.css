@@ -2,13 +2,11 @@
     margin: 0 0 25px 0;
     padding: 0;
     overflow: hidden;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #breakingNews .breaking-right {
     padding: 0 0 0 25px;
-    border-left: 5px solid rgba(57,138,150,.5);
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    border-left: 5px solid rgba(193,46,42,0.99);
 }
 
 #breakingNews h2 {
@@ -16,14 +14,11 @@
     display: inline-block;
     margin: 0; padding: 0;
     line-height: 1;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #breakingNews h3 {
     display: inline-block;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin: 0; padding: 0;
-
     line-height: 1;
 }
 
@@ -31,31 +26,41 @@
     display: inline-block;
     font-size: 70%;
     letter-spacing: .06em;
-    color: #398A96;
+
+    color: #C12E2A;
     line-height: 0;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #breakingNews span.breaking-large {
     font-size: 124%;
     letter-spacing: .06em;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #breakingNews p {
     font-size: 100%;
-    line-height: 1.7;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.5;
     margin-left: 0px;
-    margin-top: 7px;
+    margin-top: 2.5px;
+    margin-bottom: 3px;
 }
 
-#breakingNews span.breaking-small-black {
+#item {
+    text-transform: uppercase;
     display: inline-block;
-    font-size: 75%;
-    letter-spacing: .07em;
-    line-height: 0;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0; padding: 0;
+    line-height: 1;
 }
 
-/*BFE2E7*/
+
+#gwasbutton{
+    background-image: -webkit-linear-gradient(to bottom, #E7F7F9 50%, #D3EFF3 100%);
+}
+
+#news_image {
+    float:left;
+    margin-right: 5px;
+}
+
+#alignrigth {
+    width: 12.66666667%;
+}
