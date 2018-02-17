@@ -40,7 +40,8 @@ public class StudyDocument extends OntologyEnabledDocument<Study> {
     @Field private Collection<Integer> numberOfIndividuals;
     @Field private Collection<String> additionalAncestryDescription;
     @Field private Collection<String> ancestryLinks;
-
+    @Field private Collection<String> genotypingTechnologies;
+    @Field private String studyDesignComment;
 
     @Field @NonEmbeddableField private int associationCount;
 
@@ -112,6 +113,10 @@ public class StudyDocument extends OntologyEnabledDocument<Study> {
         this.additionalAncestryDescription = new LinkedHashSet<>();
         this.ancestryLinks = new LinkedHashSet<>();
         embedAncestryData(study);
+
+        this.genotypingTechnologies = new LinkedHashSet<>();
+        embedGenotypingTechnologiesData(study);
+        this.studyDesignComment = study.getStudyDesignComment();
 
         this.qualifiers = new LinkedHashSet<>();
         this.rsIds = new LinkedHashSet<>();
@@ -275,6 +280,12 @@ public class StudyDocument extends OntologyEnabledDocument<Study> {
         return ancestryLinks;
     }
 
+    private void embedGenotypingTechnologiesData(Study study){
+        Collection<GenotypingTechnology> genotypingTechnologiesCollection = study.getGenotypingTechnologies();
+        for (GenotypingTechnology genotypingTechnology: genotypingTechnologiesCollection) {
+            genotypingTechnologies.add(genotypingTechnology.getGenotypingTechnology());
+        }
+    }
 
     private void embedAncestryData(Study study) {
         study.getAncestries().forEach(
@@ -444,6 +455,6 @@ public class StudyDocument extends OntologyEnabledDocument<Study> {
 
     public Boolean getFullPvalueSet() { return fullPvalueSet; }
 
-
+    public String getStudyDesignComment() { return studyDesignComment; }
 
 }

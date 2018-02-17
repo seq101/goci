@@ -217,6 +217,7 @@ public class StudyService {
                                            + cor + " countries of recruitment");
                 }
         );
+
         
         int platformCount = study.getPlatforms().size();
         Date publishDate = study.getHousekeeping().getCatalogPublishDate();
