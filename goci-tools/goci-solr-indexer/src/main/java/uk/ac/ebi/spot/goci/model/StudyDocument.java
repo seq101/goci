@@ -280,6 +280,9 @@ public class StudyDocument extends OntologyEnabledDocument<Study> {
         return ancestryLinks;
     }
 
+    public Collection<String> getGenotypingTechnologies() {return genotypingTechnologies; }
+
+
     private void embedGenotypingTechnologiesData(Study study){
         Collection<GenotypingTechnology> genotypingTechnologiesCollection = study.getGenotypingTechnologies();
         for (GenotypingTechnology genotypingTechnology: genotypingTechnologiesCollection) {
