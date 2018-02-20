@@ -272,7 +272,33 @@ function processStudy(study, table) {
                 "<td>").html(study.replicateSampleDescription)));
 
     }
-
+    
+    genotypingTechSize = study.genotypingTechnologies.length;
+    if (genotypingTechSize > 0) {
+        
+        var genotypingTechnologiesList = "";
+        var priorityGenotypingTech = "";
+        for (var i = 0; i < genotypingTechSize; i++) {
+            if (study.genotypingTechnologies[i] == 'Genome-wide genotyping array') {
+                priorityGenotypingTech = study.genotypingTechnologies[i] + ", ";
+            }
+            else {
+                genotypingTechnologiesList = genotypingTechnologiesList.concat(study.genotypingTechnologies[i]);
+                if (study.studyDesignComment != null) {
+                    genotypingTechnologiesList = genotypingTechnologiesList.concat(" [").concat(study.studyDesignComment).concat("]");
+                }
+                genotypingTechnologiesList = genotypingTechnologiesList.concat(", ")
+            }
+        }
+        
+        genotypingTechnologiesList = priorityGenotypingTech + genotypingTechnologiesList;
+        
+        genotypingTechnologiesList = genotypingTechnologiesList.slice(0, -2);
+        
+        innerTable.append($("<tr>").append($("<th>").attr('style', 'width: 30%').html("Genotyping technology")).append(
+            $("<td>").html(genotypingTechnologiesList)));
+    }
+    
     innerTable.append($("<tr>").append($("<th>").attr('style', 'width: 30%').html("Platform [SNPs passing QC]")).append(
             $("<td>").html(study.platform)));
 
