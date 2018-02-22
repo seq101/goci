@@ -73,11 +73,14 @@
                 <tr>
                     <th class="col-md-1" data-field="year" data-sortable="true">Year</th>
                     <th class="col-md-1" data-field="month" data-sortable="true" data-sorter="monthSorter">Month</th>
+                    <th class="col-md-2" data-field="pubmedId" data-sortable="true">PubMed ID</th>
+                    <th class="col-md-2" data-field="accessionId" data-sortable="true">GCST</th>
+                    <th class="col-md-2" data-field="author" data-sortable="true">Author</th>
                     <th class="col-md-2" data-field="curator" data-sortable="true">Curator</th>
-                    <th class="col-md-2" data-field="numberPerCurator" data-sortable="true">Total number per curator</th>
+                    <!--<th class="col-md-2" data-field="numberPerCurator" data-sortable="true">Total number per curator</th>-->
                     <th class="col-md-2" data-field="curationstatus" data-sortable="true">Curation Status</th>
-                    <th class="col-md-2">Link to studies</th>
-                    <th class="col-md-2" data-field="numberOfMonth" data-sortable="true">Total number of entries for month</th>
+                    <!--<th class="col-md-2">Link to studies</th>-->
+                    <!--<th class="col-md-2" data-field="numberOfMonth" data-sortable="true">Total number of entries for month</th>-->
                 </tr>
                 </thead>
                 <tbody>
@@ -85,12 +88,15 @@
                     <td th:text="${monthlyTotalsSummaryView.year} ?: 'null'"></td>
                     <!--Some thymeleaf wrangling to get the month name for a date-->
                     <td th:text="${#dates.monthName(#dates.create(monthlyTotalsSummaryView.year,monthlyTotalsSummaryView.month, '01'))} ?: 'null'"></td>
+                    <td th:text="${monthlyTotalsSummaryView.pubmedId} ?: 'null'"></td>
+                    <td th:text="${monthlyTotalsSummaryView.accessionId} ? ${monthlyTotalsSummaryView.accessionId} : 'Not yet published'"></td>
+                    <td th:text="${monthlyTotalsSummaryView.author} ?: 'null'"></td>
                     <td th:text="${monthlyTotalsSummaryView.curator} ?: 'null'"></td>
-                    <td th:text="${monthlyTotalsSummaryView.curatorTotal} ?: 'null'"></td>
+                    <!--<td th:text="${monthlyTotalsSummaryView.curatorTotal} ?: 'null'"></td>-->
                     <td th:text="${monthlyTotalsSummaryView.curationStatus} ?: 'null'"></td>
-                    <td><a th:href="@{/reports/monthly/{reportId}(reportId=${monthlyTotalsSummaryView.id})}"
-                           class="btn btn-link">Show studies</a></td>
-                    <td th:text="${monthlyTotalsSummaryView.monthlyTotal} ?: 'null'"></td>
+                    <!--<td><a th:href="@{/reports/monthly/{reportId}(reportId=${monthlyTotalsSummaryView.id})}"-->
+                           <!--class="btn btn-link">Show studies</a></td>-->
+                    <!--<td th:text="${monthlyTotalsSummaryView.monthlyTotal} ?: 'null'"></td>-->
                 </tr>
                 </tbody>
             </table>
