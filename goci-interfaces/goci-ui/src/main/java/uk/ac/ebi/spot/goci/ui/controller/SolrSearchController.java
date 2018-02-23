@@ -362,7 +362,7 @@ public class SolrSearchController {
         if (genotypingTechnologies != null && genotypingTechnologies.length != 0) {
             getLog().trace(String.valueOf(genotypingTechnologies));
 
-            //addFilterQuery(solrSearchBuilder, "traitName_s", genotypingTechnologies);
+            addFilterQuery(solrSearchBuilder, "genotypingTechnologies", genotypingTechnologies);
         }
 
 
