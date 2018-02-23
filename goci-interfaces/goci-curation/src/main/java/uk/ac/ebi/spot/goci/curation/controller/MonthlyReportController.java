@@ -60,8 +60,7 @@ public class MonthlyReportController {
                               @RequestParam(required = false) Long status,
                               @RequestParam(required = false) Long curator,
                               @RequestParam(required = false) Integer year,
-                              @RequestParam(required = false) Integer month,
-                              @RequestParam(required = false) String pubmedId) {
+                              @RequestParam(required = false) Integer month) {
 
 
         List<MonthlyTotalsSummaryView> monthlyTotalsSummaryViews = new ArrayList<>();
@@ -121,9 +120,6 @@ public class MonthlyReportController {
         else if (status != null) {
             monthlyTotalsSummaryViews = monthlyTotalsSummaryViewRepository.findByCurationStatus(statusName);
         }
-        else if (pubmedId != null) { // pubmedId
-            monthlyTotalsSummaryViews = monthlyTotalsSummaryViewRepository.findByPubmedId(pubmedId);
-        }
         else if (curator != null && year != null && month != null) { // curator, year and month
             monthlyTotalsSummaryViews = monthlyTotalsSummaryViewRepository.findByCuratorAndYearAndMonthOrderByYearDesc(
                     curatorName,
@@ -153,14 +149,12 @@ public class MonthlyReportController {
         }
         else { // no filters
             monthlyTotalsSummaryViews = monthlyTotalsSummaryViewRepository.findAll();
-            System.out.println("** findAll: "+monthlyTotalsSummaryViews.size());
         }
 
         studySearchFilter.setCuratorSearchFilterId(curator);
         studySearchFilter.setStatusSearchFilterId(status);
         studySearchFilter.setYearFilter(year);
         studySearchFilter.setMonthFilter(month);
-        studySearchFilter.setPubmedId(pubmedId);
 
         // Add studySearchFilter to model so user can filter table
         model.addAttribute("studySearchFilter", studySearchFilter);
@@ -179,12 +173,9 @@ public class MonthlyReportController {
         Long curator = studySearchFilter.getCuratorSearchFilterId();
         Integer year = studySearchFilter.getYearFilter();
         Integer month = studySearchFilter.getMonthFilter();
-        String pubmedId = studySearchFilter.getPubmedId();
-        System.out.println("** PMID: "+pubmedId);
 
         // To handle various filters create a map to store type and value
-        Map<String, Object> filterMap = reportService.buildRedirectMap(status, curator, year, month, pubmedId);
-        System.out.println("** filterMap:"+filterMap);
+        Map<String, Object> filterMap = reportService.buildRedirectMap(status, curator, year, month);
 
         String redirectPrefix = "redirect:/reports/monthly";
         return reportService.buildRedirect(redirectPrefix, filterMap);
