@@ -200,7 +200,7 @@ public class StudyController {
             studyPage =
                     studyRepository.findByPubmedId(pubmed, constructPageSpecification(page - 1, sort));
             filters = filters + "&pubmed=" + pubmed;
-            studySearchFilter.setPubmedIdSearchFilterId(pubmed);
+            studySearchFilter.setPubmedId(pubmed);
         }
 
         // Search by author option available from landing page
@@ -458,7 +458,7 @@ public class StudyController {
         // Get ids of objects searched for
         Long status = studySearchFilter.getStatusSearchFilterId();
         Long curator = studySearchFilter.getCuratorSearchFilterId();
-        String pubmedId = studySearchFilter.getPubmedIdSearchFilterId();
+        String pubmedId = studySearchFilter.getPubmedId();
         String author = studySearchFilter.getAuthor();
         String studyType = studySearchFilter.getStudyType();
         Long efoTraitId = studySearchFilter.getEfoTraitSearchFilterId();

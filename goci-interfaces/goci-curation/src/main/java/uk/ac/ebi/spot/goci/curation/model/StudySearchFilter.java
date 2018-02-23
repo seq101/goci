@@ -17,9 +17,9 @@ public class StudySearchFilter {
 
     private Integer yearFilter;
 
-    private String pubmedIdSearchFilterId;
+    //private String pubmedIdSearchFilterId;
 
-//    private String pubmedId;
+    private String pubmedId;
 
     private String author;
 
@@ -38,8 +38,8 @@ public class StudySearchFilter {
                              Long curatorSearchFilterId,
                              Integer monthFilter,
                              Integer yearFilter,
-//                             String pubmedId,
-                             String pubmedIdSearchFilterId,
+                             String pubmedId,
+                             //String pubmedIdSearchFilterId,
                              String author,
                              String studyType,
                              Long efoTraitSearchFilterId,
@@ -49,8 +49,8 @@ public class StudySearchFilter {
         this.curatorSearchFilterId = curatorSearchFilterId;
         this.monthFilter = monthFilter;
         this.yearFilter = yearFilter;
-//        this.pubmedId = pubmedId;
-        this.pubmedIdSearchFilterId = pubmedIdSearchFilterId;
+        this.pubmedId = pubmedId;
+        //this.pubmedIdSearchFilterId = pubmedIdSearchFilterId;
         this.author = author;
         this.studyType = studyType;
         this.efoTraitSearchFilterId = efoTraitSearchFilterId;
@@ -90,21 +90,21 @@ public class StudySearchFilter {
         this.yearFilter = yearFilter;
     }
 
-//    public String getPubmedId() {
-//        return pubmedId;
-//    }
-//
-//    public void setPubmedId(String pubmedId) {
-//        this.pubmedId = pubmedId;
-//    }
+    public String getPubmedId() {
+        return pubmedId;
+    }
 
+    public void setPubmedId(String pubmedId) {
+        this.pubmedId = pubmedId;
+    }
+/*
     public String getPubmedIdSearchFilterId() {
         return pubmedIdSearchFilterId;
     }
     public void setPubmedIdSearchFilterId(String pubmedIdSearchFilterId) {
         this.pubmedIdSearchFilterId = pubmedIdSearchFilterId;
     }
-
+*/
     public String getAuthor() {
         return author;
     }

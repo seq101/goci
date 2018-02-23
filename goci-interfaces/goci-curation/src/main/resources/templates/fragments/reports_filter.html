@@ -46,14 +46,14 @@
 
                     <!-- New filter for PubMedId, Select List -->
                     <div class="form-group">
-                        <label for="pubmedIdSearchFilterId" class="control-label">PubMed ID</label>
-                        <select name="pubmedIdSearchFilterId" class="form-control select2-select"
-                                th:field="*{pubmedIdSearchFilterId}" id="pubmedIdSearchFilterId">
+                        <label for="pubmedId" class="control-label">PubMed ID</label>
+                        <select name="pubmedId" class="form-control select2-select"
+                                th:field="*{pubmedId}" id="pubmedId">
                             <!-- Empty value for first entry-->
                             <option value=""></option>
-                            <option th:each="pubmedId : ${pubmedIds}"
-                                    th:value="${pubmedId}"
-                                    th:text="${pubmedId}"></option>
+                            <option th:each="localpubmedId : ${pubmedIds}"
+                                    th:value="${localpubmedId}"
+                                    th:text="${localpubmedId}"></option>
                         </select>
                     </div>
 

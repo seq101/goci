@@ -128,7 +128,7 @@ public class YearlyReportController {
         Long curator = studySearchFilter.getCuratorSearchFilterId();
         Integer year = studySearchFilter.getYearFilter();
         Integer month = studySearchFilter.getMonthFilter();
-        String pubMedId = studySearchFilter.getPubmedIdSearchFilterId();
+        String pubMedId = studySearchFilter.getPubmedId();
 
         // To handle various filters create a map to store type and value
         Map<String, Object> filterMap = reportService.buildRedirectMap(status, curator, year, month, pubMedId);

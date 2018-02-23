@@ -160,7 +160,7 @@ public class MonthlyReportController {
         studySearchFilter.setStatusSearchFilterId(status);
         studySearchFilter.setYearFilter(year);
         studySearchFilter.setMonthFilter(month);
-        studySearchFilter.setPubmedIdSearchFilterId(pubmedId);
+        studySearchFilter.setPubmedId(pubmedId);
 
         // Add studySearchFilter to model so user can filter table
         model.addAttribute("studySearchFilter", studySearchFilter);
@@ -179,7 +179,7 @@ public class MonthlyReportController {
         Long curator = studySearchFilter.getCuratorSearchFilterId();
         Integer year = studySearchFilter.getYearFilter();
         Integer month = studySearchFilter.getMonthFilter();
-        String pubmedId = studySearchFilter.getPubmedIdSearchFilterId();
+        String pubmedId = studySearchFilter.getPubmedId();
         System.out.println("** PMID: "+pubmedId);
 
         // To handle various filters create a map to store type and value
