@@ -21,6 +21,8 @@ public interface MonthlyTotalsSummaryViewRepository extends JpaRepository<Monthl
 
     @Query("select distinct year from MonthlyTotalsSummaryView order by year desc") List<Integer> getAllYears();
 
+    @Query("select distinct pubmedId from MonthlyTotalsSummaryView") List<String> getAllPubMedIds();
+
     List<MonthlyTotalsSummaryView> findByYearOrderByYearDesc(Integer year);
 
     List<MonthlyTotalsSummaryView> findByYearAndMonthOrderByYearDesc(Integer year, Integer month);
@@ -30,6 +32,8 @@ public interface MonthlyTotalsSummaryViewRepository extends JpaRepository<Monthl
     List<MonthlyTotalsSummaryView> findByCurator(String curator);
 
     List<MonthlyTotalsSummaryView> findByCurationStatus(String curationStatus);
+
+    List<MonthlyTotalsSummaryView> findByPubmedId(String pubmedId);
 
     List<MonthlyTotalsSummaryView> findByCuratorAndCurationStatus(String curator, String curationStatus);
 

@@ -43,7 +43,7 @@ public class ReportService {
     }
 
     // Builds a map that can be used to create a redirect
-    public Map<String, Object> buildRedirectMap(Long status, Long curator, Integer year, Integer month) {
+    public Map<String, Object> buildRedirectMap(Long status, Long curator, Integer year, Integer month, String pubmedId) {
 
         Map<String, Object> filterMap = new HashMap<>();
 
@@ -59,6 +59,10 @@ public class ReportService {
         if (month != null) {
             filterMap.putIfAbsent("month", month);
         }
+        if (pubmedId != null) {
+            filterMap.putIfAbsent("pubmedId", pubmedId);
+        }
+        System.out.println("** FM: "+filterMap);
 
         return filterMap;
     }

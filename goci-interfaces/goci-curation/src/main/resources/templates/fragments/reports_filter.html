@@ -44,6 +44,33 @@
                         </select>
                     </div>
 
+                    <!-- New filter for PubMedId, Select List -->
+                    <div class="form-group">
+                        <label for="pubmedIdSearchFilterId" class="control-label">PubMed ID</label>
+                        <select name="pubmedIdSearchFilterId" class="form-control select2-select"
+                                th:field="*{pubmedIdSearchFilterId}" id="pubmedIdSearchFilterId">
+                            <!-- Empty value for first entry-->
+                            <option value=""></option>
+                            <option th:each="pubmedId : ${pubmedIds}"
+                                    th:value="${pubmedId}"
+                                    th:text="${pubmedId}"></option>
+                        </select>
+                    </div>
+
+                    <!-- New filter for PubMedId, Autocomplete -->
+                    <!--<div class="col-md-8">-->
+                        <!--<div class="input-group">-->
+                            <!--<input type="text"-->
+                                   <!--class="form-control"-->
+                                   <!--th:field="*{pubmedIdSearchFilterId}"-->
+                                   <!--placeholder="Search for..."/>-->
+                            <!--<span class="input-group-btn">-->
+                                    <!--<button class="btn btn-primary btn-sm"-->
+                                            <!--type="submit">Search by pubmed ID</button></span>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+
                     <div class="form-group">
                         <label for="year" class="control-label">Year</label>
                         <select name="year" class="form-control select2-select"
