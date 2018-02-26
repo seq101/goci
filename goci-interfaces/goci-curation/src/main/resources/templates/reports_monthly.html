@@ -119,6 +119,13 @@
 <div th:include="fragments/footer :: page_footer"></div>
 
 <script>
+    var d = new Date();
+    var curr_date = d.getDate();
+    var curr_month = d.getMonth() + 1; //Months are zero based
+    var curr_year = d.getFullYear();
+    var date = (curr_date + "_" + curr_month + "_" + curr_year);
+
+
     var table = $('#mainTable').DataTable({
         info: false,
         paging: false,
@@ -132,7 +139,7 @@
             {
                 extend: 'csv',
                 text: 'Save to CSV',
-                filename: 'Data export'
+                filename: 'monthly_curator_totals-'+date
             }, ],
         "order": [[ 0, "desc" ]]
     });
