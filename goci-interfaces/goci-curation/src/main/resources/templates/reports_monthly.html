@@ -89,7 +89,7 @@
                     <th class="col-md-2" data-field="accessionId" data-sortable="true">GCST</th>
                     <th class="col-md-2" data-field="author" data-sortable="true">Author</th>
                     <th class="col-md-2" data-field="curator" data-sortable="true">Curator</th>
-                    <!--<th class="col-md-2" data-field="numberPerCurator" data-sortable="true">Total number per curator</th>-->
+                    <th class="col-md-2" data-field="numberPerCurator" data-sortable="true">Curator Total</th>
                     <th class="col-md-2" data-field="curationstatus" data-sortable="true">Curation Status</th>
                     <!--<th class="col-md-2">Link to studies</th>-->
                     <!--<th class="col-md-2" data-field="numberOfMonth" data-sortable="true">Total number of entries for month</th>-->
@@ -104,7 +104,7 @@
                     <td th:text="${monthlyTotalsSummaryView.accessionId} ? ${monthlyTotalsSummaryView.accessionId} : 'Not yet published'"></td>
                     <td th:text="${monthlyTotalsSummaryView.author} ?: 'null'"></td>
                     <td th:text="${monthlyTotalsSummaryView.curator} ?: 'null'"></td>
-                    <!--<td th:text="${monthlyTotalsSummaryView.curatorTotal} ?: 'null'"></td>-->
+                    <td th:text="${monthlyTotalsSummaryView.curatorTotal} ?: 'null'"></td>
                     <td th:text="${monthlyTotalsSummaryView.curationStatus} ?: 'null'"></td>
                     <!--<td><a th:href="@{/reports/monthly/{reportId}(reportId=${monthlyTotalsSummaryView.id})}"-->
                            <!--class="btn btn-link">Show studies</a></td>-->
