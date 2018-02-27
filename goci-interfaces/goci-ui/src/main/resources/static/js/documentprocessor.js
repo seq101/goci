@@ -39,6 +39,7 @@ function processStudy(study, table) {
         
         
         row.append($("<td>").html(pubdate));
+
     row.append($("<td>").html(study.publication));
     row.append($("<td>").html(study.title));
     var traitsearch = "<span><a href='search?query=".concat(study.traitName).concat("'>").concat(study.traitName).concat(
@@ -273,16 +274,16 @@ function processStudy(study, table) {
 
     }
     
-    genotypingTechSize = study.genotypingTechnologies.length;
-    if (genotypingTechSize > 0) {
-        
+    var hasTargetArrayIcon = false;
+    if (study.genotypingTechnologies != null) {
         var genotypingTechnologiesList = "";
         var priorityGenotypingTech = "";
-        for (var i = 0; i < genotypingTechSize; i++) {
+        for (var i = 0; i < study.genotypingTechnologies.length; i++) {
             if (study.genotypingTechnologies[i] == 'Genome-wide genotyping array') {
                 priorityGenotypingTech = study.genotypingTechnologies[i] + ", ";
             }
             else {
+                hasTargetArrayIcon = true;
                 genotypingTechnologiesList = genotypingTechnologiesList.concat(study.genotypingTechnologies[i]);
                 if (study.studyDesignComment != null) {
                     genotypingTechnologiesList = genotypingTechnologiesList.concat(" [").concat(study.studyDesignComment).concat("]");
@@ -290,13 +291,17 @@ function processStudy(study, table) {
                 genotypingTechnologiesList = genotypingTechnologiesList.concat(", ")
             }
         }
-        
+    
         genotypingTechnologiesList = priorityGenotypingTech + genotypingTechnologiesList;
-        
+    
         genotypingTechnologiesList = genotypingTechnologiesList.slice(0, -2);
-        
+    
         innerTable.append($("<tr>").append($("<th>").attr('style', 'width: 30%').html("Genotyping technology")).append(
             $("<td>").html(genotypingTechnologiesList)));
+    }
+    
+    if (hasTargetArrayIcon) {
+        console.log("add icon to the row");
     }
     
     innerTable.append($("<tr>").append($("<th>").attr('style', 'width: 30%').html("Platform [SNPs passing QC]")).append(
